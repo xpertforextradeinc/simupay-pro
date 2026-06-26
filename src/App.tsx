@@ -49,16 +49,22 @@ function AppContent() {
 
   // 1. Recover Session on Mount
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    console.log('[Auth Flow] Initialization started...');
+    
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      console.log('[Auth Flow] getSession result:', { session, error });
       setSession(session);
       if (session) {
+        console.log('[Auth Flow] Session found on mount, syncing data...');
         syncUserData(session.user);
       } else {
+        console.log('[Auth Flow] No session found on mount, stopping loader.');
         setLoading(false);
       }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('[Auth Flow] onAuthStateChange event:', event, session);
       setSession(session);
       if (session) {
         syncUserData(session.user);
@@ -77,26 +83,32 @@ function AppContent() {
   // 2. Fetch or Sync User Profile & Logs
   const syncUserData = async (user: any) => {
     try {
+      console.log('[Auth Flow] Syncing user data for:', user.id);
       // Run data fetching concurrently
       const [finalProfile, txData, notifData, ticketsData] = await Promise.all([
         dbService.getProfile(
           user.id,
           user.email,
-          user.user_metadata?.full_name || user.user_metadata?.name
+          user.user_metadata?.full_name || user.user_metadata?.name || user.user_metadata?.custom_claims?.name
         ),
         dbService.getTransactions(user.id),
         dbService.getNotifications(user.id),
         dbService.getSupportTickets(user.id)
       ]);
 
+      console.log('[Auth Flow] User data synced successfully:', { finalProfile });
       setProfile(finalProfile);
       setTransactions(txData);
       setNotifications(notifData);
       setSupportTickets(ticketsData);
+      
+      // Auto-navigate to dashboard upon successful login sync
+      setActiveTab('dashboard');
 
     } catch (e) {
-      console.error('Graceful initialization fallback enabled:', e);
+      console.error('[Auth Flow] Graceful initialization fallback enabled:', e);
     } finally {
+      console.log('[Auth Flow] Finished loading process.');
       setLoading(false);
     }
   };

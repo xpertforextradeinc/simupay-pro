@@ -113,6 +113,7 @@ export const dbService = {
         .maybeSingle();
 
       if (error) throw error;
+      
       if (data) {
         let profile = data as Profile;
         if (profile.email === 'elitedailyearnings@gmail.com' && profile.role !== 'admin') {
@@ -130,6 +131,44 @@ export const dbService = {
           data.last_login = nowStr;
         }
         return profile;
+      } else {
+        // User not found in remote DB. Create a new default profile.
+        console.log('[Auth Flow] Creating new user profile in Supabase profiles table for', userId);
+        const resolvedEmail = email || 'merchant@simupay.pro';
+        const newProfile: Profile = {
+          id: userId,
+          email: resolvedEmail,
+          full_name: fullName || 'SimuPay Merchant',
+          wallet_balance: 35000.00,
+          activation_key: 'SPP-MOCK-KEY-781A',
+          license_active: resolvedEmail === 'elitedailyearnings@gmail.com',
+          license_type: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'Enterprise' : 'Standard',
+          expiry_date: undefined,
+          subscription_status: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'Active' : 'N/A',
+          avatar_url: '',
+          email_alerts: true,
+          mempool_clear: false,
+          role: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'admin' : 'user',
+          created_at: new Date().toISOString(),
+          last_login: new Date().toISOString()
+        };
+
+        try {
+           const { data: insertedData, error: insertError } = await supabase
+             .from('profiles')
+             .insert([newProfile])
+             .select()
+             .maybeSingle();
+
+           if (!insertError && insertedData) {
+             console.log('[Auth Flow] New profile successfully created in Supabase.');
+             return insertedData as Profile;
+           } else {
+             console.warn('[Auth Flow] Insert failed, falling back to local storage', insertError);
+           }
+        } catch(err) {
+           console.warn('[Auth Flow] Could not insert profile to Supabase', err);
+        }
       }
     } catch (e) {
       console.warn('Supabase profiles retrieval failed, returning localStorage fallback.', e);
