@@ -77,24 +77,21 @@ function AppContent() {
   // 2. Fetch or Sync User Profile & Logs
   const syncUserData = async (user: any) => {
     try {
-      // A. Profile Sync
-      const finalProfile = await dbService.getProfile(
-        user.id,
-        user.email,
-        user.user_metadata?.full_name || user.user_metadata?.name
-      );
+      // Run data fetching concurrently
+      const [finalProfile, txData, notifData, ticketsData] = await Promise.all([
+        dbService.getProfile(
+          user.id,
+          user.email,
+          user.user_metadata?.full_name || user.user_metadata?.name
+        ),
+        dbService.getTransactions(user.id),
+        dbService.getNotifications(user.id),
+        dbService.getSupportTickets(user.id)
+      ]);
+
       setProfile(finalProfile);
-
-      // B. Transactions Sync
-      const txData = await dbService.getTransactions(user.id);
       setTransactions(txData);
-
-      // C. Notifications Sync
-      const notifData = await dbService.getNotifications(user.id);
       setNotifications(notifData);
-
-      // D. Support Tickets Sync
-      const ticketsData = await dbService.getSupportTickets(user.id);
       setSupportTickets(ticketsData);
 
     } catch (e) {
