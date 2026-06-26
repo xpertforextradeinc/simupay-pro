@@ -104,7 +104,7 @@ const seedWallets = (userId: string): Wallet[] => {
 export const dbService = {
 
   // 1. PROFILES OPERATIONS
-  getProfile: async (userId: string): Promise<Profile> => {
+  getProfile: async (userId: string, email?: string, fullName?: string): Promise<Profile> => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -114,13 +114,22 @@ export const dbService = {
 
       if (error) throw error;
       if (data) {
+        let profile = data as Profile;
+        if (profile.email === 'elitedailyearnings@gmail.com' && profile.role !== 'admin') {
+          profile.role = 'admin';
+          try {
+            await supabase.from('profiles').update({ role: 'admin' }).eq('id', userId);
+          } catch (err) {
+            console.warn('Failed to save remote admin role:', err);
+          }
+        }
         // Record last login if it exists
         if (!data.last_login) {
           const nowStr = new Date().toISOString();
           await supabase.from('profiles').update({ last_login: nowStr }).eq('id', userId);
           data.last_login = nowStr;
         }
-        return data as Profile;
+        return profile;
       }
     } catch (e) {
       console.warn('Supabase profiles retrieval failed, returning localStorage fallback.', e);
@@ -129,22 +138,30 @@ export const dbService = {
     // Fallback profile management
     const localProfiles = getLocalStorageItem<Record<string, Profile>>('spp_profiles', {});
     if (localProfiles[userId]) {
-      return localProfiles[userId];
+      const existing = localProfiles[userId];
+      if (existing.email === 'elitedailyearnings@gmail.com' && existing.role !== 'admin') {
+        existing.role = 'admin';
+        localProfiles[userId] = existing;
+        setLocalStorageItem('spp_profiles', localProfiles);
+      }
+      return existing;
     }
 
+    const resolvedEmail = email || 'merchant@simupay.pro';
     const defaultProfile: Profile = {
       id: userId,
-      email: 'merchant@simupay.pro',
-      full_name: 'SimuPay Merchant',
+      email: resolvedEmail,
+      full_name: fullName || 'SimuPay Merchant',
       wallet_balance: 35000.00,
       activation_key: 'SPP-MOCK-KEY-781A',
-      license_active: false,
-      license_type: 'Standard',
+      license_active: resolvedEmail === 'elitedailyearnings@gmail.com',
+      license_type: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'Enterprise' : 'Standard',
       expiry_date: undefined,
-      subscription_status: 'N/A',
+      subscription_status: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'Active' : 'N/A',
       avatar_url: '',
       email_alerts: true,
       mempool_clear: false,
+      role: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'admin' : 'user',
       created_at: new Date().toISOString(),
       last_login: new Date().toISOString()
     };
@@ -271,6 +288,10 @@ export const dbService = {
           return { success: false, message: 'This activation key is already utilized or expired.' };
         }
 
+        // Get user profile email
+        const profile = await dbService.getProfile(userId);
+        const userEmail = profile?.email || 'merchant@simupay.pro';
+
         // Update key status to active
         await supabase
           .from('activation_keys')
@@ -293,7 +314,7 @@ export const dbService = {
           .eq('id', userId);
 
         // Add subscription record
-        await dbService.createSubscription(userId, `${keyObj.license_type} License`, 999, keyObj.license_type === 'Standard' ? 'Annual' : 'Lifetime');
+        await dbService.createSubscription(userId, userEmail, `${keyObj.license_type} License`, undefined, 999, keyObj.license_type === 'Standard' ? 'Annual' : 'Lifetime');
         await dbService.logActivity(userId, 'activation', `Activated ${keyObj.license_type} License with validation key: ${formattedKey}`);
         await dbService.createNotification(userId, 'License Key Activated', `Congratulations! Your account license has been upgraded to ${keyObj.license_type} Unlimited.`, 'success');
 
@@ -322,16 +343,18 @@ export const dbService = {
 
       // Update profile locally
       const localProfiles = getLocalStorageItem<Record<string, Profile>>('spp_profiles', {});
+      let userEmail = 'merchant@simupay.pro';
       if (localProfiles[userId]) {
         localProfiles[userId].license_active = true;
         localProfiles[userId].license_type = matchedKey.license_type;
         localProfiles[userId].subscription_status = 'Active';
         localProfiles[userId].expiry_date = matchedKey.expires_at || undefined;
+        userEmail = localProfiles[userId].email || 'merchant@simupay.pro';
         setLocalStorageItem('spp_profiles', localProfiles);
       }
 
       // Add subscription and notifications
-      await dbService.createSubscription(userId, `${matchedKey.license_type} License`, 999, matchedKey.license_type === 'Standard' ? 'Annual' : 'Lifetime');
+      await dbService.createSubscription(userId, userEmail, `${matchedKey.license_type} License`, undefined, 999, matchedKey.license_type === 'Standard' ? 'Annual' : 'Lifetime');
       await dbService.logActivity(userId, 'activation', `Activated local license key ${formattedKey} type: ${matchedKey.license_type}`);
       await dbService.createNotification(userId, 'License Key Activated', `Congratulations! Your account license has been upgraded to ${matchedKey.license_type} Unlimited.`, 'success');
 
@@ -341,14 +364,16 @@ export const dbService = {
     // Admin override check
     if (formattedKey === 'SPP-ADMIN-UNLIMITED-2026') {
       const localProfiles = getLocalStorageItem<Record<string, Profile>>('spp_profiles', {});
+      let userEmail = 'merchant@simupay.pro';
       if (localProfiles[userId]) {
         localProfiles[userId].license_active = true;
         localProfiles[userId].license_type = 'Enterprise';
         localProfiles[userId].subscription_status = 'Active';
+        userEmail = localProfiles[userId].email || 'merchant@simupay.pro';
         setLocalStorageItem('spp_profiles', localProfiles);
       }
 
-      await dbService.createSubscription(userId, 'Enterprise License (Admin Bypass)', 0, 'Lifetime');
+      await dbService.createSubscription(userId, userEmail, 'Enterprise License (Admin Bypass)', undefined, 0, 'Lifetime');
       await dbService.logActivity(userId, 'activation', `Bypassed license using administrative master code: ${formattedKey}`);
       await dbService.createNotification(userId, 'Admin License Unlocked', 'Administrative master key accepted. All premium portals unlocked.', 'success');
 
@@ -605,12 +630,15 @@ export const dbService = {
       const baseSub: Subscription = {
         id: 'sub-init',
         user_id: userId,
+        email: 'merchant@simupay.pro',
         plan_name: 'Standard Pro Sandbox',
         status: 'active',
-        amount: 299,
+        amount: 0,
         billing_cycle: 'Annual',
-        current_period_start: new Date().toISOString(),
-        current_period_end: new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString()
+        started_at: new Date().toISOString(),
+        expires_at: new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       };
       const updatedAll = [...localSubs, baseSub];
       setLocalStorageItem('spp_subscriptions', updatedAll);
@@ -619,18 +647,31 @@ export const dbService = {
     return userSubs;
   },
 
-  createSubscription: async (userId: string, planName: string, amount: number, cycle: 'Monthly' | 'Annual' | 'Lifetime'): Promise<Subscription> => {
+  createSubscription: async (
+    userId: string, 
+    email: string,
+    planName: string, 
+    planCode: string | undefined,
+    amount: number, 
+    cycle: 'Monthly' | 'Quarterly' | 'Annual' | 'Lifetime',
+    paymentReference?: string
+  ): Promise<Subscription> => {
     const newSub: Subscription = {
       id: `SUB-${Math.floor(100000 + Math.random() * 900000)}`,
       user_id: userId,
+      email,
       plan_name: planName,
-      status: 'active',
+      plan_code: planCode,
       amount,
       billing_cycle: cycle,
-      current_period_start: new Date().toISOString(),
-      current_period_end: cycle === 'Lifetime' 
+      payment_reference: paymentReference,
+      status: 'active',
+      started_at: new Date().toISOString(),
+      expires_at: cycle === 'Lifetime' 
         ? new Date(Date.now() + 100 * 365 * 24 * 3600 * 1000).toISOString() 
-        : new Date(Date.now() + (cycle === 'Monthly' ? 30 : 365) * 24 * 3600 * 1000).toISOString()
+        : new Date(Date.now() + (cycle === 'Monthly' ? 30 : cycle === 'Quarterly' ? 90 : 365) * 24 * 3600 * 1000).toISOString(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     };
 
     try {
@@ -644,6 +685,141 @@ export const dbService = {
     localSubs.unshift(newSub);
     setLocalStorageItem('spp_subscriptions', localSubs);
     return newSub;
+  },
+
+  // 7B. ADMIN AND SECURITY APIs
+  getAllProfiles: async (): Promise<Profile[]> => {
+    try {
+      const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+      if (!error && data) return data as Profile[];
+    } catch (e) {
+      console.warn('Supabase getAllProfiles failed, reading local database.', e);
+    }
+    const localProfiles = getLocalStorageItem<Record<string, Profile>>('spp_profiles', {});
+    return Object.values(localProfiles).sort((a, b) => b.created_at.localeCompare(a.created_at));
+  },
+
+  getAllTransactions: async (): Promise<Transaction[]> => {
+    try {
+      const { data, error } = await supabase.from('transactions').select('*').order('created_at', { ascending: false });
+      if (!error && data) return data as Transaction[];
+    } catch (e) {
+      console.warn('Supabase getAllTransactions failed, reading local database.', e);
+    }
+    return getLocalStorageItem<Transaction[]>('spp_transactions', []);
+  },
+
+  getAllSubscriptions: async (): Promise<Subscription[]> => {
+    try {
+      const { data, error } = await supabase.from('subscriptions').select('*').order('created_at', { ascending: false });
+      if (!error && data) return data as Subscription[];
+    } catch (e) {
+      console.warn('Supabase getAllSubscriptions failed, reading local database.', e);
+    }
+    return getLocalStorageItem<Subscription[]>('spp_subscriptions', []);
+  },
+
+  getAllSupportTicketsAdmin: async (): Promise<SupportTicket[]> => {
+    try {
+      const { data, error } = await supabase.from('support_tickets').select('*').order('created_at', { ascending: false });
+      if (!error && data) return data as SupportTicket[];
+    } catch (e) {
+      console.warn('Supabase getAllSupportTicketsAdmin failed, reading local database.', e);
+    }
+    return getLocalStorageItem<SupportTicket[]>('spp_support_tickets', []);
+  },
+
+  updateSupportTicketStatus: async (ticketId: string, status: 'open' | 'resolved' | 'pending'): Promise<void> => {
+    try {
+      await supabase.from('support_tickets').update({ status }).eq('id', ticketId);
+    } catch (e) {
+      console.warn('Supabase updateSupportTicketStatus failed, updating locally.', e);
+    }
+    const localTickets = getLocalStorageItem<SupportTicket[]>('spp_support_tickets', []);
+    const updated = localTickets.map(t => t.id === ticketId ? { ...t, status } : t);
+    setLocalStorageItem('spp_support_tickets', updated);
+  },
+
+  updateUserRole: async (userId: string, role: 'admin' | 'user'): Promise<void> => {
+    try {
+      await supabase.from('profiles').update({ role }).eq('id', userId);
+    } catch (e) {
+      console.warn('Supabase updateUserRole failed, updating locally.', e);
+    }
+    const localProfiles = getLocalStorageItem<Record<string, Profile>>('spp_profiles', {});
+    if (localProfiles[userId]) {
+      localProfiles[userId].role = role;
+      setLocalStorageItem('spp_profiles', localProfiles);
+    }
+  },
+
+  updateUserBalance: async (userId: string, balance: number): Promise<void> => {
+    try {
+      await supabase.from('profiles').update({ wallet_balance: balance }).eq('id', userId);
+    } catch (e) {
+      console.warn('Supabase updateUserBalance failed, updating locally.', e);
+    }
+    const localProfiles = getLocalStorageItem<Record<string, Profile>>('spp_profiles', {});
+    if (localProfiles[userId]) {
+      localProfiles[userId].wallet_balance = balance;
+      setLocalStorageItem('spp_profiles', localProfiles);
+    }
+  },
+
+  createActivationKey: async (key: string, licenseType: 'Standard' | 'Enterprise', expiresDays: number | null): Promise<ActivationKey> => {
+    const newKey: ActivationKey = {
+      id: `KEY-${Math.floor(100000 + Math.random() * 900000)}`,
+      activation_key: key,
+      license_type: licenseType,
+      status: 'unused',
+      assigned_user: null,
+      activated_at: null,
+      expires_at: expiresDays ? new Date(Date.now() + expiresDays * 24 * 3600 * 1000).toISOString() : null
+    };
+
+    try {
+      await supabase.from('activation_keys').insert([newKey]);
+    } catch (e) {
+      console.warn('Supabase createActivationKey failed, writing locally.', e);
+    }
+
+    const localKeys = getLocalStorageItem<ActivationKey[]>('spp_activation_keys', []);
+    localKeys.push(newKey);
+    setLocalStorageItem('spp_activation_keys', localKeys);
+    return newKey;
+  },
+
+  deleteActivationKey: async (keyId: string): Promise<void> => {
+    try {
+      await supabase.from('activation_keys').delete().eq('id', keyId);
+    } catch (e) {
+      console.warn('Supabase deleteActivationKey failed, removing locally.', e);
+    }
+    const localKeys = getLocalStorageItem<ActivationKey[]>('spp_activation_keys', []);
+    const filtered = localKeys.filter(k => k.id !== keyId);
+    setLocalStorageItem('spp_activation_keys', filtered);
+  },
+
+  deleteSubscription: async (subId: string): Promise<void> => {
+    try {
+      await supabase.from('subscriptions').delete().eq('id', subId);
+    } catch (e) {
+      console.warn('Supabase deleteSubscription failed, removing locally.', e);
+    }
+    const localSubs = getLocalStorageItem<Subscription[]>('spp_subscriptions', []);
+    const filtered = localSubs.filter(s => s.id !== subId);
+    setLocalStorageItem('spp_subscriptions', filtered);
+  },
+
+  updateSubscriptionStatus: async (subId: string, status: 'active' | 'expired' | 'canceled'): Promise<void> => {
+    try {
+      await supabase.from('subscriptions').update({ status }).eq('id', subId);
+    } catch (e) {
+      console.warn('Supabase updateSubscriptionStatus failed, updating locally.', e);
+    }
+    const localSubs = getLocalStorageItem<Subscription[]>('spp_subscriptions', []);
+    const updated = localSubs.map(s => s.id === subId ? { ...s, status } : s);
+    setLocalStorageItem('spp_subscriptions', updated);
   },
 
   // 8. ACTIVITY LOGS OPERATIONS

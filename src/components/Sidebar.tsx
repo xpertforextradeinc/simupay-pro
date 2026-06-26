@@ -18,7 +18,9 @@ import {
   Menu,
   X,
   BarChart3,
-  Database
+  Database,
+  CreditCard,
+  Shield
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -34,6 +36,7 @@ interface SidebarProps {
   email: string;
   licenseActive: boolean;
   walletBalance: number;
+  role?: string;
 }
 
 export function Sidebar({
@@ -47,7 +50,8 @@ export function Sidebar({
   fullName,
   email,
   licenseActive,
-  walletBalance
+  walletBalance,
+  role
 }: SidebarProps) {
   interface MenuItem {
     readonly id: ActiveTab;
@@ -56,7 +60,7 @@ export function Sidebar({
     readonly premium?: boolean;
   }
 
-  const menuItems: readonly MenuItem[] = [
+  const baseMenuItems: MenuItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'account', label: 'My Account', icon: User },
     { id: 'wallet', label: 'Wallet', icon: Wallet },
@@ -67,11 +71,18 @@ export function Sidebar({
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'sms-center', label: 'SMS Center', icon: Smartphone },
     { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'subscription', label: 'Subscription', icon: CreditCard },
     { id: 'orders', label: 'Orders', icon: ShoppingBag },
     { id: 'support', label: 'Support', icon: HelpCircle },
     { id: 'settings', label: 'Settings', icon: Settings },
     { id: 'db-setup', label: 'Database Setup', icon: Database }
   ];
+
+  // If user is Admin, insert Admin Dashboard as the second item
+  const menuItems: MenuItem[] = [...baseMenuItems];
+  if (role === 'admin') {
+    menuItems.splice(1, 0, { id: 'admin-panel', label: 'Admin Panel', icon: Shield });
+  }
 
   const handleTabClick = (tabId: ActiveTab) => {
     onTabChange(tabId);

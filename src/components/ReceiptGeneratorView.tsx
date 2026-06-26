@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useToast } from './Toast';
-import { Receipt, FileText, Printer, CheckCircle, Download, Calendar, Coins, Hash, ShieldCheck, Tag } from 'lucide-react';
-import { Transaction } from '../types';
+import { Receipt, FileText, Printer, CheckCircle, Download, Calendar, Coins, Hash, ShieldCheck, Tag, Lock, Zap } from 'lucide-react';
+import { Transaction, Profile } from '../types';
 
 interface ReceiptGeneratorViewProps {
   transactions: Transaction[];
+  profile: Profile | null;
+  onNavigate: (tab: any) => void;
 }
 
-export function ReceiptGeneratorView({ transactions }: ReceiptGeneratorViewProps) {
+export function ReceiptGeneratorView({ transactions, profile, onNavigate }: ReceiptGeneratorViewProps) {
   const [selectedTxId, setSelectedTxId] = useState<string>('manual');
   
   // Custom manual inputs
@@ -18,6 +20,40 @@ export function ReceiptGeneratorView({ transactions }: ReceiptGeneratorViewProps
   const [manualStatus, setManualStatus] = useState<'completed' | 'pending' | 'failed'>('completed');
 
   const { showToast } = useToast();
+
+  const licenseActive = profile?.license_active ?? false;
+
+  if (!licenseActive) {
+    return (
+      <div className="bg-[#091714] p-8 rounded-2xl border border-[#16362F] shadow-2xl space-y-6 flex flex-col items-center text-center max-w-xl mx-auto my-6">
+        <div className="w-16 h-16 rounded-full bg-[#00C853]/15 border-2 border-[#00C853]/35 flex items-center justify-center text-[#00C853]">
+          <Lock className="w-8 h-8" />
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="text-lg font-display font-bold text-white">Enterprise License Tunnel Required</h3>
+          <p className="text-xs text-[#9CB1AC] leading-relaxed">
+            Receipt Generator is a premium, enterprise-tier feature. Access is currently locked. To activate high-speed cross-chain simulations and tools, choose your path below:
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 w-full justify-center pt-2">
+          <button
+            onClick={() => onNavigate('subscription')}
+            className="px-5 py-3 bg-[#00C853] hover:bg-emerald-400 text-[#050E0C] rounded-xl font-bold text-xs font-display tracking-wide transition-all shadow-lg cursor-pointer flex items-center justify-center gap-1.5 flex-1"
+          >
+            <Zap className="w-4 h-4 fill-current" /> Subscribe & Upgrade
+          </button>
+          <button
+            onClick={() => onNavigate('activation')}
+            className="px-5 py-3 bg-transparent hover:bg-[#16362F]/50 text-[#00C853] border border-[#00C853] rounded-xl font-bold text-xs font-display tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5 flex-1"
+          >
+            <Lock className="w-4 h-4" /> Use Activation Key
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handlePrint = () => {
     window.print();

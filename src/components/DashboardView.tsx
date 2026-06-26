@@ -13,7 +13,8 @@ import {
   CheckCircle,
   AlertCircle,
   Receipt,
-  Settings
+  Settings,
+  CreditCard
 } from 'lucide-react';
 import { Profile, Transaction, AppNotification } from '../types';
 
@@ -83,14 +84,22 @@ export function DashboardView({
           </p>
         </div>
 
-        <div className="relative z-10 flex gap-2 w-full md:w-auto">
+        <div className="relative z-10 flex flex-wrap gap-2 w-full md:w-auto">
           {!licenseActive && (
-            <button
-              onClick={() => onNavigate('activation')}
-              className="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-brand-bg hover:from-amber-400 hover:to-amber-500 rounded-xl font-semibold text-xs tracking-wide transition-all shadow-lg shadow-amber-950/40 cursor-pointer flex items-center gap-1"
-            >
-              <Zap className="w-3.5 h-3.5" /> Activate License Key
-            </button>
+            <>
+              <button
+                onClick={() => onNavigate('subscription')}
+                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-500 hover:to-blue-600 rounded-xl font-semibold text-xs tracking-wide transition-all shadow-lg cursor-pointer flex items-center gap-1"
+              >
+                <CreditCard className="w-3.5 h-3.5" /> Upgrade & Subscribe
+              </button>
+              <button
+                onClick={() => onNavigate('activation')}
+                className="px-4 py-2.5 bg-[#091714] border border-amber-500/40 text-amber-500 hover:bg-amber-500/10 rounded-xl font-semibold text-xs tracking-wide transition-all cursor-pointer flex items-center gap-1"
+              >
+                <Zap className="w-3.5 h-3.5" /> Activate Key
+              </button>
+            </>
           )}
           <button
             onClick={() => onNavigate('flash-transfer')}

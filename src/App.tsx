@@ -1,22 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { supabase } from './supabase';
 import { ToastProvider, useToast } from './components/Toast';
 import { Auth } from './components/Auth';
 import { Sidebar } from './components/Sidebar';
-import { DashboardView } from './components/DashboardView';
-import { AccountView } from './components/AccountView';
-import { WalletView } from './components/WalletView';
-import { ActivationView } from './components/ActivationView';
-import { FlashTransferView } from './components/FlashTransferView';
-import { ReceiptGeneratorView } from './components/ReceiptGeneratorView';
-import { TransactionHistoryView } from './components/TransactionHistoryView';
-import { AnalyticsView } from './components/AnalyticsView';
-import { SmsCenterView, OrdersView, SupportView, SettingsView } from './components/UtilityViews';
-import { NotificationsView } from './components/NotificationsView';
-import { DbSetupView } from './components/DbSetupView';
 import { dbService } from './services/dbService';
 import { ActiveTab, Profile, Transaction, AppNotification, SupportTicket } from './types';
-import { KeyRound, ShieldAlert, LogOut, Search, Bell, ChevronDown, User, Settings, Database } from 'lucide-react';
+import { KeyRound, ShieldAlert, LogOut, Search, Bell, ChevronDown, User, Settings, Database, Loader2 } from 'lucide-react';
+
+const DashboardView = React.lazy(() => import('./components/DashboardView').then(m => ({ default: m.DashboardView })));
+const AccountView = React.lazy(() => import('./components/AccountView').then(m => ({ default: m.AccountView })));
+const WalletView = React.lazy(() => import('./components/WalletView').then(m => ({ default: m.WalletView })));
+const ActivationView = React.lazy(() => import('./components/ActivationView').then(m => ({ default: m.ActivationView })));
+const FlashTransferView = React.lazy(() => import('./components/FlashTransferView').then(m => ({ default: m.FlashTransferView })));
+const ReceiptGeneratorView = React.lazy(() => import('./components/ReceiptGeneratorView').then(m => ({ default: m.ReceiptGeneratorView })));
+const TransactionHistoryView = React.lazy(() => import('./components/TransactionHistoryView').then(m => ({ default: m.TransactionHistoryView })));
+const AnalyticsView = React.lazy(() => import('./components/AnalyticsView').then(m => ({ default: m.AnalyticsView })));
+const SmsCenterView = React.lazy(() => import('./components/UtilityViews').then(m => ({ default: m.SmsCenterView })));
+const OrdersView = React.lazy(() => import('./components/UtilityViews').then(m => ({ default: m.OrdersView })));
+const SupportView = React.lazy(() => import('./components/UtilityViews').then(m => ({ default: m.SupportView })));
+const SettingsView = React.lazy(() => import('./components/UtilityViews').then(m => ({ default: m.SettingsView })));
+const NotificationsView = React.lazy(() => import('./components/NotificationsView').then(m => ({ default: m.NotificationsView })));
+const DbSetupView = React.lazy(() => import('./components/DbSetupView').then(m => ({ default: m.DbSetupView })));
+const SubscriptionView = React.lazy(() => import('./components/SubscriptionView').then(m => ({ default: m.SubscriptionView })));
+const AdminPanelView = React.lazy(() => import('./components/AdminPanelView').then(m => ({ default: m.AdminPanelView })));
 
 export default function App() {
   return (
@@ -72,7 +78,11 @@ function AppContent() {
   const syncUserData = async (user: any) => {
     try {
       // A. Profile Sync
-      const finalProfile = await dbService.getProfile(user.id);
+      const finalProfile = await dbService.getProfile(
+        user.id,
+        user.email,
+        user.user_metadata?.full_name || user.user_metadata?.name
+      );
       setProfile(finalProfile);
 
       // B. Transactions Sync
@@ -166,6 +176,7 @@ function AppContent() {
         email={profile?.email ?? ''}
         licenseActive={profile?.license_active ?? false}
         walletBalance={profile?.wallet_balance ?? 0}
+        role={profile?.role}
       />
 
       {/* Main content body */}
@@ -322,98 +333,122 @@ function AppContent() {
         </div>
 
         {/* View Router Section */}
-        {activeTab === 'dashboard' && (
-          <DashboardView
-            profile={profile}
-            transactions={transactions}
-            notifications={notifications}
-            onNavigate={setActiveTab}
-            onCopyWallet={handleCopyWalletAddress}
-          />
-        )}
+        <Suspense fallback={<div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-[#00C853]" /></div>}>
+          {activeTab === 'dashboard' && (
+            <DashboardView
+              profile={profile}
+              transactions={transactions}
+              notifications={notifications}
+              onNavigate={setActiveTab}
+              onCopyWallet={handleCopyWalletAddress}
+            />
+          )}
 
-        {activeTab === 'account' && (
-          <AccountView
-            profile={profile}
-            onProfileUpdate={handleProfileUpdate}
-          />
-        )}
+          {activeTab === 'account' && (
+            <AccountView
+              profile={profile}
+              onProfileUpdate={handleProfileUpdate}
+            />
+          )}
 
-        {activeTab === 'wallet' && (
-          <WalletView
-            profile={profile}
-            transactions={transactions}
-            onBalanceUpdate={handleBalanceUpdate}
-            onAddTransaction={handleAddTransaction}
-          />
-        )}
+          {activeTab === 'wallet' && (
+            <WalletView
+              profile={profile}
+              transactions={transactions}
+              onBalanceUpdate={handleBalanceUpdate}
+              onAddTransaction={handleAddTransaction}
+              onNavigate={setActiveTab}
+            />
+          )}
 
-        {activeTab === 'activation' && (
-          <ActivationView
-            profile={profile}
-            onActivateSuccess={handleActivateSuccess}
-          />
-        )}
+          {activeTab === 'activation' && (
+            <ActivationView
+              profile={profile}
+              onActivateSuccess={handleActivateSuccess}
+            />
+          )}
 
-        {activeTab === 'flash-transfer' && (
-          <FlashTransferView
-            profile={profile}
-            onBalanceUpdate={handleBalanceUpdate}
-            onAddTransaction={handleAddTransaction}
-            onNavigate={setActiveTab}
-          />
-        )}
+          {activeTab === 'flash-transfer' && (
+            <FlashTransferView
+              profile={profile}
+              onBalanceUpdate={handleBalanceUpdate}
+              onAddTransaction={handleAddTransaction}
+              onNavigate={setActiveTab}
+            />
+          )}
 
-        {activeTab === 'receipt-generator' && (
-          <ReceiptGeneratorView
-            transactions={transactions}
-          />
-        )}
+          {activeTab === 'receipt-generator' && (
+            <ReceiptGeneratorView
+              transactions={transactions}
+              profile={profile}
+              onNavigate={setActiveTab}
+            />
+          )}
 
-        {activeTab === 'transactions' && (
-          <TransactionHistoryView
-            transactions={transactions}
-          />
-        )}
+          {activeTab === 'transactions' && (
+            <TransactionHistoryView
+              transactions={transactions}
+            />
+          )}
 
-        {activeTab === 'analytics' && (
-          <AnalyticsView
-            profile={profile}
-            transactions={transactions}
-          />
-        )}
+          {activeTab === 'analytics' && (
+            <AnalyticsView
+              profile={profile}
+              transactions={transactions}
+              onNavigate={setActiveTab}
+            />
+          )}
 
-        {activeTab === 'sms-center' && <SmsCenterView />}
-        {activeTab === 'orders' && <OrdersView />}
-        {activeTab === 'support' && (
-          <SupportView
-            userId={profile?.id || ''}
-            tickets={supportTickets}
-            onRefresh={() => {
-              if (session?.user) {
-                dbService.getSupportTickets(session.user.id).then(setSupportTickets);
-              }
-            }}
-          />
-        )}
-        {activeTab === 'settings' && (
-          <SettingsView
-            profile={profile}
-            onUpdateProfile={handleProfileUpdate}
-          />
-        )}
-        {activeTab === 'notifications' && (
-          <NotificationsView
-            userId={profile?.id || ''}
-            notifications={notifications}
-            onRefresh={() => {
-              if (session?.user) {
-                dbService.getNotifications(session.user.id).then(setNotifications);
-              }
-            }}
-          />
-        )}
-        {activeTab === 'db-setup' && <DbSetupView />}
+          {activeTab === 'sms-center' && <SmsCenterView />}
+          {activeTab === 'orders' && <OrdersView />}
+          {activeTab === 'support' && (
+            <SupportView
+              userId={profile?.id || ''}
+              tickets={supportTickets}
+              onRefresh={() => {
+                if (session?.user) {
+                  dbService.getSupportTickets(session.user.id).then(setSupportTickets);
+                }
+              }}
+            />
+          )}
+          {activeTab === 'settings' && (
+            <SettingsView
+              profile={profile}
+              onUpdateProfile={handleProfileUpdate}
+            />
+          )}
+          {activeTab === 'notifications' && (
+            <NotificationsView
+              userId={profile?.id || ''}
+              notifications={notifications}
+              onRefresh={() => {
+                if (session?.user) {
+                  dbService.getNotifications(session.user.id).then(setNotifications);
+                }
+              }}
+            />
+          )}
+          {activeTab === 'db-setup' && <DbSetupView />}
+
+          {activeTab === 'subscription' && (
+            <SubscriptionView
+              profile={profile}
+              onUpdateProfile={handleProfileUpdate}
+              onRefresh={() => {
+                if (session?.user) {
+                  syncUserData(session.user);
+                }
+              }}
+            />
+          )}
+
+          {activeTab === 'admin-panel' && (
+            <AdminPanelView
+              currentUserId={profile?.id || ''}
+            />
+          )}
+        </Suspense>
       </main>
     </div>
   );

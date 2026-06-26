@@ -14,6 +14,7 @@ export interface Profile {
   avatar_url?: string;
   email_alerts?: boolean;
   mempool_clear?: boolean;
+  role?: 'admin' | 'user';
   created_at: string;
   last_login?: string;
 }
@@ -75,12 +76,17 @@ export interface AppNotification {
 export interface Subscription {
   id: string;
   user_id: string;
+  email: string;
   plan_name: string;
-  status: 'active' | 'expired' | 'canceled';
+  plan_code?: string;
   amount: number;
-  billing_cycle: 'Monthly' | 'Annual' | 'Lifetime';
-  current_period_start: string;
-  current_period_end: string;
+  billing_cycle: 'Monthly' | 'Quarterly' | 'Annual' | 'Lifetime';
+  payment_reference?: string;
+  status: 'active' | 'expired' | 'canceled';
+  started_at: string;
+  expires_at?: string;
+  created_at: string;
+  updated_at?: string;
 }
 
 export interface ActivityLog {
@@ -115,4 +121,6 @@ export type ActiveTab =
   | 'orders'
   | 'support'
   | 'settings'
-  | 'db-setup';
+  | 'db-setup'
+  | 'subscription'
+  | 'admin-panel';

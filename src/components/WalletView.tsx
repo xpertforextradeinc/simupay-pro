@@ -21,13 +21,15 @@ interface WalletViewProps {
   transactions: Transaction[];
   onBalanceUpdate: (newBalance: number) => void;
   onAddTransaction: (tx: Transaction) => void;
+  onNavigate: (tab: any) => void;
 }
 
 export function WalletView({
   profile,
   transactions,
   onBalanceUpdate,
-  onAddTransaction
+  onAddTransaction,
+  onNavigate
 }: WalletViewProps) {
   const [copiedNetwork, setCopiedNetwork] = useState<string | null>(null);
   const [depositAmount, setDepositAmount] = useState('10000');
@@ -228,51 +230,71 @@ export function WalletView({
               <h3 className="text-base font-display font-bold text-white">Instant Portal Asset Injection (Demo Sandbox)</h3>
             </div>
 
-            <form onSubmit={handleSimulateDeposit} className="space-y-4">
-              <p className="text-xs text-[#9CB1AC] leading-relaxed">
-                Add virtual assets instantly to your active merchant node to stress-test your ledger pipelines and flash transactions in real-time.
-              </p>
+            {profile?.license_active ? (
+              <form onSubmit={handleSimulateDeposit} className="space-y-4">
+                <p className="text-xs text-[#9CB1AC] leading-relaxed">
+                  Add virtual assets instantly to your active merchant node to stress-test your ledger pipelines and flash transactions in real-time.
+                </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-[#9CB1AC] uppercase tracking-wider">Network Source</label>
-                  <select
-                    value={selectedDepositNetwork}
-                    onChange={(e) => setSelectedDepositNetwork(e.target.value)}
-                    className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#00C853] text-sm font-sans"
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-[#9CB1AC] uppercase tracking-wider">Network Source</label>
+                    <select
+                      value={selectedDepositNetwork}
+                      onChange={(e) => setSelectedDepositNetwork(e.target.value)}
+                      className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#00C853] text-sm font-sans"
+                    >
+                      <option value="USDT (TRC20)">Tron Protocol (USDT TRC20)</option>
+                      <option value="USDT (ERC20)">Ethereum Protocol (USDT ERC20)</option>
+                      <option value="USDT (BEP20)">BNB Chain Protocol (USDT BEP20)</option>
+                      <option value="BTC (Bitcoin)">Bitcoin Protocol (BTC)</option>
+                      <option value="ETH (Ethereum)">Ethereum Core Protocol (ETH)</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-[#9CB1AC] uppercase tracking-wider font-mono">Amount ($ USD Value)</label>
+                    <input
+                      type="number"
+                      value={depositAmount}
+                      onChange={(e) => setDepositAmount(e.target.value)}
+                      placeholder="e.g. 25000"
+                      className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white placeholder-gray-600 focus:outline-none focus:border-[#00C853] text-sm font-mono font-semibold"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-2">
+                  <button
+                    type="submit"
+                    disabled={isDepositing}
+                    className="bg-[#00C853] hover:bg-[#00C853]/90 text-[#050E0C] font-semibold px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 text-xs font-display cursor-pointer shadow-lg disabled:opacity-50"
                   >
-                    <option value="USDT (TRC20)">Tron Protocol (USDT TRC20)</option>
-                    <option value="USDT (ERC20)">Ethereum Protocol (USDT ERC20)</option>
-                    <option value="USDT (BEP20)">BNB Chain Protocol (USDT BEP20)</option>
-                    <option value="BTC (Bitcoin)">Bitcoin Protocol (BTC)</option>
-                    <option value="ETH (Ethereum)">Ethereum Core Protocol (ETH)</option>
-                  </select>
+                    <RefreshCw className={`w-3.5 h-3.5 ${isDepositing ? 'animate-spin' : ''}`} />
+                    {isDepositing ? 'Executing Decentralized Bridge...' : 'Bridge Assets Instantly'}
+                  </button>
                 </div>
-
+              </form>
+            ) : (
+              <div className="py-6 flex flex-col items-center text-center space-y-4">
+                <div className="w-12 h-12 rounded-full bg-[#00C853]/15 border-2 border-[#00C853]/35 flex items-center justify-center text-[#00C853]">
+                  <Lock className="w-6 h-6" />
+                </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-[#9CB1AC] uppercase tracking-wider font-mono">Amount ($ USD Value)</label>
-                  <input
-                    type="number"
-                    value={depositAmount}
-                    onChange={(e) => setDepositAmount(e.target.value)}
-                    placeholder="e.g. 25000"
-                    className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white placeholder-gray-600 focus:outline-none focus:border-[#00C853] text-sm font-mono font-semibold"
-                    required
-                  />
+                  <h4 className="text-sm font-bold text-white font-display">Premium Injection Locked</h4>
+                  <p className="text-xs text-[#9CB1AC] max-w-sm leading-relaxed">
+                    Instantly simulate incoming ledger deposits with an Enterprise Subscription.
+                  </p>
                 </div>
-              </div>
-
-              <div className="flex justify-end pt-2">
                 <button
-                  type="submit"
-                  disabled={isDepositing}
-                  className="bg-[#00C853] hover:bg-[#00C853]/90 text-[#050E0C] font-semibold px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 text-xs font-display cursor-pointer shadow-lg disabled:opacity-50"
+                  onClick={() => onNavigate('subscription')}
+                  className="mt-2 bg-[#00C853] text-[#050E0C] hover:bg-emerald-400 font-bold px-4 py-2 rounded-xl text-xs transition-all shadow-lg"
                 >
-                  <RefreshCw className={`w-3.5 h-3.5 ${isDepositing ? 'animate-spin' : ''}`} />
-                  {isDepositing ? 'Executing Decentralized Bridge...' : 'Bridge Assets Instantly'}
+                  Upgrade to Pro
                 </button>
               </div>
-            </form>
+            )}
           </div>
 
           {/* Secure Node Status Notice */}

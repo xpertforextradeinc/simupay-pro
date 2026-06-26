@@ -180,6 +180,21 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
   const [ticketSent, setTicketSent] = useState(false);
   const { showToast } = useToast();
 
+  const [tgBotLink, setTgBotLink] = useState(() => localStorage.getItem('spp_telegram_bot_link') || 'https://t.me/SimuPayPro_Support_Bot');
+  const [isEditingTgLink, setIsEditingTgLink] = useState(false);
+  const [tempTgLink, setTempTgLink] = useState(tgBotLink);
+
+  const handleSaveTgLink = () => {
+    if (!tempTgLink.trim() || !tempTgLink.startsWith('http')) {
+      showToast('Please enter a valid URL starting with http:// or https://', 'warning');
+      return;
+    }
+    localStorage.setItem('spp_telegram_bot_link', tempTgLink.trim());
+    setTgBotLink(tempTgLink.trim());
+    setIsEditingTgLink(false);
+    showToast('Telegram support link updated successfully!', 'success');
+  };
+
   const handleSupportTicket = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!ticketSubject || !ticketMessage) {
@@ -211,7 +226,92 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-display font-bold text-white">Help & Merchant Support</h2>
-        <p className="text-xs text-gray-500">File technical support tickets and read general system operating parameters.</p>
+        <p className="text-xs text-gray-500">Access instant human assistance or file a technical ticket to our developers.</p>
+      </div>
+
+      {/* INSTANT CHANNELS GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* WhatsApp Enterprise Support */}
+        <div className="bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1.5 max-w-full sm:max-w-[65%]">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <h3 className="text-sm font-semibold text-white">WhatsApp Live Support</h3>
+            </div>
+            <p className="text-xs text-gray-400 leading-relaxed">
+              Connect directly with our corporate account manager. Standard response time is under 5 minutes.
+            </p>
+          </div>
+          <a
+            href="https://wa.me/2348104908260"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto text-center flex-shrink-0 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-lg transition-all"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            WhatsApp Support
+          </a>
+        </div>
+
+        {/* Telegram Configurable Support */}
+        <div className="bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-1.5 max-w-full sm:max-w-[65%]">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                <h3 className="text-sm font-semibold text-white">Telegram Support Bot</h3>
+              </div>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Interact with our interactive customer bot for rapid automated query solving.
+              </p>
+            </div>
+            <a
+              href={tgBotLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto text-center flex-shrink-0 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-lg transition-all"
+            >
+              <Send className="w-3.5 h-3.5" />
+              Telegram Support
+            </a>
+          </div>
+
+          <div className="border-t border-emerald-950/50 pt-3">
+            {!isEditingTgLink ? (
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-gray-500 truncate max-w-[70%]">Active Bot: <span className="font-mono text-gray-300">{tgBotLink}</span></span>
+                <button
+                  onClick={() => { setTempTgLink(tgBotLink); setIsEditingTgLink(true); }}
+                  className="text-blue-400 hover:text-blue-300 font-semibold cursor-pointer underline decoration-dotted text-xs"
+                >
+                  Configure link
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  value={tempTgLink}
+                  onChange={(e) => setTempTgLink(e.target.value)}
+                  placeholder="https://t.me/your_bot_link"
+                  className="flex-1 bg-brand-bg/60 border border-emerald-950/60 rounded-lg px-2.5 py-1.5 text-white text-[11px] font-mono focus:outline-none focus:border-blue-500"
+                />
+                <button
+                  onClick={handleSaveTgLink}
+                  className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-3 py-1.5 rounded-lg text-[10px] cursor-pointer"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => setIsEditingTgLink(false)}
+                  className="text-gray-400 hover:text-gray-300 text-[10px] cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
@@ -276,7 +376,7 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
             {tickets.length === 0 ? (
               <p className="text-[11px] text-gray-500 italic">No tickets filed yet in this node session.</p>
             ) : (
-              <div className="space-y-2 max-h-[180px] overflow-y-auto pr-1">
+              <div className="space-y-2 max-h-[180px] overflow-y-auto pr-1 font-sans">
                 {tickets.map((ticket) => (
                   <div key={ticket.id} className="p-3 bg-brand-bg/40 rounded-lg border border-emerald-950/40 flex justify-between items-start gap-2">
                     <div className="space-y-1">

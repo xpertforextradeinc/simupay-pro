@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabase';
 import { useToast } from './Toast';
-import { Zap, ShieldCheck, Lock, ArrowRight, ShieldAlert, CheckCircle, RefreshCw, FileText } from 'lucide-react';
+import { Zap, ShieldCheck, Lock, ArrowRight, ShieldAlert, CheckCircle, RefreshCw, FileText, Key } from 'lucide-react';
 import { Profile, Transaction } from '../types';
 
 interface FlashTransferViewProps {
@@ -163,25 +163,33 @@ export function FlashTransferView({
       </div>
 
       {!licenseActive ? (
-        /* LOCK STATE: Activation Required */
+        /* LOCK STATE: Activation or Subscription Required */
         <div className="bg-[#091714] p-8 rounded-2xl border border-[#16362F] shadow-2xl space-y-6 flex flex-col items-center text-center max-w-xl mx-auto my-6">
-          <div className="w-16 h-16 rounded-full bg-amber-500/10 border-2 border-amber-500/30 flex items-center justify-center text-amber-500">
+          <div className="w-16 h-16 rounded-full bg-[#00C853]/15 border-2 border-[#00C853]/35 flex items-center justify-center text-[#00C853]">
             <Lock className="w-8 h-8" />
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-lg font-display font-bold text-white">License Key Activation Required</h3>
+            <h3 className="text-lg font-display font-bold text-white">Enterprise License Tunnel Required</h3>
             <p className="text-xs text-[#9CB1AC] leading-relaxed">
-              Flash Transfer is an enterprise-tier ledger bridging feature. Safe multi-network dispatch capabilities are locked pending active key validation.
+              Flash Transfer is a premium, enterprise-tier ledger bridging feature. Access is currently locked. To activate high-speed cross-chain simulations, choose your path below:
             </p>
           </div>
 
-          <button
-            onClick={() => onNavigate('activation')}
-            className="px-5 py-3 bg-[#00C853] hover:bg-emerald-500 text-[#050E0C] rounded-xl font-bold text-xs font-display tracking-wide transition-all shadow-lg cursor-pointer flex items-center gap-1.5"
-          >
-            <Zap className="w-4 h-4 fill-current" /> Unlock Premium Portal
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 w-full justify-center pt-2">
+            <button
+              onClick={() => onNavigate('subscription')}
+              className="px-5 py-3 bg-[#00C853] hover:bg-emerald-400 text-[#050E0C] rounded-xl font-bold text-xs font-display tracking-wide transition-all shadow-lg cursor-pointer flex items-center justify-center gap-1.5 flex-1"
+            >
+              <Zap className="w-4 h-4 fill-current" /> Subscribe & Upgrade
+            </button>
+            <button
+              onClick={() => onNavigate('activation')}
+              className="px-5 py-3 bg-transparent hover:bg-[#16362F]/50 text-[#00C853] border border-[#00C853] rounded-xl font-bold text-xs font-display tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5 flex-1"
+            >
+              <Key className="w-4 h-4" /> Use Activation Key
+            </button>
+          </div>
         </div>
       ) : (
         /* PREMIUM ACTIVE STATE: Flash Transfer Form & Progress Screen */
