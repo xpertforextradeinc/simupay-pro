@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  /* Custom brand colors for SimuPay Pro */
+  --color-brand-bg: #050E0C;
+  --color-brand-card: #091714;
+  --color-brand-accent: #00C853;
+  --color-brand-blue: #2563EB;
+  --color-brand-gold: #FFD700;
+}
+
+@layer base {
+  body {
+    background-color: #050E0C;
+    color: #f3f4f6;
+    font-family: var(--font-sans);
+  }
+
+  /* Custom Scrollbar for Premium feel */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #050E0C;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #0e2924;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00C853;
+  }
+}
+
+/* Watermark & receipt graphics */
+.receipt-watermark {
+  background-image: radial-gradient(#00c85310 1px, transparent 0);
+  background-size: 24px 24px;
+}
