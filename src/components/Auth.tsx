@@ -351,9 +351,18 @@ export function Auth({ onAuthSuccess }: AuthProps) {
         )}
 
         {/* Security watermark */}
-        <div className="mt-8 pt-4 border-t border-emerald-950/60 flex items-center justify-center gap-2 text-xs text-gray-500 font-mono">
-          <Key className="w-3.5 h-3.5 text-emerald-600" />
-          <span>256-BIT SSL SECURED ENCRYPTION</span>
+        <div className="mt-8 pt-4 border-t border-emerald-950/60 flex flex-col items-center justify-center gap-3 text-xs text-gray-500 font-mono">
+          <div className="flex items-center gap-2">
+            <Key className="w-3.5 h-3.5 text-emerald-600" />
+            <span>256-BIT SSL SECURED ENCRYPTION</span>
+          </div>
+          <div className="text-center opacity-60">
+            <p className="text-[10px] leading-tight">
+              © 2026 SimuPay Pro
+              <br />
+              Powered by Luckman Dev World
+            </p>
+          </div>
         </div>
       </motion.div>
     </div>

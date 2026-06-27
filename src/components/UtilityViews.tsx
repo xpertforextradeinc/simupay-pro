@@ -449,64 +449,110 @@ export function SettingsView({ profile, onUpdateProfile }: SettingsViewProps) {
         <p className="text-xs text-gray-500">Configure corporate ledger tunnels, API permissions, and preferences.</p>
       </div>
 
-      <div className="bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl max-w-2xl space-y-6">
-        <div className="flex items-center gap-2 border-b border-emerald-950/50 pb-2.5">
-          <Settings className="w-4 h-4 text-[#00C853]" />
-          <h3 className="text-sm font-semibold text-white">Merchant Preferences</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl">
+        {/* Settings Column */}
+        <div className="bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl space-y-6">
+          <div className="flex items-center gap-2 border-b border-emerald-950/50 pb-2.5">
+            <Settings className="w-4 h-4 text-[#00C853]" />
+            <h3 className="text-sm font-semibold text-white">Merchant Preferences</h3>
+          </div>
+
+          <div className="space-y-4 text-xs">
+            {/* Email notifications */}
+            <div className="flex items-center justify-between p-3.5 bg-brand-bg/60 border border-emerald-950 rounded-xl">
+              <div className="space-y-0.5">
+                <span className="text-xs font-bold text-white block">Email Compliance Alerts</span>
+                <span className="text-[10px] text-gray-500 block">Dispatch transaction alerts directly to your inbox.</span>
+              </div>
+              <input
+                type="checkbox"
+                checked={emailAlerts}
+                onChange={(e) => setEmailAlerts(e.target.checked)}
+                className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-[#00C853] focus:ring-[#00C853] cursor-pointer"
+              />
+            </div>
+
+            {/* Sandbox toggle */}
+            <div className="flex items-center justify-between p-3.5 bg-brand-bg/60 border border-emerald-950 rounded-xl">
+              <div className="space-y-0.5">
+                <span className="text-xs font-bold text-white block">Sandbox Testing Mode</span>
+                <span className="text-[10px] text-gray-500 block">Allow simulation deposits and test credits.</span>
+              </div>
+              <input
+                type="checkbox"
+                checked={sandboxMode}
+                disabled
+                className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-[#00C853] focus:ring-[#00C853] opacity-40 cursor-not-allowed"
+              />
+            </div>
+
+            {/* Auto Mempool clear */}
+            <div className="flex items-center justify-between p-3.5 bg-brand-bg/60 border border-emerald-950 rounded-xl">
+              <div className="space-y-0.5">
+                <span className="text-xs font-bold text-white block">Auto-Clear Mempool Queue</span>
+                <span className="text-[10px] text-gray-500 block">Clean transaction queue to save bandwidth when necessary.</span>
+              </div>
+              <input
+                type="checkbox"
+                checked={mempoolClear}
+                onChange={(e) => setMempoolClear(e.target.checked)}
+                className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-[#00C853] focus:ring-[#00C853] cursor-pointer"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              onClick={handleSaveSettings}
+              disabled={saving}
+              className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs cursor-pointer shadow-lg transition-all disabled:opacity-50"
+            >
+              {saving ? 'Saving...' : 'Save Preferences'}
+            </button>
+          </div>
         </div>
 
-        <div className="space-y-4 text-xs">
-          {/* Email notifications */}
-          <div className="flex items-center justify-between p-3.5 bg-brand-bg/60 border border-emerald-950 rounded-xl">
-            <div className="space-y-0.5">
-              <span className="text-xs font-bold text-white block">Email Compliance Alerts</span>
-              <span className="text-[10px] text-gray-500 block">Dispatch transaction alerts directly to your inbox.</span>
-            </div>
-            <input
-              type="checkbox"
-              checked={emailAlerts}
-              onChange={(e) => setEmailAlerts(e.target.checked)}
-              className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-[#00C853] focus:ring-[#00C853] cursor-pointer"
-            />
+        {/* About Developer Column */}
+        <div className="bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl h-fit space-y-6">
+          <div className="flex items-center gap-2 border-b border-emerald-950/50 pb-2.5">
+            <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
+            <h3 className="text-sm font-semibold text-white">System Information</h3>
           </div>
 
-          {/* Sandbox toggle */}
-          <div className="flex items-center justify-between p-3.5 bg-brand-bg/60 border border-emerald-950 rounded-xl">
-            <div className="space-y-0.5">
-              <span className="text-xs font-bold text-white block">Sandbox Testing Mode</span>
-              <span className="text-[10px] text-gray-500 block">Allow simulation deposits and test credits.</span>
+          <div className="space-y-4">
+            <div className="p-4 bg-brand-bg/60 border border-emerald-950 rounded-xl flex flex-col items-center justify-center text-center gap-2">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#00C853] to-emerald-900 flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold font-mono">LDW</span>
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-white">Luckman Dev World</h4>
+                <p className="text-[10px] text-gray-400 font-mono">Lead Developer & Architect</p>
+              </div>
             </div>
-            <input
-              type="checkbox"
-              checked={sandboxMode}
-              disabled
-              className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-[#00C853] focus:ring-[#00C853] opacity-40 cursor-not-allowed"
-            />
-          </div>
 
-          {/* Auto Mempool clear */}
-          <div className="flex items-center justify-between p-3.5 bg-brand-bg/60 border border-emerald-950 rounded-xl">
-            <div className="space-y-0.5">
-              <span className="text-xs font-bold text-white block">Auto-Clear Mempool Queue</span>
-              <span className="text-[10px] text-gray-500 block">Clean transaction queue to save bandwidth when necessary.</span>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
+                <span className="text-gray-500">PLATFORM</span>
+                <span className="text-white font-bold">SimuPay Pro v2.0</span>
+              </div>
+              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
+                <span className="text-gray-500">FRAMEWORK</span>
+                <span className="text-white font-bold">React + Vite + TS</span>
+              </div>
+              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
+                <span className="text-gray-500">DATABASE</span>
+                <span className="text-white font-bold">Supabase (PostgreSQL)</span>
+              </div>
+              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
+                <span className="text-gray-500">HOSTING</span>
+                <span className="text-white font-bold">Vercel Edge</span>
+              </div>
+              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
+                <span className="text-gray-500">COPYRIGHT</span>
+                <span className="text-white font-bold">© 2026 Luckman Dev World</span>
+              </div>
             </div>
-            <input
-              type="checkbox"
-              checked={mempoolClear}
-              onChange={(e) => setMempoolClear(e.target.checked)}
-              className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-[#00C853] focus:ring-[#00C853] cursor-pointer"
-            />
           </div>
-        </div>
-
-        <div className="flex justify-end">
-          <button
-            onClick={handleSaveSettings}
-            disabled={saving}
-            className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs cursor-pointer shadow-lg transition-all disabled:opacity-50"
-          >
-            {saving ? 'Saving...' : 'Save Preferences'}
-          </button>
         </div>
       </div>
     </div>

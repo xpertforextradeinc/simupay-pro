@@ -6,6 +6,7 @@ import { Sidebar } from './components/Sidebar';
 import { dbService } from './services/dbService';
 import { ActiveTab, Profile, Transaction, AppNotification, SupportTicket } from './types';
 import { KeyRound, ShieldAlert, LogOut, Search, Bell, ChevronDown, User, Settings, Database, Loader2 } from 'lucide-react';
+import { useShortcuts } from './hooks/useShortcuts';
 
 const DashboardView = React.lazy(() => import('./components/DashboardView').then(m => ({ default: m.DashboardView })));
 const AccountView = React.lazy(() => import('./components/AccountView').then(m => ({ default: m.AccountView })));
@@ -47,6 +48,13 @@ function AppContent() {
   const [supportTickets, setSupportTickets] = useState<SupportTicket[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Register Global Keyboard Shortcuts
+  useShortcuts((tab) => {
+    if (session) {
+      setActiveTab(tab);
+    }
+  });
+
   // 1. Recover Session on Mount
   useEffect(() => {
     console.log('[Auth Flow] Initialization started...');
@@ -65,6 +73,9 @@ function AppContent() {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('[Auth Flow] onAuthStateChange event:', event, session);
+      // Ignore INITIAL_SESSION to let getSession() handle the initial URL parsing properly
+      if (event === 'INITIAL_SESSION') return;
+      
       setSession(session);
       if (session) {
         syncUserData(session.user);

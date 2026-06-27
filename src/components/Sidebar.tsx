@@ -199,6 +199,17 @@ export function Sidebar({
           })}
         </nav>
 
+        {/* Branding Footer */}
+        {(!collapsed || mobileOpen) && (
+          <div className="px-4 py-3 text-center opacity-60 hover:opacity-100 transition-opacity">
+            <p className="text-[10px] text-gray-500 font-mono leading-tight">
+              © 2026 SimuPay Pro
+              <br />
+              Powered by Luckman Dev World
+            </p>
+          </div>
+        )}
+
         {/* Logout Section */}
         <div className="p-3 border-t border-emerald-950/40">
           <button

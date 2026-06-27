@@ -135,12 +135,18 @@ export const dbService = {
         // User not found in remote DB. Create a new default profile.
         console.log('[Auth Flow] Creating new user profile in Supabase profiles table for', userId);
         const resolvedEmail = email || 'merchant@simupay.pro';
+        const generateKey = () => {
+          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+          const segment = () => Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+          return `SPP-${segment()}-${segment()}-${segment()}`;
+        };
+
         const newProfile: Profile = {
           id: userId,
           email: resolvedEmail,
           full_name: fullName || 'SimuPay Merchant',
           wallet_balance: 35000.00,
-          activation_key: 'SPP-MOCK-KEY-781A',
+          activation_key: generateKey(),
           license_active: resolvedEmail === 'elitedailyearnings@gmail.com',
           license_type: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'Enterprise' : 'Standard',
           expiry_date: undefined,
@@ -186,13 +192,19 @@ export const dbService = {
       return existing;
     }
 
+    const generateFallbackKey = () => {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const segment = () => Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+      return `SPP-${segment()}-${segment()}-${segment()}`;
+    };
+
     const resolvedEmail = email || 'merchant@simupay.pro';
     const defaultProfile: Profile = {
       id: userId,
       email: resolvedEmail,
       full_name: fullName || 'SimuPay Merchant',
       wallet_balance: 35000.00,
-      activation_key: 'SPP-MOCK-KEY-781A',
+      activation_key: generateFallbackKey(),
       license_active: resolvedEmail === 'elitedailyearnings@gmail.com',
       license_type: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'Enterprise' : 'Standard',
       expiry_date: undefined,
