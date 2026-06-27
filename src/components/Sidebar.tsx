@@ -21,6 +21,7 @@ import {
   Database,
   CreditCard,
   Shield,
+  ShieldCheck,
   Globe,
   ArrowUpRight
 } from 'lucide-react';
@@ -70,11 +71,11 @@ export function Sidebar({
     { id: 'flash-transfer', label: 'Flash Transfer', icon: Zap, premium: true },
     { id: 'receipt-generator', label: 'Receipt Generator', icon: Receipt },
     { id: 'transactions', label: 'Transaction History', icon: History },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'sms-center', label: 'SMS Center', icon: Smartphone },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3, premium: true },
+    { id: 'sms-center', label: 'SMS Center', icon: Smartphone, premium: true },
     { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'subscription', label: 'Subscription', icon: CreditCard },
-    { id: 'orders', label: 'Orders', icon: ShoppingBag },
+    { id: 'orders', label: 'Orders', icon: ShoppingBag, premium: true },
     { id: 'support', label: 'Support', icon: HelpCircle },
     { id: 'resources', label: 'Resources', icon: Globe },
     { id: 'settings', label: 'Settings', icon: Settings }
@@ -86,6 +87,13 @@ export function Sidebar({
     menuItems.splice(1, 0, { id: 'admin-panel', label: 'Admin Panel', icon: Shield });
     menuItems.push({ id: 'db-setup', label: 'Database Setup', icon: Database });
   }
+
+  // Future features (Coming Soon)
+  const futureItems: MenuItem[] = [
+    { id: 'dashboard', label: 'Mempool Clearer', icon: Zap, premium: true },
+    { id: 'dashboard', label: 'Exchange Bridge', icon: Globe, premium: true },
+    { id: 'dashboard', label: 'Node Validator', icon: ShieldCheck, premium: true }
+  ];
 
   const handleTabClick = (tabId: ActiveTab) => {
     onTabChange(tabId);
@@ -210,6 +218,25 @@ export function Sidebar({
               </button>
             );
           })}
+
+          {/* Future Modules Section */}
+          {!collapsed && (
+            <div className="mt-6 px-4 py-2">
+              <span className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] block mb-2">Enterprise Modules</span>
+              <div className="space-y-1">
+                {futureItems.map((item, idx) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={idx} className="flex items-center gap-3 px-4 py-2.5 text-gray-600 rounded-xl cursor-not-allowed group">
+                      <Icon className="w-4 h-4" />
+                      <span className="text-xs font-medium flex-1">{item.label}</span>
+                      <span className="text-[8px] border border-gray-800 text-gray-700 px-1.5 py-0.5 rounded font-mono">SOON</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </nav>
 
         {/* Sidebar Partner Shortcut */}

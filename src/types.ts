@@ -130,8 +130,13 @@ export interface ReceiptRecord {
   transaction_time: string;
   reference_no?: string;
   sender_name?: string;
+  sender_tag?: string; // e.g. $cashtag
   recipient_name?: string;
-  recipient_identifier?: string; // Cashtag, email, phone, address
+  recipient_tag?: string; // e.g. $cashtag
+  recipient_address?: string; // Crypto wallet address
+  asset?: string; // BTC, ETH, USDT
+  network?: string; // TRC20, ERC20
+  bank_name?: string; // For Zelle/Bank transfers
   memo?: string;
   metadata?: Record<string, any>;
   created_at: string;

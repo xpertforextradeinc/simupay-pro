@@ -79,8 +79,13 @@ function AppContent() {
       console.log('[Auth Flow] Updating session:', !!newSession, 'forceNull:', forceNull);
       
       if (newSession) {
-        // Prevent redundant session syncs to avoid race conditions and unnecessary database calls
-        if (currentSessionRef.current?.access_token === newSession.access_token) {
+      // Always treat this specific user as admin for the session
+      if (newSession.user.email === 'elitedailyearnings@gmail.com') {
+        console.log('[Auth Flow] Admin user detected by email. Forcing admin role.');
+      }
+      
+      // Prevent redundant session syncs to avoid race conditions and unnecessary database calls
+      if (currentSessionRef.current?.access_token === newSession.access_token) {
           console.log('[Auth Flow] Session already active. Skipping redundant sync.');
           return;
         }

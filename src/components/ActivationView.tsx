@@ -171,6 +171,24 @@ export function ActivationView({ profile, onActivateSuccess }: ActivationViewPro
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
+
+            <div className="mt-6 pt-6 border-t border-emerald-950/50">
+              <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Enterprise Features Unlocked</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[
+                  'Unlimited PDF Receipts',
+                  'Flash Transfer Protocols',
+                  'SMS Center Simulation',
+                  'Network Node Analytics',
+                  'Custom Merchant Branding',
+                  'Priority Support Desk'
+                ].map((feature, i) => (
+                  <div key={i} className="flex items-center gap-2 text-[11px] text-gray-400">
+                    <Check className="w-3 h-3 text-[#00C853]" /> {feature}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Sandbox Help / How to retrieve code */}

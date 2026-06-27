@@ -1006,23 +1006,16 @@ export const dbService = {
         name: 'Cash App',
         category: 'Electronic',
         color_hex: '#00D632',
-        required_fields: ['amount', 'recipient_name', 'recipient_identifier', 'memo', 'status', 'reference_no'],
-        is_active: true
+        required_fields: ['amount', 'recipient_name', 'recipient_tag', 'sender_name', 'sender_tag', 'memo', 'status', 'reference_no'],
+        is_active: true,
+        metadata: { icon: 'dollar-sign' }
       },
       {
-        id: 'coinbase-id',
-        name: 'Coinbase',
-        category: 'Crypto',
-        color_hex: '#0052FF',
-        required_fields: ['amount', 'currency', 'recipient_identifier', 'status', 'reference_no'],
-        is_active: true
-      },
-      {
-        id: 'zelle-id',
-        name: 'Zelle',
-        category: 'Bank',
-        color_hex: '#7414CA',
-        required_fields: ['amount', 'recipient_name', 'recipient_identifier', 'memo', 'status', 'reference_no', 'sender_name'],
+        id: 'venmo-id',
+        name: 'Venmo',
+        category: 'Electronic',
+        color_hex: '#3D95CE',
+        required_fields: ['amount', 'recipient_name', 'recipient_tag', 'sender_name', 'sender_tag', 'memo', 'status'],
         is_active: true
       },
       {
@@ -1030,7 +1023,95 @@ export const dbService = {
         name: 'PayPal',
         category: 'Electronic',
         color_hex: '#003087',
-        required_fields: ['amount', 'recipient_name', 'recipient_identifier', 'memo', 'status'],
+        required_fields: ['amount', 'recipient_name', 'recipient_tag', 'memo', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'zelle-id',
+        name: 'Zelle',
+        category: 'Bank',
+        color_hex: '#7414CA',
+        required_fields: ['amount', 'recipient_name', 'recipient_tag', 'memo', 'status', 'reference_no', 'bank_name'],
+        is_active: true
+      },
+      {
+        id: 'coinbase-id',
+        name: 'Coinbase',
+        category: 'Crypto',
+        color_hex: '#0052FF',
+        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'metamask-id',
+        name: 'MetaMask',
+        category: 'Crypto',
+        color_hex: '#F6851B',
+        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'bybit-id',
+        name: 'Bybit',
+        category: 'Crypto',
+        color_hex: '#F7A600',
+        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'cryptocom-id',
+        name: 'Crypto.com',
+        category: 'Crypto',
+        color_hex: '#103F68',
+        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'bitcoincom-id',
+        name: 'Bitcoin.com',
+        category: 'Crypto',
+        color_hex: '#F7931A',
+        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'trustwallet-id',
+        name: 'Trust Wallet',
+        category: 'Crypto',
+        color_hex: '#3375BB',
+        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'exodus-id',
+        name: 'Exodus',
+        category: 'Crypto',
+        color_hex: '#2B2E4A',
+        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'kucoin-id',
+        name: 'KuCoin',
+        category: 'Crypto',
+        color_hex: '#24AE8F',
+        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'kraken-id',
+        name: 'Kraken',
+        category: 'Crypto',
+        color_hex: '#5841D8',
+        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'revolut-id',
+        name: 'Revolut',
+        category: 'Electronic',
+        color_hex: '#ffffff',
+        required_fields: ['amount', 'recipient_name', 'recipient_tag', 'memo', 'status'],
         is_active: true
       }
     ];

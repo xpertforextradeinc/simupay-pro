@@ -87,8 +87,13 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
       provider_name: provider.name,
       reference_no: '',
       sender_name: '',
+      sender_tag: '',
       recipient_name: '',
-      recipient_identifier: '',
+      recipient_tag: '',
+      recipient_address: '',
+      asset: provider.category === 'Crypto' ? 'USDT' : '',
+      network: provider.category === 'Crypto' ? 'TRC-20' : '',
+      bank_name: provider.category === 'Bank' ? 'Chase Bank' : '',
       memo: '',
     });
     
@@ -311,9 +316,25 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                     <input 
                       type="text" 
                       name="sender_name"
-                      value={formData.sender_name}
+                      value={formData.sender_name || ''}
                       onChange={handleInputChange}
                       className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#00C853]"
+                    />
+                  </div>
+                )}
+
+                {isFieldRequired('sender_tag') && (
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                      <Tag className="w-3 h-3" /> Sender Tag
+                    </label>
+                    <input 
+                      type="text" 
+                      name="sender_tag"
+                      value={formData.sender_tag || ''}
+                      onChange={handleInputChange}
+                      placeholder="$cashtag / @username"
+                      className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853]"
                     />
                   </div>
                 )}
@@ -326,24 +347,80 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                     <input 
                       type="text" 
                       name="recipient_name"
-                      value={formData.recipient_name}
+                      value={formData.recipient_name || ''}
                       onChange={handleInputChange}
                       className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#00C853]"
                     />
                   </div>
                 )}
 
-                {isFieldRequired('recipient_identifier') && (
-                  <div className="space-y-1.5 md:col-span-2">
+                {isFieldRequired('recipient_tag') && (
+                  <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
-                      <Tag className="w-3 h-3" /> Recipient ID (Email/Tag/Wallet)
+                      <Tag className="w-3 h-3" /> Recipient Tag
                     </label>
                     <input 
                       type="text" 
-                      name="recipient_identifier"
-                      value={formData.recipient_identifier}
+                      name="recipient_tag"
+                      value={formData.recipient_tag || ''}
+                      onChange={handleInputChange}
+                      placeholder="$cashtag / @username"
+                      className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853]"
+                    />
+                  </div>
+                )}
+
+                {isFieldRequired('recipient_address') && (
+                  <div className="space-y-1.5 md:col-span-2">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                      <Hash className="w-3 h-3" /> Wallet Address
+                    </label>
+                    <input 
+                      type="text" 
+                      name="recipient_address"
+                      value={formData.recipient_address || ''}
+                      onChange={handleInputChange}
+                      placeholder="0x... / T..."
+                      className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853]"
+                    />
+                  </div>
+                )}
+
+                {isFieldRequired('asset') && (
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Asset (e.g. BTC, USDT)</label>
+                    <input 
+                      type="text" 
+                      name="asset"
+                      value={formData.asset || ''}
                       onChange={handleInputChange}
                       className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853]"
+                    />
+                  </div>
+                )}
+
+                {isFieldRequired('network') && (
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Network (e.g. TRC-20)</label>
+                    <input 
+                      type="text" 
+                      name="network"
+                      value={formData.network || ''}
+                      onChange={handleInputChange}
+                      className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853]"
+                    />
+                  </div>
+                )}
+
+                {isFieldRequired('bank_name') && (
+                  <div className="space-y-1.5 md:col-span-2">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Bank Name</label>
+                    <input 
+                      type="text" 
+                      name="bank_name"
+                      value={formData.bank_name || ''}
+                      onChange={handleInputChange}
+                      className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#00C853]"
                     />
                   </div>
                 )}
@@ -440,10 +517,22 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                       <span className="text-[10px] text-gray-500 font-bold uppercase">To</span>
                       <span className="text-sm text-white font-medium">{formData.recipient_name || '---'}</span>
                     </div>
-                    {formData.recipient_identifier && (
+                    {formData.recipient_tag && (
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-gray-500 font-bold uppercase">Identifier</span>
-                        <span className="text-[11px] text-[#00C853] font-mono">{formData.recipient_identifier}</span>
+                        <span className="text-[10px] text-gray-500 font-bold uppercase">Tag</span>
+                        <span className="text-[11px] text-[#00C853] font-mono">{formData.recipient_tag}</span>
+                      </div>
+                    )}
+                    {formData.recipient_address && (
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] text-gray-500 font-bold uppercase">Wallet Address</span>
+                        <span className="text-[9px] text-gray-400 font-mono break-all">{formData.recipient_address}</span>
+                      </div>
+                    )}
+                    {formData.asset && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] text-gray-500 font-bold uppercase">Asset / Network</span>
+                        <span className="text-[10px] text-white font-mono">{formData.asset} ({formData.network || 'Mainnet'})</span>
                       </div>
                     )}
                     <div className="flex justify-between items-center">

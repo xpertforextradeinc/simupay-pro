@@ -177,6 +177,47 @@ export function DashboardView({
         </div>
       </div>
 
+      {/* Premium Incentives (Show if not active) */}
+      {!licenseActive && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-brand-card p-6 rounded-2xl border border-amber-500/20 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4">
+              <Zap className="w-8 h-8 text-amber-500/20" />
+            </div>
+            <h4 className="text-sm font-bold text-white flex items-center gap-2">
+              <Zap className="w-4 h-4 text-amber-500" /> Flash Transfer Protocols
+            </h4>
+            <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+              Unlock the ability to simulate high-speed cross-chain transfers with instant confirmation states and professional PDF generation.
+            </p>
+            <button 
+              onClick={() => onNavigate('activation')}
+              className="mt-4 text-[10px] font-bold text-amber-500 uppercase tracking-widest hover:text-amber-400 transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              Activate to Unlock <ArrowUpRight className="w-3 h-3" />
+            </button>
+          </div>
+
+          <div className="bg-brand-card p-6 rounded-2xl border border-blue-500/20 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4">
+              <Activity className="w-8 h-8 text-blue-500/20" />
+            </div>
+            <h4 className="text-sm font-bold text-white flex items-center gap-2">
+              <Activity className="w-4 h-4 text-blue-500" /> Deep Analytics & SMS Center
+            </h4>
+            <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+              Get detailed insights into your transaction volume and access the professional SMS notification simulation center.
+            </p>
+            <button 
+              onClick={() => onNavigate('activation')}
+              className="mt-4 text-[10px] font-bold text-blue-500 uppercase tracking-widest hover:text-blue-400 transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              Activate to Unlock <ArrowUpRight className="w-3 h-3" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Enterprise Security Audit Status & Metadata */}
       <div className="bg-[#091714]/80 p-5 rounded-2xl border border-emerald-950/40 shadow-xl space-y-4">
         <div className="flex justify-between items-center border-b border-emerald-950/30 pb-2.5">
