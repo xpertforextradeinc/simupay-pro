@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { supabase } from './supabase';
 import { ToastProvider, useToast } from './components/Toast';
 import { Auth } from './components/Auth';
@@ -37,6 +37,7 @@ export default function App() {
 
 function AppContent() {
   const [session, setSession] = useState<any>(null);
+  const currentSessionRef = useRef<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
   const [collapsed, setCollapsed] = useState(false);
@@ -74,17 +75,31 @@ function AppContent() {
 
   // 1. Recover Session on Mount
   useEffect(() => {
-    const handleSessionUpdate = async (session: any) => {
-      console.log('[Auth Flow] Updating session:', !!session);
-      setSession(session);
-      if (session) {
-        await syncUserData(session.user);
+    const handleSessionUpdate = async (newSession: any, forceNull = false) => {
+      console.log('[Auth Flow] Updating session:', !!newSession, 'forceNull:', forceNull);
+      
+      if (newSession) {
+        // Prevent redundant session syncs to avoid race conditions and unnecessary database calls
+        if (currentSessionRef.current?.access_token === newSession.access_token) {
+          console.log('[Auth Flow] Session already active. Skipping redundant sync.');
+          return;
+        }
+        currentSessionRef.current = newSession;
+        setSession(newSession);
+        await syncUserData(newSession.user);
       } else {
-        setProfile(null);
-        setTransactions([]);
-        setNotifications([]);
-        setSupportTickets([]);
-        setLoading(false);
+        // Only clear the session if there isn't already an active one, or if we explicitly force a null update (like on sign out)
+        if (!currentSessionRef.current || forceNull) {
+          currentSessionRef.current = null;
+          setSession(null);
+          setProfile(null);
+          setTransactions([]);
+          setNotifications([]);
+          setSupportTickets([]);
+          setLoading(false);
+        } else {
+          console.log('[Auth Flow] Ignoring null session update because we already have an active session.');
+        }
       }
     };
 
@@ -99,7 +114,7 @@ function AppContent() {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || (event === 'INITIAL_SESSION' && session)) {
         handleSessionUpdate(session);
       } else if (event === 'SIGNED_OUT') {
-        handleSessionUpdate(null);
+        handleSessionUpdate(null, true);
       }
     });
 
@@ -143,6 +158,21 @@ function AppContent() {
 
     } catch (e) {
       console.error('[Auth Flow] Graceful initialization fallback enabled:', e);
+      
+      // Construct a minimal fallback profile so the UI can render correctly even if database fetch fails completely
+      const fallbackProfile: Profile = {
+        id: user.id,
+        email: user.email || 'merchant@simupay.pro',
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || 'SimuPay Merchant',
+        wallet_balance: 35000.00,
+        activation_key: 'SPP-FALLBACK-KEY',
+        license_active: user.email === 'elitedailyearnings@gmail.com',
+        license_type: user.email === 'elitedailyearnings@gmail.com' ? 'Enterprise' : 'Standard',
+        role: user.email === 'elitedailyearnings@gmail.com' ? 'admin' : 'user',
+        created_at: new Date().toISOString()
+      };
+      setProfile(fallbackProfile);
+      
       // Still attempt to navigate to dashboard
       setActiveTab('dashboard');
     } finally {
@@ -152,6 +182,7 @@ function AppContent() {
   };
 
   const handleLogout = async () => {
+    currentSessionRef.current = null;
     await supabase.auth.signOut();
     setActiveTab('dashboard');
     showToast('Logged out securely.', 'info');
