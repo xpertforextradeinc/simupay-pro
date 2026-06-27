@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TrendingUp,
   ArrowUpRight,
@@ -17,6 +17,7 @@ import {
   CreditCard
 } from 'lucide-react';
 import { Profile, Transaction, AppNotification } from '../types';
+import { DISCLOSURE_TEXT } from '../data/partners';
 
 interface DashboardViewProps {
   profile: Profile | null;
@@ -33,152 +34,146 @@ export function DashboardView({
   onNavigate,
   onCopyWallet
 }: DashboardViewProps) {
+  const [emptyStateDismissed, setEmptyStateDismissed] = useState(() => {
+    return localStorage.getItem('spp_dashboard_empty_dismissed') === 'true';
+  });
+
+  const [partnerCardDismissed, setPartnerCardDismissed] = useState(() => {
+    return localStorage.getItem('spp_dashboard_partner_card_dismissed') === 'true';
+  });
+
+  const handleDismissEmptyState = () => {
+    setEmptyStateDismissed(true);
+    localStorage.setItem('spp_dashboard_empty_dismissed', 'true');
+  };
+
+  const handleDismissPartnerCard = () => {
+    setPartnerCardDismissed(true);
+    localStorage.setItem('spp_dashboard_partner_card_dismissed', 'true');
+  };
   // Compute analytics
   const totalBalance = profile?.wallet_balance ?? 0;
   const licenseActive = profile?.license_active ?? false;
+  
+  // Simulate daily receipt limit
+  const today = new Date().toISOString().split('T')[0];
+  const receiptsToday = transactions.filter(t => t.created_at.startsWith(today)).length;
+  const maxFreeReceipts = 5;
+  const isPremium = profile?.subscription_status === 'Active';
+
   const totalTx = transactions.length;
-  const completedTx = transactions.filter((t) => t.status === 'completed').length;
-  const pendingTx = transactions.filter((t) => t.status === 'pending').length;
-  const failedTx = transactions.filter((t) => t.status === 'failed').length;
 
-  // Recent 5 transactions
-  const recentTransactions = [...transactions]
-    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-    .slice(0, 5);
-
-  // SVG Line Chart mock data (monthly volume)
-  const chartPoints = [25, 45, 35, 75, 60, 95, 80]; // simulated curves
+  // Chart configuration and metrics
+  const chartPoints = [15, 30, 25, 45, 60, 55, 80];
   const width = 500;
-  const height = 120;
-  const padding = 15;
-  const pointsXY = chartPoints.map((val, idx) => {
-    const x = padding + (idx * (width - padding * 2)) / (chartPoints.length - 1);
-    const y = height - padding - (val * (height - padding * 2)) / 100;
-    return `${x},${y}`;
-  });
-  const pointsPath = pointsXY.join(' ');
+  const height = 150;
+  const padding = 20;
+  const pointsPath = chartPoints
+    .map((val, idx) => {
+      const x = padding + (idx * (width - padding * 2)) / (chartPoints.length - 1);
+      const y = height - padding - (val * (height - padding * 2)) / 100;
+      return `${x},${y}`;
+    })
+    .join(' ');
+
+  const recentTransactions = transactions.slice(0, 5);
 
   return (
     <div className="space-y-6">
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-brand-card to-[#0e2c26]/60 p-6 rounded-2xl border border-emerald-950/40 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        {/* Decorative Grid */}
         <div className="absolute inset-0 receipt-watermark opacity-15 pointer-events-none" />
         <div className="relative z-10 space-y-1">
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-display font-bold text-white">
-              Welcome back, {profile?.full_name || 'Merchant'}!
-            </h1>
-            {licenseActive ? (
-              <span className="bg-[#00C853]/15 text-[#00C853] text-[10px] font-bold font-mono px-2 py-0.5 rounded-full border border-[#00C853]/30 flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3" /> Activated
-              </span>
-            ) : (
-              <span className="bg-amber-500/15 text-amber-500 text-[10px] font-bold font-mono px-2 py-0.5 rounded-full border border-amber-500/30 flex items-center gap-1">
-                <ShieldAlert className="w-3 h-3" /> Standard Account
-              </span>
-            )}
-          </div>
+          <h1 className="text-2xl font-display font-bold text-white">
+            Welcome back, {profile?.full_name || 'Merchant'}!
+          </h1>
           <p className="text-gray-400 text-sm max-w-xl">
-            SimuPay Pro secure enterprise ledger terminal. Control your global cross-network transactions and smart flash assets.
+            SimuPay Pro secure enterprise receipt generation platform. Manage your professional receipts and transaction records.
           </p>
         </div>
 
-        <div className="relative z-10 flex flex-wrap gap-2 w-full md:w-auto">
-          {!licenseActive && (
-            <>
-              <button
-                onClick={() => onNavigate('subscription')}
-                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-500 hover:to-blue-600 rounded-xl font-semibold text-xs tracking-wide transition-all shadow-lg cursor-pointer flex items-center gap-1"
-              >
-                <CreditCard className="w-3.5 h-3.5" /> Upgrade & Subscribe
-              </button>
-              <button
-                onClick={() => onNavigate('activation')}
-                className="px-4 py-2.5 bg-[#091714] border border-amber-500/40 text-amber-500 hover:bg-amber-500/10 rounded-xl font-semibold text-xs tracking-wide transition-all cursor-pointer flex items-center gap-1"
-              >
-                <Zap className="w-3.5 h-3.5" /> Activate Key
-              </button>
-            </>
+        <div className="relative z-10 flex gap-2">
+          {!isPremium && (
+            <button
+              onClick={() => onNavigate('subscription')}
+              className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-500 hover:to-blue-600 rounded-xl font-semibold text-xs tracking-wide transition-all shadow-lg cursor-pointer"
+            >
+              Upgrade to Premium
+            </button>
           )}
           <button
-            onClick={() => onNavigate('flash-transfer')}
-            className="flex-1 md:flex-none px-4 py-2.5 bg-[#00C853] hover:bg-emerald-500 text-brand-bg rounded-xl font-semibold text-xs tracking-wide transition-all shadow-lg shadow-emerald-950/40 cursor-pointer flex items-center justify-center gap-1.5"
+            onClick={() => onNavigate('receipt-generator')}
+            className="px-4 py-2.5 bg-[#00C853] hover:bg-emerald-500 text-brand-bg rounded-xl font-semibold text-xs tracking-wide transition-all shadow-lg cursor-pointer"
           >
-            <Zap className="w-3.5 h-3.5 fill-current" /> Fast Flash Transfer
+            Quick Generate Receipt
           </button>
         </div>
       </div>
 
-      {/* Grid Statistics Counters */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Wallet Balance Card */}
-        <div className="bg-brand-card p-5 rounded-xl border border-emerald-950/40 shadow-xl flex items-center justify-between group hover:border-[#00C853]/30 transition-all">
-          <div className="space-y-1">
-            <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">Available Balance</span>
-            <h3 className="text-2xl font-display font-bold text-white tracking-tight">
-              ${totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </h3>
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <span className="text-[#00C853] font-mono font-medium flex items-center gap-0.5">
-                <TrendingUp className="w-3 h-3" /> +14.2%
+      {/* 3. Empty State Recommendation */}
+      {totalTx === 0 && !emptyStateDismissed && (
+        <div className="bg-gradient-to-br from-[#091714] to-[#040e0c] p-5 rounded-2xl border border-emerald-950 shadow-xl relative overflow-hidden animate-in fade-in slide-in-from-top-4 duration-300">
+          <button
+            onClick={handleDismissEmptyState}
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-300 text-xs font-mono transition-colors cursor-pointer"
+            title="Dismiss"
+          >
+            Dismiss
+          </button>
+          
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1 max-w-xl">
+              <span className="text-[10px] font-bold text-emerald-400 font-mono uppercase tracking-wider bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-950">
+                Getting Started
               </span>
-              <span>vs last week</span>
+              <h3 className="text-sm font-bold text-white mt-1">Need a cryptocurrency exchange?</h3>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Create a free Gate account if you’re looking for a platform to trade or manage digital assets.
+              </p>
+            </div>
+            
+            <div className="flex-shrink-0">
+              <a
+                href="https://www.gate.com/share/simupaypro"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#00C853] hover:bg-[#00E676] text-black font-semibold text-xs py-2.5 px-4 rounded-xl text-center shadow-lg transition-all duration-300 transform active:scale-95 cursor-pointer block"
+              >
+                Open Gate
+              </a>
             </div>
           </div>
-          <div className="p-3 bg-emerald-950/30 rounded-xl border border-[#00C853]/15 group-hover:bg-[#00C853]/10 transition-colors">
-            <Wallet className="w-6 h-6 text-[#00C853]" />
+          
+          <div className="mt-3 pt-2 border-t border-emerald-950/30 text-[9px] text-gray-500 font-mono leading-tight">
+            {DISCLOSURE_TEXT}
           </div>
         </div>
+      )}
 
-        {/* Total Transactions */}
-        <div className="bg-brand-card p-5 rounded-xl border border-emerald-950/40 shadow-xl flex items-center justify-between group hover:border-blue-500/30 transition-all">
-          <div className="space-y-1">
-            <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">Total Ledger Transactions</span>
-            <h3 className="text-2xl font-display font-bold text-white tracking-tight">
-              {totalTx}
-            </h3>
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <span className="text-blue-400 font-mono font-medium">{transactions.length > 0 ? 'Live database synced' : 'Initial session'}</span>
-            </div>
-          </div>
-          <div className="p-3 bg-blue-950/30 rounded-xl border border-blue-500/15 group-hover:bg-blue-500/10 transition-colors">
-            <Activity className="w-6 h-6 text-blue-400" />
-          </div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="bg-brand-card p-5 rounded-xl border border-emerald-950/40 shadow-xl space-y-1">
+          <span className="text-xs text-gray-500 uppercase tracking-wider">Subscription Status</span>
+          <h3 className="text-xl font-display font-bold text-white">
+            {isPremium ? 'Premium Plan' : 'Free Plan'}
+          </h3>
+          <p className="text-[10px] text-gray-400">{isPremium ? 'Unlimited access unlocked' : 'Limited features'}</p>
+        </div>
+        
+        <div className="bg-brand-card p-5 rounded-xl border border-emerald-950/40 shadow-xl space-y-1">
+          <span className="text-xs text-gray-500 uppercase tracking-wider">Free Receipts Used Today</span>
+          <h3 className="text-xl font-display font-bold text-white">
+            {receiptsToday} / {maxFreeReceipts}
+          </h3>
+          <p className="text-[10px] text-gray-400">Resets daily</p>
         </div>
 
-        {/* Completed Transactions */}
-        <div className="bg-brand-card p-5 rounded-xl border border-emerald-950/40 shadow-xl flex items-center justify-between group hover:border-emerald-500/30 transition-all">
-          <div className="space-y-1">
-            <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">Completed Transfers</span>
-            <h3 className="text-2xl font-display font-bold text-white tracking-tight">
-              {completedTx}
-            </h3>
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <span className="text-[#00C853] font-mono font-medium">
-                {totalTx > 0 ? `${Math.round((completedTx / totalTx) * 100)}%` : '0%'} Success rate
-              </span>
-            </div>
-          </div>
-          <div className="p-3 bg-[#00C853]/10 rounded-xl border border-[#00C853]/15 group-hover:bg-[#00C853]/20 transition-colors">
-            <CheckCircle className="w-6 h-6 text-[#00C853]" />
-          </div>
-        </div>
-
-        {/* Pending Transactions */}
-        <div className="bg-brand-card p-5 rounded-xl border border-emerald-950/40 shadow-xl flex items-center justify-between group hover:border-amber-500/30 transition-all">
-          <div className="space-y-1">
-            <span className="text-xs text-gray-500 font-medium uppercase tracking-wider">Pending Authorizations</span>
-            <h3 className="text-2xl font-display font-bold text-white tracking-tight">
-              {pendingTx}
-            </h3>
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <span className="text-amber-500 font-mono font-medium">Requires activation keys</span>
-            </div>
-          </div>
-          <div className="p-3 bg-amber-950/20 rounded-xl border border-amber-500/15 group-hover:bg-amber-500/10 transition-colors">
-            <Clock className="w-6 h-6 text-amber-500" />
-          </div>
+        <div className="bg-brand-card p-5 rounded-xl border border-emerald-950/40 shadow-xl space-y-1">
+          <span className="text-xs text-gray-500 uppercase tracking-wider">Total Receipts Generated</span>
+          <h3 className="text-xl font-display font-bold text-white">
+            {totalTx}
+          </h3>
+          <p className="text-[10px] text-gray-400">All-time record</p>
         </div>
       </div>
 
@@ -479,6 +474,56 @@ export function DashboardView({
           </div>
         </div>
       </div>
+
+      {/* 1. Dashboard Partner Card */}
+      {!partnerCardDismissed && (
+        <div className="bg-gradient-to-br from-[#091714] to-[#040e0c] p-6 rounded-2xl border border-emerald-950/50 shadow-xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+          
+          <button
+            onClick={handleDismissPartnerCard}
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-300 text-xs font-mono transition-colors cursor-pointer"
+            title="Dismiss"
+          >
+            Dismiss
+          </button>
+
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+            <div className="space-y-2 max-w-2xl">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] uppercase font-bold text-emerald-400 font-mono tracking-wider bg-emerald-950/40 px-2.5 py-1 rounded-md border border-emerald-950">
+                  Recommended Partner
+                </span>
+                <span className="text-[9px] uppercase font-bold text-[#00C853] bg-[#00C853]/10 border border-[#00C853]/20 px-2.5 py-0.5 rounded-full font-mono">
+                  Create Your Free Gate Account
+                </span>
+              </div>
+              <h3 className="text-sm md:text-base font-bold text-white tracking-tight font-display">
+                Looking for a trusted cryptocurrency exchange?
+              </h3>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Gate offers cryptocurrency trading, spot markets, futures, and digital asset management. Establish your account securely through SIMUPAY PRO partner nodes.
+              </p>
+            </div>
+
+            <div className="flex-shrink-0">
+              <a
+                href="https://www.gate.com/share/simupaypro"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#00C853] hover:bg-[#00E676] text-black font-semibold text-xs py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all duration-300 transform active:scale-95 cursor-pointer block text-center"
+              >
+                Get Started
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-4 pt-3 border-t border-emerald-950/30 text-[10px] text-gray-500 font-mono leading-relaxed">
+            {DISCLOSURE_TEXT}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

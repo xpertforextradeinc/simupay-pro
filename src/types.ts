@@ -123,4 +123,5 @@ export type ActiveTab =
   | 'settings'
   | 'db-setup'
   | 'subscription'
-  | 'admin-panel';
+  | 'admin-panel'
+  | 'resources';

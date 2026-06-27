@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   LayoutDashboard,
   User,
@@ -20,7 +20,9 @@ import {
   BarChart3,
   Database,
   CreditCard,
-  Shield
+  Shield,
+  Globe,
+  ArrowUpRight
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -74,19 +76,30 @@ export function Sidebar({
     { id: 'subscription', label: 'Subscription', icon: CreditCard },
     { id: 'orders', label: 'Orders', icon: ShoppingBag },
     { id: 'support', label: 'Support', icon: HelpCircle },
-    { id: 'settings', label: 'Settings', icon: Settings },
-    { id: 'db-setup', label: 'Database Setup', icon: Database }
+    { id: 'resources', label: 'Resources', icon: Globe },
+    { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
-  // If user is Admin, insert Admin Dashboard as the second item
+  // If user is Admin, insert Admin Dashboard as the second item and Database Setup at the end
   const menuItems: MenuItem[] = [...baseMenuItems];
   if (role === 'admin') {
     menuItems.splice(1, 0, { id: 'admin-panel', label: 'Admin Panel', icon: Shield });
+    menuItems.push({ id: 'db-setup', label: 'Database Setup', icon: Database });
   }
 
   const handleTabClick = (tabId: ActiveTab) => {
     onTabChange(tabId);
     setMobileOpen(false);
+  };
+
+  const [shortcutDismissed, setShortcutDismissed] = useState(() => {
+    return localStorage.getItem('spp_sidebar_partner_dismissed') === 'true';
+  });
+
+  const handleDismissShortcut = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShortcutDismissed(true);
+    localStorage.setItem('spp_sidebar_partner_dismissed', 'true');
   };
 
   return (
@@ -198,6 +211,46 @@ export function Sidebar({
             );
           })}
         </nav>
+
+        {/* Sidebar Partner Shortcut */}
+        {!shortcutDismissed && (!collapsed || mobileOpen) && (
+          <div className="mx-4 my-2 p-3 bg-gradient-to-br from-[#091714] to-[#040e0c] border border-emerald-950/60 rounded-xl relative group/card">
+            <button
+              onClick={handleDismissShortcut}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-300 transition-colors p-0.5 rounded cursor-pointer"
+              title="Dismiss"
+            >
+              <X className="w-3 h-3" />
+            </button>
+            
+            <div className="space-y-2">
+              <span className="text-[9px] uppercase font-bold text-gray-500 font-mono tracking-wider block">
+                Partner Recommendation
+              </span>
+              <div>
+                <h5 className="text-xs font-bold text-white flex items-center gap-1 font-display">
+                  Gate
+                  <span className="text-[8px] bg-[#00C853]/10 text-[#00C853] border border-[#00C853]/20 px-1 rounded uppercase">PRO Choice</span>
+                </h5>
+                <p className="text-[10px] text-gray-400">Create a free account</p>
+              </div>
+              
+              <a
+                href="https://www.gate.com/share/simupaypro"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-[#00C853] hover:bg-[#00E676] text-black font-bold text-[10px] py-1.5 px-3 rounded-lg flex items-center justify-center gap-1 transition-all cursor-pointer"
+              >
+                Join Now
+                <ArrowUpRight className="w-3 h-3" />
+              </a>
+              
+              <p className="text-[8px] text-gray-500 font-mono leading-tight scale-90 origin-left mt-1">
+                Partner link: We may earn a commission.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Branding Footer */}
         {(!collapsed || mobileOpen) && (

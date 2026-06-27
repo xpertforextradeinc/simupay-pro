@@ -103,6 +103,28 @@ const seedWallets = (userId: string): Wallet[] => {
 // ============================================================================
 export const dbService = {
 
+  // 0. HEALTH AND INITIALIZATION CHECKS
+  checkDatabaseInitialized: async (): Promise<boolean> => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .select('id')
+        .limit(1);
+      
+      if (error) {
+        // Postgres error code 42P01 is "undefined_table"
+        if (error.code === '42P01' || error.message?.includes('does not exist') || error.message?.includes('relation "public.profiles" does not exist')) {
+          console.warn('[Db Check] profiles table does not exist. DB setup required.');
+          return false;
+        }
+      }
+      return true;
+    } catch (e) {
+      console.warn('[Db Check] Error checking database status, falling back to local simulation:', e);
+      return false;
+    }
+  },
+
   // 1. PROFILES OPERATIONS
   getProfile: async (userId: string, email?: string, fullName?: string): Promise<Profile> => {
     try {

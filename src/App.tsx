@@ -25,6 +25,7 @@ const NotificationsView = React.lazy(() => import('./components/NotificationsVie
 const DbSetupView = React.lazy(() => import('./components/DbSetupView').then(m => ({ default: m.DbSetupView })));
 const SubscriptionView = React.lazy(() => import('./components/SubscriptionView').then(m => ({ default: m.SubscriptionView })));
 const AdminPanelView = React.lazy(() => import('./components/AdminPanelView').then(m => ({ default: m.AdminPanelView })));
+const ResourcesView = React.lazy(() => import('./components/ResourcesView').then(m => ({ default: m.ResourcesView })));
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ function AppContent() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { showToast } = useToast();
+  const [isDbInitialized, setIsDbInitialized] = useState<boolean>(true);
 
   // Core Business States
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -56,6 +58,13 @@ function AppContent() {
       setActiveTab(tab);
     }
   });
+
+  // Guard administrative views from standard users
+  useEffect(() => {
+    if ((activeTab === 'db-setup' || activeTab === 'admin-panel') && profile && profile.role !== 'admin') {
+      setActiveTab('dashboard');
+    }
+  }, [activeTab, profile]);
 
   const onTransactionComplete = (tx: Transaction) => {
     setTransactions(prev => [tx, ...prev]);
@@ -102,6 +111,11 @@ function AppContent() {
     setLoading(true);
     try {
       console.log('[Auth Flow] Syncing user data for:', user.id);
+      
+      // Perform automated checks for required database tables on startup
+      const dbOk = await dbService.checkDatabaseInitialized();
+      setIsDbInitialized(dbOk);
+
       // Run data fetching concurrently
       const [finalProfile, txData, notifData, ticketsData] = await Promise.all([
         dbService.getProfile(
@@ -120,8 +134,12 @@ function AppContent() {
       setNotifications(notifData);
       setSupportTickets(ticketsData);
       
-      // Auto-navigate to dashboard upon successful login sync
-      setActiveTab('dashboard');
+      // Auto-navigate: admins redirect to db-setup if tables are missing, standard users always redirect directly to the dashboard
+      if (!dbOk && finalProfile?.role === 'admin') {
+        setActiveTab('db-setup');
+      } else {
+        setActiveTab('dashboard');
+      }
 
     } catch (e) {
       console.error('[Auth Flow] Graceful initialization fallback enabled:', e);
@@ -491,7 +509,19 @@ function AppContent() {
               }}
             />
           )}
-          {activeTab === 'db-setup' && <DbSetupView />}
+          {activeTab === 'db-setup' && (
+            profile?.role === 'admin' ? (
+              <DbSetupView isDbInitialized={isDbInitialized} />
+            ) : (
+              <DashboardView
+                profile={profile}
+                transactions={transactions}
+                notifications={notifications}
+                onNavigate={setActiveTab}
+                onCopyWallet={handleCopyWalletAddress}
+              />
+            )
+          )}
 
           {activeTab === 'subscription' && (
             <SubscriptionView
@@ -505,10 +535,24 @@ function AppContent() {
             />
           )}
 
+          {activeTab === 'resources' && (
+            <ResourcesView />
+          )}
+
           {activeTab === 'admin-panel' && (
-            <AdminPanelView
-              currentUserId={profile?.id || ''}
-            />
+            profile?.role === 'admin' ? (
+              <AdminPanelView
+                currentUserId={profile?.id || ''}
+              />
+            ) : (
+              <DashboardView
+                profile={profile}
+                transactions={transactions}
+                notifications={notifications}
+                onNavigate={setActiveTab}
+                onCopyWallet={handleCopyWalletAddress}
+              />
+            )
           )}
         </Suspense>
       </main>

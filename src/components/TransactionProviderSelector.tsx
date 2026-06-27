@@ -1,11 +1,6 @@
 import React, { useMemo } from 'react';
-import { 
-  cryptoProviders, 
-  digitalWalletProviders, 
-  bankProviders, 
-  getFieldsForProvider, 
-  ProviderCategory 
-} from '../data/paymentProviders';
+import { ProviderCategory } from '../data/paymentProviders';
+import { adminService } from '../services/adminService';
 
 interface Props {
   category: ProviderCategory;
@@ -20,16 +15,14 @@ export const TransactionProviderSelector: React.FC<Props> = ({
   category, provider, setCategory, setProvider, formData, setFormData 
 }) => {
   
-  const providers = useMemo(() => {
-    switch (category) {
-      case 'crypto': return cryptoProviders;
-      case 'wallet': return digitalWalletProviders;
-      case 'bank': return bankProviders;
-      default: return [];
-    }
+  const providersList = useMemo(() => {
+    return adminService.getProviders().filter(p => p.enabled && p.category === category);
   }, [category]);
 
-  const fields = useMemo(() => getFieldsForProvider(category, provider), [category, provider]);
+  const fields = useMemo(() => {
+    const matched = providersList.find(p => p.name === provider);
+    return matched ? matched.fields : [];
+  }, [providersList, provider]);
 
   return (
     <div className="space-y-4">
@@ -57,12 +50,12 @@ export const TransactionProviderSelector: React.FC<Props> = ({
             className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#00C853] text-sm"
           >
             <option value="">Select Provider</option>
-            {providers.map(p => <option key={p} value={p}>{p}</option>)}
+            {providersList.map(p => <option key={p.id} value={p.name}>{p.name}</option>)}
           </select>
         </div>
       </div>
 
-      {provider && (
+      {provider && fields.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 p-4 bg-[#050E0C]/40 rounded-xl border border-[#16362F]/40 animate-in fade-in duration-300">
           {fields.map(field => (
             <div key={field.name} className="space-y-1.5">
@@ -73,6 +66,7 @@ export const TransactionProviderSelector: React.FC<Props> = ({
                   onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
                   className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#00C853] text-sm"
                 >
+                  <option value="">Select Option</option>
                   {field.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                 </select>
               ) : (
@@ -91,3 +85,4 @@ export const TransactionProviderSelector: React.FC<Props> = ({
     </div>
   );
 };
+
