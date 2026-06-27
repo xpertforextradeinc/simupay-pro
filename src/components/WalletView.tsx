@@ -12,34 +12,41 @@ import {
   Unlock,
   Clock,
   Lock,
-  ArrowDownLeft
 } from 'lucide-react';
 import { Profile, Transaction } from '../types';
+import { useTransactionNotifier } from './TransactionNotifications';
+import { TransactionProviderSelector } from './TransactionProviderSelector';
+import { ProviderCategory } from '../data/paymentProviders';
 
 interface WalletViewProps {
   profile: Profile | null;
   transactions: Transaction[];
   onBalanceUpdate: (newBalance: number) => void;
-  onAddTransaction: (tx: Transaction) => void;
+  onTransactionComplete: (tx: Transaction) => void;
   onNavigate: (tab: any) => void;
+  onRefreshNotifications: () => void;
 }
 
 export function WalletView({
   profile,
   transactions,
   onBalanceUpdate,
-  onAddTransaction,
-  onNavigate
+  onTransactionComplete,
+  onNavigate,
+  onRefreshNotifications
 }: WalletViewProps) {
   const [copiedNetwork, setCopiedNetwork] = useState<string | null>(null);
-  const [depositAmount, setDepositAmount] = useState('10000');
-  const [selectedDepositNetwork, setSelectedDepositNetwork] = useState('USDT (TRC20)');
+  const [category, setCategory] = useState<ProviderCategory>('crypto');
+  const [provider, setProvider] = useState('');
+  const [formData, setFormData] = useState<Record<string, any>>({});
   const [isDepositing, setIsDepositing] = useState(false);
   const { showToast } = useToast();
+  const { notifyTransaction } = useTransactionNotifier(
+    profile?.id ?? '',
+    onRefreshNotifications
+  );
 
   const totalBalance = profile?.wallet_balance ?? 0;
-  
-  // Calculate distinct balance segments to simulate corporate treasury holds
   const availableBalance = totalBalance * 0.85;
   const pendingBalance = totalBalance * 0.10;
   const lockedBalance = totalBalance * 0.05;
@@ -56,14 +63,16 @@ export function WalletView({
     navigator.clipboard.writeText(address);
     setCopiedNetwork(name);
     showToast(`${name} address copied!`, 'success');
-    setTimeout(() => {
-      setCopiedNetwork(null);
-    }, 2000);
+    setTimeout(() => setCopiedNetwork(null), 2000);
   };
 
   const handleSimulateDeposit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const amountNum = parseFloat(depositAmount);
+    if (!provider) {
+      showToast('Please select a provider.', 'warning');
+      return;
+    }
+    const amountNum = parseFloat(formData.amount);
     if (isNaN(amountNum) || amountNum <= 0) {
       showToast('Please enter a valid deposit amount.', 'warning');
       return;
@@ -72,8 +81,7 @@ export function WalletView({
     setIsDepositing(true);
     try {
       const newBalance = totalBalance + amountNum;
-
-      // Update Supabase profiles table
+      
       if (profile) {
         const { error: profileError } = await supabase
           .from('profiles')
@@ -84,42 +92,26 @@ export function WalletView({
 
         const mockTxId = `SPP-TX-${Math.floor(10000000 + Math.random() * 90000000)}`;
         const txHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
-        const selectedAddress = networkAddresses.find(n => n.name.includes(selectedDepositNetwork))?.address || networkAddresses[3].address;
 
         const newTx: Transaction = {
           id: mockTxId,
           user_id: profile.id,
-          wallet: selectedAddress,
-          network: selectedDepositNetwork,
+          wallet: formData.address || networkAddresses[3].address,
+          network: provider,
           amount: amountNum,
           status: 'completed',
           tx_hash: txHash,
           created_at: new Date().toISOString()
         };
 
-        const { error: txError } = await supabase.from('transactions').insert([newTx]);
-        if (txError) console.warn('Supabase Tx insert error:', txError);
-
-        // Notify user
-        try {
-          await supabase.from('notifications').insert([
-            {
-              user_id: profile.id,
-              title: 'USDT Deposit Received',
-              message: `Credited $${amountNum.toLocaleString()} successfully to your available merchant balance via ${selectedDepositNetwork}.`,
-              created_at: new Date().toISOString()
-            }
-          ]);
-        } catch (e) {
-          console.warn('Silent insert notification error:', e);
-        }
+        await supabase.from('transactions').insert([newTx]);
 
         onBalanceUpdate(newBalance);
-        onAddTransaction(newTx);
+        onTransactionComplete(newTx);
+        await notifyTransaction(newTx, 'incoming');
         showToast(`Successfully deposited $${amountNum.toLocaleString()}`, 'success');
       }
     } catch (error: any) {
-      // Offline fallback state update for smooth local development experience
       const newBalance = totalBalance + amountNum;
       const mockTxId = `SPP-TX-${Math.floor(10000000 + Math.random() * 90000000)}`;
       const txHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
@@ -127,8 +119,8 @@ export function WalletView({
       const mockTx: Transaction = {
         id: mockTxId,
         user_id: profile?.id || 'offline-user',
-        wallet: networkAddresses[3].address,
-        network: selectedDepositNetwork,
+        wallet: formData.address || networkAddresses[3].address,
+        network: provider,
         amount: amountNum,
         status: 'completed',
         tx_hash: txHash,
@@ -136,7 +128,8 @@ export function WalletView({
       };
 
       onBalanceUpdate(newBalance);
-      onAddTransaction(mockTx);
+      onTransactionComplete(mockTx);
+      await notifyTransaction(mockTx, 'incoming');
       showToast(`Local simulation credited $${amountNum.toLocaleString()}`, 'success');
     } finally {
       setIsDepositing(false);
@@ -145,15 +138,12 @@ export function WalletView({
 
   return (
     <div className="space-y-6 max-w-5xl">
-      {/* Header */}
       <div className="border-b border-[#16362F]/60 pb-5">
         <h2 className="text-2xl font-display font-bold text-white tracking-tight">Enterprise Wallet Vault</h2>
         <p className="text-xs text-[#9CB1AC]">Monitor real-time ledger allocations, copy direct vault addresses, and inject test merchant assets.</p>
       </div>
 
-      {/* Balance Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Main Balance Card */}
         <div className="bg-[#091714] p-5 rounded-xl border border-[#16362F] flex flex-col justify-between shadow-lg relative overflow-hidden">
           <div className="absolute top-0 right-0 w-16 h-16 bg-[#00C853]/5 rounded-full blur-xl" />
           <div className="flex items-center justify-between text-xs text-[#9CB1AC] font-semibold uppercase">
@@ -161,70 +151,46 @@ export function WalletView({
             <Wallet className="w-4 h-4 text-[#00C853]" />
           </div>
           <div className="mt-4">
-            <h3 className="text-2xl font-display font-bold text-white">
-              ${totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </h3>
-            <p className="text-[10px] text-[#00C853] font-mono mt-1 flex items-center gap-1">
-              ● Live Ledger Balance
-            </p>
+            <h3 className="text-2xl font-display font-bold text-white">${totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
+            <p className="text-[10px] text-[#00C853] font-mono mt-1 flex items-center gap-1">● Live Ledger Balance</p>
           </div>
         </div>
-
-        {/* Available Balance Card */}
         <div className="bg-[#091714] p-5 rounded-xl border border-[#16362F] flex flex-col justify-between shadow-lg">
           <div className="flex items-center justify-between text-xs text-[#9CB1AC] font-semibold uppercase">
             <span>Available Balance</span>
             <Unlock className="w-4 h-4 text-[#00C853]" />
           </div>
           <div className="mt-4">
-            <h3 className="text-2xl font-display font-bold text-white">
-              ${availableBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </h3>
-            <p className="text-[10px] text-[#9CB1AC]/80 font-mono mt-1">
-              85% - Instantly Dispatched
-            </p>
+            <h3 className="text-2xl font-display font-bold text-white">${availableBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
+            <p className="text-[10px] text-[#9CB1AC]/80 font-mono mt-1">85% - Instantly Dispatched</p>
           </div>
         </div>
-
-        {/* Pending Balance Card */}
         <div className="bg-[#091714] p-5 rounded-xl border border-[#16362F] flex flex-col justify-between shadow-lg">
           <div className="flex items-center justify-between text-xs text-[#9CB1AC] font-semibold uppercase">
             <span>Pending Balance</span>
             <Clock className="w-4 h-4 text-blue-400" />
           </div>
           <div className="mt-4">
-            <h3 className="text-2xl font-display font-bold text-white">
-              ${pendingBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </h3>
-            <p className="text-[10px] text-blue-400/80 font-mono mt-1">
-              10% - In-Transit Confirmations
-            </p>
+            <h3 className="text-2xl font-display font-bold text-white">${pendingBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
+            <p className="text-[10px] text-blue-400/80 font-mono mt-1">10% - In-Transit Confirmations</p>
           </div>
         </div>
-
-        {/* Locked Balance Card */}
         <div className="bg-[#091714] p-5 rounded-xl border border-[#16362F] flex flex-col justify-between shadow-lg">
           <div className="flex items-center justify-between text-xs text-[#9CB1AC] font-semibold uppercase">
             <span>Locked Reserve</span>
             <Lock className="w-4 h-4 text-amber-500" />
           </div>
           <div className="mt-4">
-            <h3 className="text-2xl font-display font-bold text-white">
-              ${lockedBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </h3>
-            <p className="text-[10px] text-amber-500/80 font-mono mt-1">
-              5% - Enterprise Risk Collateral
-            </p>
+            <h3 className="text-2xl font-display font-bold text-white">${lockedBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
+            <p className="text-[10px] text-amber-500/80 font-mono mt-1">5% - Enterprise Risk Collateral</p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: Quick Deposit Simulator */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-[#091714] p-6 rounded-2xl border border-[#16362F] shadow-xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#00C853]/5 rounded-full blur-3xl pointer-events-none" />
-            
             <div className="flex items-center gap-2 mb-4 border-b border-[#16362F] pb-3">
               <Plus className="w-5 h-5 text-[#00C853]" />
               <h3 className="text-base font-display font-bold text-white">Instant Portal Asset Injection (Demo Sandbox)</h3>
@@ -236,34 +202,14 @@ export function WalletView({
                   Add virtual assets instantly to your active merchant node to stress-test your ledger pipelines and flash transactions in real-time.
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-[#9CB1AC] uppercase tracking-wider">Network Source</label>
-                    <select
-                      value={selectedDepositNetwork}
-                      onChange={(e) => setSelectedDepositNetwork(e.target.value)}
-                      className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#00C853] text-sm font-sans"
-                    >
-                      <option value="USDT (TRC20)">Tron Protocol (USDT TRC20)</option>
-                      <option value="USDT (ERC20)">Ethereum Protocol (USDT ERC20)</option>
-                      <option value="USDT (BEP20)">BNB Chain Protocol (USDT BEP20)</option>
-                      <option value="BTC (Bitcoin)">Bitcoin Protocol (BTC)</option>
-                      <option value="ETH (Ethereum)">Ethereum Core Protocol (ETH)</option>
-                    </select>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-[#9CB1AC] uppercase tracking-wider font-mono">Amount ($ USD Value)</label>
-                    <input
-                      type="number"
-                      value={depositAmount}
-                      onChange={(e) => setDepositAmount(e.target.value)}
-                      placeholder="e.g. 25000"
-                      className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white placeholder-gray-600 focus:outline-none focus:border-[#00C853] text-sm font-mono font-semibold"
-                      required
-                    />
-                  </div>
-                </div>
+                <TransactionProviderSelector 
+                  category={category} 
+                  provider={provider} 
+                  setCategory={setCategory} 
+                  setProvider={setProvider} 
+                  formData={formData} 
+                  setFormData={setFormData}
+                />
 
                 <div className="flex justify-end pt-2">
                   <button
@@ -297,7 +243,6 @@ export function WalletView({
             )}
           </div>
 
-          {/* Secure Node Status Notice */}
           <div className="bg-[#091714]/40 border border-[#16362F]/80 p-4 rounded-xl flex items-start gap-3">
             <Layers className="w-5 h-5 text-[#00C853] mt-0.5 flex-shrink-0" />
             <div className="text-[11px] text-[#9CB1AC] space-y-1">
@@ -307,7 +252,6 @@ export function WalletView({
           </div>
         </div>
 
-        {/* Right: One-Click Wallet Addresses */}
         <div className="space-y-4">
           <div className="bg-[#091714] p-5 rounded-2xl border border-[#16362F] shadow-xl space-y-4">
             <div className="border-b border-[#16362F] pb-2 flex items-center justify-between">

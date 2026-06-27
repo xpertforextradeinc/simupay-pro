@@ -6,11 +6,19 @@ import { Transaction, Profile } from '../types';
 interface ReceiptGeneratorViewProps {
   transactions: Transaction[];
   profile: Profile | null;
+  lastTransaction: Transaction | null;
   onNavigate: (tab: any) => void;
 }
 
-export function ReceiptGeneratorView({ transactions, profile, onNavigate }: ReceiptGeneratorViewProps) {
-  const [selectedTxId, setSelectedTxId] = useState<string>('manual');
+export function ReceiptGeneratorView({ transactions, profile, lastTransaction, onNavigate }: ReceiptGeneratorViewProps) {
+  const [selectedTxId, setSelectedTxId] = useState<string>(lastTransaction ? lastTransaction.id : 'manual');
+  
+  // Effect to sync lastTransaction if it changes (e.g., when navigated from a transfer)
+  React.useEffect(() => {
+    if (lastTransaction) {
+      setSelectedTxId(lastTransaction.id);
+    }
+  }, [lastTransaction]);
   
   // Custom manual inputs
   const [manualAmount, setManualAmount] = useState('25000.00');

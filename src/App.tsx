@@ -7,6 +7,7 @@ import { dbService } from './services/dbService';
 import { ActiveTab, Profile, Transaction, AppNotification, SupportTicket } from './types';
 import { KeyRound, ShieldAlert, LogOut, Search, Bell, ChevronDown, User, Settings, Database, Loader2 } from 'lucide-react';
 import { useShortcuts } from './hooks/useShortcuts';
+import { TransactionNotificationBell } from './components/TransactionNotifications';
 
 const DashboardView = React.lazy(() => import('./components/DashboardView').then(m => ({ default: m.DashboardView })));
 const AccountView = React.lazy(() => import('./components/AccountView').then(m => ({ default: m.AccountView })));
@@ -44,6 +45,7 @@ function AppContent() {
   // Core Business States
   const [profile, setProfile] = useState<Profile | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [lastTransaction, setLastTransaction] = useState<Transaction | null>(null);
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [supportTickets, setSupportTickets] = useState<SupportTicket[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -55,36 +57,40 @@ function AppContent() {
     }
   });
 
+  const onTransactionComplete = (tx: Transaction) => {
+    setTransactions(prev => [tx, ...prev]);
+    setLastTransaction(tx);
+    setActiveTab('receipt-generator');
+  };
+
   // 1. Recover Session on Mount
   useEffect(() => {
-    console.log('[Auth Flow] Initialization started...');
-    
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      console.log('[Auth Flow] getSession result:', { session, error });
+    const handleSessionUpdate = async (session: any) => {
+      console.log('[Auth Flow] Updating session:', !!session);
       setSession(session);
       if (session) {
-        console.log('[Auth Flow] Session found on mount, syncing data...');
-        syncUserData(session.user);
-      } else {
-        console.log('[Auth Flow] No session found on mount, stopping loader.');
-        setLoading(false);
-      }
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('[Auth Flow] onAuthStateChange event:', event, session);
-      // Ignore INITIAL_SESSION to let getSession() handle the initial URL parsing properly
-      if (event === 'INITIAL_SESSION') return;
-      
-      setSession(session);
-      if (session) {
-        syncUserData(session.user);
+        await syncUserData(session.user);
       } else {
         setProfile(null);
         setTransactions([]);
         setNotifications([]);
         setSupportTickets([]);
         setLoading(false);
+      }
+    };
+
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      console.log('[Auth Flow] getSession result:', { session: !!session, error });
+      handleSessionUpdate(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('[Auth Flow] onAuthStateChange event:', event, 'session:', !!session);
+      
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || (event === 'INITIAL_SESSION' && session)) {
+        handleSessionUpdate(session);
+      } else if (event === 'SIGNED_OUT') {
+        handleSessionUpdate(null);
       }
     });
 
@@ -93,6 +99,7 @@ function AppContent() {
 
   // 2. Fetch or Sync User Profile & Logs
   const syncUserData = async (user: any) => {
+    setLoading(true);
     try {
       console.log('[Auth Flow] Syncing user data for:', user.id);
       // Run data fetching concurrently
@@ -141,6 +148,44 @@ function AppContent() {
 
   const handleAddTransaction = (newTx: Transaction) => {
     setTransactions(prev => [newTx, ...prev]);
+  };
+
+  const loadNotifications = async () => {
+    if (session?.user) {
+      const notifs = await dbService.getNotifications(session.user.id);
+      setNotifications(notifs);
+    }
+  };
+
+  const handleMarkRead = async (id: string) => {
+    if (!profile) return;
+
+    await dbService.markNotificationRead(profile.id, id);
+
+    setNotifications(prev =>
+      prev.map(n =>
+        n.id === id
+          ? { ...n, read: true }
+          : n
+      )
+    );
+  };
+
+  const handleMarkAllRead = async () => {
+    if (!profile) return;
+
+    const unread = notifications.filter(n => !n.read);
+
+    for (const n of unread) {
+      await dbService.markNotificationRead(profile.id, n.id);
+    }
+
+    setNotifications(prev =>
+      prev.map(n => ({
+        ...n,
+        read: true,
+      }))
+    );
   };
 
   const handleActivateSuccess = () => {
@@ -291,20 +336,12 @@ function AppContent() {
             </div>
 
             {/* Notification trigger button */}
-            <div className="relative">
-              <button
-                onClick={() => setActiveTab('notifications')}
-                className="p-2 bg-[#091714] border border-[#16362F] rounded-xl hover:border-[#00C853]/40 text-[#9CB1AC] hover:text-white transition-all relative cursor-pointer"
-                title="Notifications"
-              >
-                <Bell className="w-4 h-4" />
-                {notifications.filter(n => !n.read).length > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] flex items-center justify-center bg-red-500 rounded-full text-[9px] font-mono font-bold text-white px-1 leading-none shadow-lg">
-                    {notifications.filter(n => !n.read).length}
-                  </span>
-                )}
-              </button>
-            </div>
+            <TransactionNotificationBell
+              notifications={notifications}
+              onMarkRead={handleMarkRead}
+              onMarkAllRead={handleMarkAllRead}
+              onNavigate={setActiveTab}
+            />
 
             {/* Profile Selection Dropdown */}
             <div className="relative group">
@@ -376,8 +413,9 @@ function AppContent() {
               profile={profile}
               transactions={transactions}
               onBalanceUpdate={handleBalanceUpdate}
-              onAddTransaction={handleAddTransaction}
+              onTransactionComplete={onTransactionComplete}
               onNavigate={setActiveTab}
+              onRefreshNotifications={loadNotifications}
             />
           )}
 
@@ -392,8 +430,9 @@ function AppContent() {
             <FlashTransferView
               profile={profile}
               onBalanceUpdate={handleBalanceUpdate}
-              onAddTransaction={handleAddTransaction}
+              onTransactionComplete={onTransactionComplete}
               onNavigate={setActiveTab}
+              onRefreshNotifications={loadNotifications}
             />
           )}
 
@@ -401,6 +440,7 @@ function AppContent() {
             <ReceiptGeneratorView
               transactions={transactions}
               profile={profile}
+              lastTransaction={lastTransaction}
               onNavigate={setActiveTab}
             />
           )}
