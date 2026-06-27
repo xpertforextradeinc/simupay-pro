@@ -125,6 +125,8 @@ function AppContent() {
 
     } catch (e) {
       console.error('[Auth Flow] Graceful initialization fallback enabled:', e);
+      // Still attempt to navigate to dashboard
+      setActiveTab('dashboard');
     } finally {
       console.log('[Auth Flow] Finished loading process.');
       setLoading(false);
