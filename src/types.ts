@@ -107,6 +107,36 @@ export interface SupportTicket {
   created_at: string;
 }
 
+export interface PaymentProvider {
+  id: string;
+  name: string;
+  category: 'Electronic' | 'Crypto' | 'Bank';
+  logo_url?: string;
+  color_hex?: string;
+  required_fields: string[]; // e.g., ['amount', 'recipient_name', 'note']
+  metadata?: Record<string, any>;
+  is_active: boolean;
+}
+
+export interface ReceiptRecord {
+  id: string;
+  user_id: string;
+  provider_id: string;
+  provider_name: string;
+  amount: number;
+  currency: string;
+  status: 'completed' | 'pending' | 'failed';
+  transaction_date: string;
+  transaction_time: string;
+  reference_no?: string;
+  sender_name?: string;
+  recipient_name?: string;
+  recipient_identifier?: string; // Cashtag, email, phone, address
+  memo?: string;
+  metadata?: Record<string, any>;
+  created_at: string;
+}
+
 export type ActiveTab =
   | 'dashboard'
   | 'account'

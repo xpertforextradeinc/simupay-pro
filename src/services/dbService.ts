@@ -8,7 +8,9 @@ import {
   AppNotification,
   Subscription,
   ActivityLog,
-  SupportTicket
+  SupportTicket,
+  PaymentProvider,
+  ReceiptRecord
 } from '../types';
 
 // ============================================================================
@@ -982,5 +984,81 @@ export const dbService = {
 
     await dbService.logActivity(userId, 'support', `Created local support ticket simulation: "${subject}"`);
     return newTicket;
+  },
+
+  getPaymentProviders: async (): Promise<PaymentProvider[]> => {
+    try {
+      const { data, error } = await supabase
+        .from('payment_providers')
+        .select('*')
+        .eq('is_active', true)
+        .order('name');
+      
+      if (!error && data) return data;
+    } catch (e) {
+      console.warn('Supabase providers fetch failed, using defaults.', e);
+    }
+
+    // Default Fallback Providers
+    return [
+      {
+        id: 'cashapp-id',
+        name: 'Cash App',
+        category: 'Electronic',
+        color_hex: '#00D632',
+        required_fields: ['amount', 'recipient_name', 'recipient_identifier', 'memo', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'coinbase-id',
+        name: 'Coinbase',
+        category: 'Crypto',
+        color_hex: '#0052FF',
+        required_fields: ['amount', 'currency', 'recipient_identifier', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'zelle-id',
+        name: 'Zelle',
+        category: 'Bank',
+        color_hex: '#7414CA',
+        required_fields: ['amount', 'recipient_name', 'recipient_identifier', 'memo', 'status', 'reference_no', 'sender_name'],
+        is_active: true
+      },
+      {
+        id: 'paypal-id',
+        name: 'PayPal',
+        category: 'Electronic',
+        color_hex: '#003087',
+        required_fields: ['amount', 'recipient_name', 'recipient_identifier', 'memo', 'status'],
+        is_active: true
+      }
+    ];
+  },
+
+  saveReceiptRecord: async (userId: string, record: Omit<ReceiptRecord, 'id' | 'created_at' | 'user_id'>): Promise<ReceiptRecord> => {
+    const newRecord: ReceiptRecord = {
+      ...record,
+      id: Math.random().toString(36).substring(2, 15),
+      user_id: userId,
+      created_at: new Date().toISOString()
+    };
+
+    try {
+      const { error } = await supabase.from('receipt_records').insert([newRecord]);
+      if (!error) {
+        await dbService.logActivity(userId, 'receipt generation', `Generated and saved ${record.provider_name} receipt for $${record.amount}`);
+        return newRecord;
+      }
+    } catch (e) {
+      console.warn('Supabase receipt save failed, storing locally.', e);
+    }
+
+    const localReceipts = getLocalStorageItem<ReceiptRecord[]>('spp_receipt_records', []);
+    localReceipts.unshift(newRecord);
+    setLocalStorageItem('spp_receipt_records', localReceipts);
+
+    await dbService.logActivity(userId, 'receipt generation', `Generated local ${record.provider_name} receipt simulation for $${record.amount}`);
+    return newRecord;
   }
 };

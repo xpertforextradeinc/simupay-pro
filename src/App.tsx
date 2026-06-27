@@ -489,10 +489,7 @@ function AppContent() {
 
           {activeTab === 'receipt-generator' && (
             <ReceiptGeneratorView
-              transactions={transactions}
               profile={profile}
-              lastTransaction={lastTransaction}
-              onNavigate={setActiveTab}
             />
           )}
 
