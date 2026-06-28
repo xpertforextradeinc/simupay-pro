@@ -19,23 +19,20 @@ import {
 import {
   TrendingUp,
   Activity,
-  ArrowUpRight,
-  ArrowDownRight,
-  DollarSign,
-  Briefcase,
   Layers,
   Zap,
   Globe,
-  Award
+  Award,
+  Lock
 } from 'lucide-react';
-import { Profile, Transaction } from '../types';
+import type { Profile } from '../types';
 
 interface AnalyticsViewProps {
   profile: Profile | null;
-  transactions: Transaction[];
+  onNavigate?: (tab: string) => void;
 }
 
-export function AnalyticsView({ profile, transactions, onNavigate }: AnalyticsViewProps & { onNavigate: (tab: any) => void }) {
+export function AnalyticsView({ profile, onNavigate }: AnalyticsViewProps) {
   const currentBalance = profile?.wallet_balance ?? 35000;
   const licenseActive = profile?.license_active ?? false;
 

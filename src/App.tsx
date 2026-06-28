@@ -511,7 +511,6 @@ function AppContent() {
           {activeTab === 'analytics' && (
             <AnalyticsView
               profile={profile}
-              transactions={transactions}
               onNavigate={setActiveTab}
             />
           )}

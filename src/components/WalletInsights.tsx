@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import {
   LineChart,
   Line,
@@ -12,11 +12,10 @@ import {
   Pie,
   Cell,
   BarChart,
-  Bar,
-  Legend
+  Bar
 } from 'recharts';
 import { TrendingUp, TrendingDown, Activity, PieChart as PieChartIcon, BarChart2, DollarSign, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
-import { Profile, Transaction } from '../types';
+import type { Profile, Transaction } from '../types';
 
 interface WalletInsightsProps {
   profile: Profile | null;
