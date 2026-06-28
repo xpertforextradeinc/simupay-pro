@@ -34,7 +34,7 @@ export function AdminSubscriptions({
   // Manual enrollment form
   const [manualUserId, setManualUserId] = useState('');
   const [manualEmail, setManualEmail] = useState('');
-  const [manualPlanName, setManualPlanName] = useState('SlipMint Quarterly');
+  const [manualPlanName, setManualPlanName] = useState('SimuPay Pro Quarterly');
   const [manualCycle, setManualCycle] = useState<'Monthly' | 'Quarterly' | 'Annual' | 'Lifetime'>('Quarterly');
   const [manualPrice, setManualPrice] = useState(75000);
 

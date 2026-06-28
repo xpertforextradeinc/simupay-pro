@@ -160,7 +160,7 @@ export const dbService = {
         const newProfile: Profile = {
           id: userId,
           email: resolvedEmail,
-          full_name: fullName || 'SlipMint Merchant',
+          full_name: fullName || 'SimuPay Pro Merchant',
           wallet_balance: 35000.00,
           activation_key: generateKey(),
           license_active: false,
@@ -213,7 +213,7 @@ export const dbService = {
     const defaultProfile: Profile = {
       id: userId,
       email: resolvedEmail,
-      full_name: fullName || 'SlipMint Merchant',
+      full_name: fullName || 'SimuPay Pro Merchant',
       wallet_balance: 35000.00,
       activation_key: generateFallbackKey(),
       license_active: false,

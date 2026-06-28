@@ -280,7 +280,7 @@ const DEFAULT_FREE_CONFIG: FreePlanConfig = {
 };
 
 const DEFAULT_SYSTEM_SETTINGS: SystemSettings = {
-  appName: 'SlipMint',
+  appName: 'SimuPay Pro',
   logo: 'SP',
   theme: 'emerald',
   contactEmail: 'admin@simupay.pro',
@@ -307,7 +307,7 @@ const DEFAULT_SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   },
   {
     id: 'plan-pro',
-    name: 'SlipMint Quarterly',
+    name: 'SimuPay Pro Quarterly',
     price: 75000,
     billingCycle: 'Quarterly',
     trialPeriodDays: 14,

@@ -71,7 +71,8 @@ export function Sidebar({
     { id: 'subscription', label: 'Subscription', icon: CreditCard },
     { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'support', label: 'Support', icon: HelpCircle },
-    { id: 'settings', label: 'Settings', icon: Settings }
+    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'security-center', label: 'Security Center', icon: ShieldCheck }
   ];
 
   // If user is Admin, insert Admin Dashboard as the second item and Database Setup at the end
@@ -109,7 +110,7 @@ export function Sidebar({
       <div className="lg:hidden h-16 bg-brand-card border-b border-emerald-950/40 px-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-2">
           <span className="font-display font-bold text-lg text-white">
-            SlipMint <span className="text-[#00C853]">Pro</span>
+            SimuPay <span className="text-[#00C853]">Pro</span>
           </span>
           {licenseActive && (
             <span className="text-[10px] bg-[#00C853]/20 text-[#00C853] px-2 py-0.5 rounded font-mono font-bold tracking-wider">
@@ -137,7 +138,7 @@ export function Sidebar({
           {!collapsed ? (
             <div className="flex items-center gap-2 overflow-hidden">
               <span className="font-display font-bold text-xl text-white tracking-tight whitespace-nowrap">
-                SlipMint <span className="text-[#00C853]">Pro</span>
+                SimuPay <span className="text-[#00C853]">Pro</span>
               </span>
               {licenseActive && (
                 <span className="text-[10px] bg-[#00C853]/20 text-[#00C853] px-2 py-0.5 rounded font-mono font-bold tracking-wider">
@@ -276,7 +277,7 @@ export function Sidebar({
         {(!collapsed || mobileOpen) && (
           <div className="px-4 py-3 text-center opacity-60 hover:opacity-100 transition-opacity">
             <p className="text-[10px] text-gray-500 font-mono leading-tight">
-              © 2026 SlipMint
+              © 2026 SimuPay Pro
               <br />
               Powered by Luckman Dev World
             </p>

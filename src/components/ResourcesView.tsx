@@ -14,7 +14,7 @@ export function ResourcesView() {
           </h2>
         </div>
         <p className="text-xs text-gray-500 mt-1 max-w-2xl">
-          Carefully curated tools and platforms to streamline your digital asset transactions. Get exclusive terms by registering through SlipMint partner nodes.
+          Carefully curated tools and platforms to streamline your digital asset transactions. Get exclusive terms by registering through SimuPay Pro partner nodes.
         </p>
       </div>
 

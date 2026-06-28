@@ -148,7 +148,7 @@ export function AdminDashboard({
           <div className="bg-brand-bg/60 p-3 rounded-xl border border-amber-500/10 text-[10px] text-[#9CB1AC] flex items-start gap-2">
             <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
             <p>
-              SlipMint Server is running on High Availability Node clusters with automated dual replication. Direct table overrides are tracked in the security node audit.
+              SimuPay Pro Server is running on High Availability Node clusters with automated dual replication. Direct table overrides are tracked in the security node audit.
             </p>
           </div>
         </div>

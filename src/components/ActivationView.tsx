@@ -46,7 +46,7 @@ export function ActivationView({ profile, onActivateSuccess, onNavigate }: Activ
               {
                 user_id: profile.id,
                 title: 'License Activated',
-                message: 'SlipMint Enterprise license activated. Flash Transfer unlocked.',
+                message: 'SimuPay Pro Enterprise license activated. Flash Transfer unlocked.',
                 created_at: new Date().toISOString()
               }
             ]);
@@ -56,7 +56,7 @@ export function ActivationView({ profile, onActivateSuccess, onNavigate }: Activ
         }
 
         onActivateSuccess();
-        showToast('SlipMint license successfully activated!', 'success');
+        showToast('SimuPay Pro license successfully activated!', 'success');
       } else {
         showToast('Invalid activation key. Please check your credentials.', 'error');
       }
@@ -74,7 +74,7 @@ export function ActivationView({ profile, onActivateSuccess, onNavigate }: Activ
       {/* Header */}
       <div>
         <h2 className="text-xl font-display font-bold text-white">Activation Terminal</h2>
-        <p className="text-xs text-gray-500">Unlock SlipMint enterprise transfer protocols and advanced ledger tracking.</p>
+        <p className="text-xs text-gray-500">Unlock SimuPay Pro enterprise transfer protocols and advanced ledger tracking.</p>
       </div>
 
       {licenseActive ? (

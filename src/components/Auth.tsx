@@ -24,6 +24,11 @@ export function Auth({ onAuthSuccess }: AuthProps) {
       return;
     }
 
+    if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+      showToast('Supabase is not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your environment variables.', 'error');
+      return;
+    }
+
     setLoading(true);
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -33,10 +38,14 @@ export function Auth({ onAuthSuccess }: AuthProps) {
 
       if (error) throw error;
 
-      showToast('Welcome back to SlipMint!', 'success');
+      showToast('Welcome back to SimuPay Pro!', 'success');
       onAuthSuccess(data.session);
     } catch (error: any) {
-      showToast(error.message || 'Login failed. Please check credentials.', 'error');
+      if (error.message?.includes('status 0')) {
+        showToast('Network error (status 0). If you provided your own Supabase credentials, ensure your App URL is added to the allowed CORS origins in Supabase.', 'error');
+      } else {
+        showToast(error.message || 'Login failed. Please check credentials.', 'error');
+      }
     } finally {
       setLoading(false);
     }
@@ -52,6 +61,11 @@ export function Auth({ onAuthSuccess }: AuthProps) {
     e.preventDefault();
     if (!email || !password || !fullName) {
       showToast('Please fill in all fields.', 'warning');
+      return;
+    }
+
+    if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+      showToast('Supabase is not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your environment variables.', 'error');
       return;
     }
 
@@ -96,7 +110,11 @@ export function Auth({ onAuthSuccess }: AuthProps) {
         showToast('Please check your email to confirm registration.', 'info');
       }
     } catch (error: any) {
-      showToast(error.message || 'Registration failed.', 'error');
+      if (error.message?.includes('status 0')) {
+        showToast('Network error (status 0). Check your Supabase CORS settings or credentials.', 'error');
+      } else {
+        showToast(error.message || 'Registration failed.', 'error');
+      }
     } finally {
       setLoading(false);
     }
@@ -120,7 +138,11 @@ export function Auth({ onAuthSuccess }: AuthProps) {
       showToast('Password reset link sent to your email!', 'success');
       setIsReset(false);
     } catch (error: any) {
-      showToast(error.message || 'Failed to send reset link.', 'error');
+      if (error.message?.includes('status 0')) {
+        showToast('Network error (status 0). Check your Supabase CORS settings or credentials.', 'error');
+      } else {
+        showToast(error.message || 'Failed to send reset link.', 'error');
+      }
     } finally {
       setLoading(false);
     }
@@ -144,7 +166,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
             <ShieldCheck className="w-8 h-8 text-[#00C853]" />
           </div>
           <h1 className="text-3xl font-display font-bold tracking-tight text-white mb-1">
-            SlipMint <span className="text-[#00C853]">Pro</span>
+            SimuPay <span className="text-[#00C853]">Pro</span>
           </h1>
           <p className="text-gray-400 text-sm text-center">
             {isReset
@@ -358,7 +380,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
           </div>
           <div className="text-center opacity-60">
             <p className="text-[10px] leading-tight">
-              © 2026 SlipMint
+              © 2026 SimuPay Pro
               <br />
               Powered by Luckman Dev World
             </p>

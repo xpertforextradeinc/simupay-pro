@@ -56,4 +56,4 @@ export const partners: Partner[] = [
   }
 ];
 
-export const DISCLOSURE_TEXT = 'Partner link: If you choose to register through this link, SlipMint may earn a commission at no additional cost to you.';
+export const DISCLOSURE_TEXT = 'Partner link: If you choose to register through this link, SimuPay Pro may earn a commission at no additional cost to you.';

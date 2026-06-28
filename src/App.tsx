@@ -25,6 +25,7 @@ const SettingsView = React.lazy(() => import('./components/UtilityViews').then(m
 const NotificationsView = React.lazy(() => import('./components/NotificationsView').then(m => ({ default: m.NotificationsView })));
 const DbSetupView = React.lazy(() => import('./components/DbSetupView').then(m => ({ default: m.DbSetupView })));
 const SubscriptionView = React.lazy(() => import('./components/SubscriptionView').then(m => ({ default: m.SubscriptionView })));
+const SecurityCenterView = React.lazy(() => import('./components/SecurityCenterView').then(m => ({ default: m.SecurityCenterView })));
 const AdminPanelView = React.lazy(() => import('./components/AdminPanelView').then(m => ({ default: m.AdminPanelView })));
 const ResourcesView = React.lazy(() => import('./components/ResourcesView').then(m => ({ default: m.ResourcesView })));
 
@@ -164,7 +165,7 @@ function AppContent() {
       const fallbackProfile: Profile = {
         id: user.id,
         email: user.email || 'merchant@simupay.pro',
-        full_name: user.user_metadata?.full_name || user.user_metadata?.name || 'SlipMint Merchant',
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || 'SimuPay Pro Merchant',
         wallet_balance: 35000.00,
         activation_key: 'SPP-FALLBACK-KEY',
         license_active: false,
@@ -532,6 +533,11 @@ function AppContent() {
             <SettingsView
               profile={profile}
               onUpdateProfile={handleProfileUpdate}
+            />
+          )}
+          {activeTab === 'security-center' && (
+            <SecurityCenterView
+              profile={profile}
             />
           )}
           {activeTab === 'notifications' && (

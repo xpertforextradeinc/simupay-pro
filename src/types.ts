@@ -157,6 +157,7 @@ export type ActiveTab =
   | 'orders'
   | 'support'
   | 'settings'
+  | 'security-center'
   | 'db-setup'
   | 'subscription'
   | 'admin-panel'

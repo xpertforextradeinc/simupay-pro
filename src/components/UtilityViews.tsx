@@ -9,7 +9,7 @@ import { dbService } from '../services/dbService';
    ========================================== */
 export function SmsCenterView() {
   const [phone, setPhone] = useState('+1 (555) 902-1249');
-  const [template, setTemplate] = useState('ALERT: SlipMint has dispathed a Flash Transfer of {amount} {network} to wallet {wallet}. Hash: {hash}');
+  const [template, setTemplate] = useState('ALERT: SimuPay Pro has dispathed a Flash Transfer of {amount} {network} to wallet {wallet}. Hash: {hash}');
   const [sending, setSending] = useState(false);
   const { showToast } = useToast();
 
@@ -77,11 +77,11 @@ export function SmsCenterView() {
           <h4 className="text-xs font-bold text-white uppercase tracking-wider border-b border-[#00C853]/20 pb-2">SMS Logs Preview</h4>
           <div className="bg-brand-bg/60 p-4 rounded-xl border border-emerald-950/40 font-sans space-y-3 relative overflow-hidden">
             <div className="flex justify-between text-[10px] text-gray-500 border-b border-emerald-950 pb-1.5 font-mono">
-              <span>SENDER: SlipMint SMS Gateway</span>
+              <span>SENDER: SimuPay Pro SMS Gateway</span>
               <span>100% SECURE</span>
             </div>
             <div className="text-xs text-gray-300 leading-relaxed font-mono">
-              ALERT: SlipMint has dispatched a Flash Transfer of $12,500.00 USDT (TRC20) to wallet TY6XepvMMy6F... Hash: 0xf92a3b01...
+              ALERT: SimuPay Pro has dispatched a Flash Transfer of $12,500.00 USDT (TRC20) to wallet TY6XepvMMy6F... Hash: 0xf92a3b01...
             </div>
           </div>
           <p className="text-[11px] text-gray-400 leading-relaxed">
@@ -130,7 +130,7 @@ export function OrdersView() {
             )}
 
             <div className="space-y-2">
-              <span className="text-[10px] text-gray-500 font-mono font-bold tracking-wider">SlipMint License Option</span>
+              <span className="text-[10px] text-gray-500 font-mono font-bold tracking-wider">SimuPay Pro License Option</span>
               <h3 className="text-lg font-display font-bold text-white">{lic.name}</h3>
               <p className="text-xs text-gray-400 leading-relaxed">{lic.desc}</p>
               
@@ -180,7 +180,7 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
   const [ticketSent, setTicketSent] = useState(false);
   const { showToast } = useToast();
 
-  const [tgBotLink, setTgBotLink] = useState(() => localStorage.getItem('spp_telegram_bot_link') || 'https://t.me/SlipMint_Support_Bot');
+  const [tgBotLink, setTgBotLink] = useState(() => localStorage.getItem('spp_telegram_bot_link') || 'https://t.me/SimuPay Pro_Support_Bot');
   const [isEditingTgLink, setIsEditingTgLink] = useState(false);
   const [tempTgLink, setTempTgLink] = useState(tgBotLink);
 
@@ -533,7 +533,7 @@ export function SettingsView({ profile, onUpdateProfile }: SettingsViewProps) {
             <div className="space-y-2">
               <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
                 <span className="text-gray-500">PLATFORM</span>
-                <span className="text-white font-bold">SlipMint v2.0</span>
+                <span className="text-white font-bold">SimuPay Pro v2.0</span>
               </div>
               <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
                 <span className="text-gray-500">FRAMEWORK</span>

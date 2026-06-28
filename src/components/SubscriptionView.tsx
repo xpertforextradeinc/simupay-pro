@@ -15,7 +15,7 @@ export function SubscriptionView({ profile, onUpdateProfile, onRefresh }: Subscr
   const plans = [
     {
       id: 'monthly',
-      name: 'SlipMint Monthly',
+      name: 'SimuPay Pro Monthly',
       price: '₦30,000',
       numericPrice: 30000,
       billing: 'Monthly',
@@ -33,7 +33,7 @@ export function SubscriptionView({ profile, onUpdateProfile, onRefresh }: Subscr
     },
     {
       id: 'quarterly',
-      name: 'SlipMint Quarterly',
+      name: 'SimuPay Pro Quarterly',
       price: '₦75,000',
       numericPrice: 75000,
       billing: 'Every 3 Months',
@@ -70,7 +70,7 @@ export function SubscriptionView({ profile, onUpdateProfile, onRefresh }: Subscr
     <div className="space-y-6">
       <div className="text-center max-w-2xl mx-auto space-y-2 py-4">
         <span className="text-[10px] bg-[#00C853]/15 text-[#00C853] border border-[#00C853]/30 px-3 py-1 rounded-full font-mono font-bold tracking-wider uppercase">
-          SlipMint Premium Tunnels
+          SimuPay Pro Premium Tunnels
         </span>
         <h2 className="text-3xl font-display font-bold text-white tracking-tight">Upgrade to Enterprise Unlimited</h2>
         <p className="text-xs text-[#9CB1AC] font-sans">
