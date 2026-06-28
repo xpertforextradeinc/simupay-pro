@@ -41,7 +41,9 @@ function AppContent() {
   const [session, setSession] = useState<any>(null);
   const currentSessionRef = useRef<any>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
+  const [activeTab, setActiveTab] = useState<ActiveTab>(() => {
+    return window.location.pathname.startsWith('/admin') ? 'admin-panel' : 'dashboard';
+  });
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { showToast } = useToast();
@@ -55,6 +57,23 @@ function AppContent() {
   const [supportTickets, setSupportTickets] = useState<SupportTicket[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Sync URL with activeTab
+  useEffect(() => {
+    const path = activeTab === 'admin-panel' ? '/admin' : '/';
+    if (window.location.pathname !== path) {
+      window.history.pushState({}, '', path);
+    }
+  }, [activeTab]);
+
+  // Handle browser back button
+  useEffect(() => {
+    const handlePopState = () => {
+      setActiveTab(window.location.pathname.startsWith('/admin') ? 'admin-panel' : 'dashboard');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   // Register Global Keyboard Shortcuts
   useShortcuts((tab) => {
     if (session) {
@@ -64,7 +83,7 @@ function AppContent() {
 
   // Guard administrative views from standard users
   useEffect(() => {
-    if ((activeTab === 'db-setup' || activeTab === 'admin-panel') && profile && profile.role !== 'admin') {
+    if (activeTab === 'db-setup' && profile && profile.role !== 'admin') {
       setActiveTab('dashboard');
     }
   }, [activeTab, profile]);
@@ -581,19 +600,11 @@ function AppContent() {
           )}
 
           {activeTab === 'admin-panel' && (
-            profile?.role === 'admin' ? (
-              <AdminPanelView
-                currentUserId={profile?.id || ''}
-              />
-            ) : (
-              <DashboardView
-                profile={profile}
-                transactions={transactions}
-                notifications={notifications}
-                onNavigate={setActiveTab}
-                onCopyWallet={handleCopyWalletAddress}
-              />
-            )
+            <AdminPanelView
+              currentUserId={profile?.id || ''}
+              profile={profile}
+              onNavigate={setActiveTab}
+            />
           )}
         </Suspense>
       </main>

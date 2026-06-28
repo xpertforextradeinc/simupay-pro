@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Shield, Users, CreditCard, Layout, Sliders, Bell, HelpCircle, 
-  RefreshCw, Layers, ShieldCheck, Activity, Terminal
+  RefreshCw, Layers, ShieldCheck, Activity, Terminal, ArrowLeft, ShieldAlert, Bot
 } from 'lucide-react';
 import { useToast } from './Toast';
 import { dbService } from '../services/dbService';
@@ -15,12 +15,15 @@ import { AdminProviders } from './admin/AdminProviders';
 import { AdminSettingsAndLimits } from './admin/AdminSettingsAndLimits';
 import { AdminNotificationsAndSupport } from './admin/AdminNotificationsAndSupport';
 import { AdminSecurity } from './admin/AdminSecurity';
+import { AdminCopilot } from './admin/AdminCopilot';
 
 interface AdminPanelViewProps {
   currentUserId: string;
+  profile?: Profile | null;
+  onNavigate?: (tab: string) => void;
 }
 
-export function AdminPanelView({ currentUserId }: AdminPanelViewProps) {
+export function AdminPanelView({ currentUserId, profile, onNavigate }: AdminPanelViewProps) {
   const { showToast } = useToast();
   
   // Data State
@@ -42,8 +45,10 @@ export function AdminPanelView({ currentUserId }: AdminPanelViewProps) {
   });
 
   useEffect(() => {
-    fetchAdminData();
-  }, []);
+    if (profile?.role === 'admin') {
+      fetchAdminData();
+    }
+  }, [profile?.role]);
 
   const fetchAdminData = async () => {
     setLoading(true);
@@ -237,6 +242,30 @@ export function AdminPanelView({ currentUserId }: AdminPanelViewProps) {
     }
   };
 
+  if (profile && profile.role !== 'admin') {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 px-4">
+        <div className="bg-[#091714] border border-red-500/30 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-red-500/50" />
+          <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-red-500">
+             <ShieldAlert className="w-10 h-10" />
+          </div>
+          <h2 className="text-2xl font-display font-bold text-white mb-2">Access Denied</h2>
+          <p className="text-[#9CB1AC] text-sm mb-8">
+            This workspace is restricted to administrators. Your current role does not have the required permissions.
+          </p>
+          <button
+            onClick={() => onNavigate && onNavigate('dashboard')}
+            className="bg-[#16362F] text-white hover:bg-[#1f4a41] px-6 py-3 rounded-xl font-bold w-full transition-colors flex items-center justify-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Return to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-96 space-y-4">
@@ -283,7 +312,8 @@ export function AdminPanelView({ currentUserId }: AdminPanelViewProps) {
           { id: 'providers', label: 'Gateways (Dynamic)', icon: Layers },
           { id: 'limits', label: 'Limits & Config', icon: Sliders },
           { id: 'notifications', label: 'Announcements', icon: Bell },
-          { id: 'security', label: 'Security Node', icon: ShieldCheck }
+          { id: 'security', label: 'Security Node', icon: ShieldCheck },
+          { id: 'copilot', label: 'AI Copilot', icon: Bot }
         ].map((tab) => {
           const TabIcon = tab.icon;
           const isActive = activeSubTab === tab.id;
@@ -357,6 +387,10 @@ export function AdminPanelView({ currentUserId }: AdminPanelViewProps) {
             systemHealth={systemHealth}
             onRefreshHealth={fetchAdminData}
           />
+        )}
+
+        {activeSubTab === 'copilot' && (
+          <AdminCopilot />
         )}
       </div>
 

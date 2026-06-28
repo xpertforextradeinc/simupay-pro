@@ -468,5 +468,75 @@ export const adminService = {
       { id: '1', email: 'guest_user@hotmail.com', reason: 'Invalid password credential sequence', timestamp: new Date(Date.now() - 12 * 60 * 1000).toISOString(), ip: '82.16.14.99' },
       { id: '2', email: 'unknown_admin@simupay.pro', reason: 'Bypassed MFA code timeout', timestamp: new Date(Date.now() - 3 * 3600 * 1000).toISOString(), ip: '41.190.3.11' }
     ];
+  },
+
+  // ----------------- AI Copilot Integration Hooks -----------------
+  
+  // Future: The AI Copilot will call this to search users via function calling
+  searchUsers: async (query: string) => {
+    console.log(`[AI Copilot] Executing searchUsers with query: ${query}`);
+    // Simulated structured data for UI. Later: supabase.from('profiles').select('*').ilike('email', `%${query}%`)
+    return [
+      { id: 'usr-1', email: 'john.doe@example.com', role: 'user', status: 'active', balance: 4500, created_at: new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString() },
+      { id: 'usr-2', email: 'jane.smith@example.com', role: 'user', status: 'active', balance: 12500, created_at: new Date(Date.now() - 60 * 24 * 3600 * 1000).toISOString() },
+      { id: 'usr-3', email: 'admin@simupay.pro', role: 'admin', status: 'active', balance: 0, created_at: new Date(Date.now() - 365 * 24 * 3600 * 1000).toISOString() }
+    ].filter(u => !query || u.email.toLowerCase().includes(query.toLowerCase()) || u.id.includes(query));
+  },
+
+  // Future: The AI Copilot will call this to search transactions
+  searchTransactions: async (query: string) => {
+    console.log(`[AI Copilot] Executing searchTransactions with query: ${query}`);
+    // Simulated structured data for UI. Later: supabase.from('transactions').select('*')
+    return [
+      { id: 'tx-1', userId: 'usr-1', amount: 1500, status: 'completed', network: 'TRC20', date: new Date().toISOString() },
+      { id: 'tx-2', userId: 'usr-2', amount: 50000, status: 'pending', network: 'ERC20', date: new Date().toISOString() }
+    ].filter(t => !query || t.id.includes(query) || t.network.toLowerCase().includes(query.toLowerCase()));
+  },
+
+  // Future: Analyze platform statistics
+  getPlatformStatistics: async () => {
+    console.log(`[AI Copilot] Executing getPlatformStatistics`);
+    return {
+      totalUsers: 1254,
+      activeUsers24h: 342,
+      totalVolume: 4500000,
+      successRate: 98.5
+    };
+  },
+
+  // Future: Subscription metrics
+  getSubscriptionSummary: async () => {
+    console.log(`[AI Copilot] Executing getSubscriptionSummary`);
+    return {
+      activeSubscriptions: 850,
+      mrr: 154000, // Monthly recurring revenue
+      churnRate: 1.2,
+      planBreakdown: {
+        basic: 400,
+        pro: 300,
+        enterprise: 150
+      }
+    };
+  },
+
+  // Future: Recent activity logs
+  getRecentActivity: async (limit: number = 5) => {
+    console.log(`[AI Copilot] Executing getRecentActivity with limit: ${limit}`);
+    return [
+      { id: 'act-1', type: 'user_signup', user: 'new_user@example.com', timestamp: new Date(Date.now() - 5000).toISOString() },
+      { id: 'act-2', type: 'large_transaction', amount: 150000, user: 'whale@example.com', timestamp: new Date(Date.now() - 15000).toISOString() },
+      { id: 'act-3', type: 'subscription_upgrade', user: 'john.doe@example.com', plan: 'pro', timestamp: new Date(Date.now() - 60000).toISOString() }
+    ].slice(0, limit);
+  },
+
+  // Future: High-level dashboard metrics
+  getDashboardMetrics: async () => {
+    console.log(`[AI Copilot] Executing getDashboardMetrics`);
+    return {
+      revenueGrowth: 15.4, // %
+      userGrowth: 8.2, // %
+      systemHealth: 'Optimal',
+      openSupportTickets: 12
+    };
   }
 };
