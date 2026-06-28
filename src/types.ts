@@ -148,6 +148,7 @@ export type ActiveTab =
   | 'wallet'
   | 'activation'
   | 'flash-transfer'
+  | 'forex-tools'
   | 'receipt-generator'
   | 'transactions'
   | 'analytics'

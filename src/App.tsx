@@ -14,6 +14,7 @@ const AccountView = React.lazy(() => import('./components/AccountView').then(m =
 const WalletView = React.lazy(() => import('./components/WalletView').then(m => ({ default: m.WalletView })));
 const ActivationView = React.lazy(() => import('./components/ActivationView').then(m => ({ default: m.ActivationView })));
 const FlashTransferView = React.lazy(() => import('./components/FlashTransferView').then(m => ({ default: m.FlashTransferView })));
+const ForexToolsView = React.lazy(() => import('./components/ForexToolsView'));
 const ReceiptGeneratorView = React.lazy(() => import('./components/ReceiptGeneratorView').then(m => ({ default: m.ReceiptGeneratorView })));
 const TransactionHistoryView = React.lazy(() => import('./components/TransactionHistoryView').then(m => ({ default: m.TransactionHistoryView })));
 const AnalyticsView = React.lazy(() => import('./components/AnalyticsView').then(m => ({ default: m.AnalyticsView })));
@@ -79,11 +80,6 @@ function AppContent() {
       console.log('[Auth Flow] Updating session:', !!newSession, 'forceNull:', forceNull);
       
       if (newSession) {
-      // Always treat this specific user as admin for the session
-      if (newSession.user.email === 'elitedailyearnings@gmail.com') {
-        console.log('[Auth Flow] Admin user detected by email. Forcing admin role.');
-      }
-      
       // Prevent redundant session syncs to avoid race conditions and unnecessary database calls
       if (currentSessionRef.current?.access_token === newSession.access_token) {
           console.log('[Auth Flow] Session already active. Skipping redundant sync.');
@@ -168,12 +164,12 @@ function AppContent() {
       const fallbackProfile: Profile = {
         id: user.id,
         email: user.email || 'merchant@simupay.pro',
-        full_name: user.user_metadata?.full_name || user.user_metadata?.name || 'SimuPay Merchant',
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || 'SlipMint Merchant',
         wallet_balance: 35000.00,
         activation_key: 'SPP-FALLBACK-KEY',
-        license_active: user.email === 'elitedailyearnings@gmail.com',
-        license_type: user.email === 'elitedailyearnings@gmail.com' ? 'Enterprise' : 'Standard',
-        role: user.email === 'elitedailyearnings@gmail.com' ? 'admin' : 'user',
+        license_active: false,
+        license_type: 'Standard',
+        role: 'user',
         created_at: new Date().toISOString()
       };
       setProfile(fallbackProfile);
@@ -479,6 +475,7 @@ function AppContent() {
             <ActivationView
               profile={profile}
               onActivateSuccess={handleActivateSuccess}
+              onNavigate={setActiveTab}
             />
           )}
 
@@ -490,6 +487,12 @@ function AppContent() {
               onNavigate={setActiveTab}
               onRefreshNotifications={loadNotifications}
             />
+          )}
+
+          {activeTab === 'forex-tools' && (
+            <React.Suspense fallback={<div className="p-8 text-center text-gray-500 animate-pulse font-mono text-xs">LOADING_TRADING_SUITE...</div>}>
+              <ForexToolsView />
+            </React.Suspense>
           )}
 
           {activeTab === 'receipt-generator' && (

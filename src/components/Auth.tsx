@@ -33,7 +33,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
 
       if (error) throw error;
 
-      showToast('Welcome back to SimuPay Pro!', 'success');
+      showToast('Welcome back to SlipMint!', 'success');
       onAuthSuccess(data.session);
     } catch (error: any) {
       showToast(error.message || 'Login failed. Please check credentials.', 'error');
@@ -144,7 +144,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
             <ShieldCheck className="w-8 h-8 text-[#00C853]" />
           </div>
           <h1 className="text-3xl font-display font-bold tracking-tight text-white mb-1">
-            SimuPay <span className="text-[#00C853]">Pro</span>
+            SlipMint <span className="text-[#00C853]">Pro</span>
           </h1>
           <p className="text-gray-400 text-sm text-center">
             {isReset
@@ -358,7 +358,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
           </div>
           <div className="text-center opacity-60">
             <p className="text-[10px] leading-tight">
-              © 2026 SimuPay Pro
+              © 2026 SlipMint
               <br />
               Powered by Luckman Dev World
             </p>

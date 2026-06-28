@@ -38,7 +38,7 @@ export function AdminUsers({ profiles, onUpdateProfile, onDeleteProfile }: Admin
     const matchesRole = 
       roleFilter === 'all' || 
       p.role === roleFilter || 
-      (roleFilter === 'owner' && p.email === 'elitedailyearnings@gmail.com'); // Treat owner specifically
+      (roleFilter === 'owner' && p.role === 'owner');
       
     const matchesLicense = 
       licenseFilter === 'all' ||

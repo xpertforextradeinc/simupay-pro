@@ -182,7 +182,7 @@ export function AccountView({ profile, onProfileUpdate }: AccountViewProps) {
               </div>
 
               <div>
-                <h3 className="text-lg font-bold text-white">{fullName || 'SimuPay Merchant'}</h3>
+                <h3 className="text-lg font-bold text-white">{fullName || 'SlipMint Merchant'}</h3>
                 <p className="text-xs text-[#9CB1AC] font-mono">@{username || 'merchant_node'}</p>
                 <p className="text-[11px] text-gray-500 mt-0.5">{profile?.email}</p>
               </div>

@@ -280,7 +280,7 @@ const DEFAULT_FREE_CONFIG: FreePlanConfig = {
 };
 
 const DEFAULT_SYSTEM_SETTINGS: SystemSettings = {
-  appName: 'SimuPay Pro',
+  appName: 'SlipMint',
   logo: 'SP',
   theme: 'emerald',
   contactEmail: 'admin@simupay.pro',
@@ -307,7 +307,7 @@ const DEFAULT_SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   },
   {
     id: 'plan-pro',
-    name: 'SimuPay Pro Quarterly',
+    name: 'SlipMint Quarterly',
     price: 75000,
     billingCycle: 'Quarterly',
     trialPeriodDays: 14,
@@ -455,7 +455,7 @@ export const adminService = {
   // Dynamic Audit logs generator for Security logs tab
   getAuditLogs: () => {
     return [
-      { id: '1', action: 'admin_login', detail: 'Administrator elitedailyearnings@gmail.com authenticated securely from IP 185.190.140.21', timestamp: new Date(Date.now() - 50 * 60 * 1000).toISOString() },
+      { id: '1', action: 'admin_login', detail: 'Administrator authenticated securely from IP 185.190.140.21', timestamp: new Date(Date.now() - 50 * 60 * 1000).toISOString() },
       { id: '2', action: 'config_update', detail: 'Daily Free limits modified to 5 sessions per calendar day.', timestamp: new Date(Date.now() - 2 * 3600 * 1000).toISOString() },
       { id: '3', action: 'user_suspension', detail: 'Suspended user account usr_9281a for policy violations.', timestamp: new Date(Date.now() - 4 * 3600 * 1000).toISOString() },
       { id: '4', action: 'provider_added', detail: 'Created custom provider layout for Stripe Connect.', timestamp: new Date(Date.now() - 10 * 3600 * 1000).toISOString() },

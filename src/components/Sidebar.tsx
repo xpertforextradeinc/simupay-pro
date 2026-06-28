@@ -65,19 +65,12 @@ export function Sidebar({
 
   const baseMenuItems: MenuItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'account', label: 'My Account', icon: User },
-    { id: 'wallet', label: 'Wallet', icon: Wallet },
-    { id: 'activation', label: 'Activation Key', icon: Key },
-    { id: 'flash-transfer', label: 'Flash Transfer', icon: Zap, premium: true },
-    { id: 'receipt-generator', label: 'Receipt Generator', icon: Receipt },
-    { id: 'transactions', label: 'Transaction History', icon: History },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3, premium: true },
-    { id: 'sms-center', label: 'SMS Center', icon: Smartphone, premium: true },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'subscription', label: 'Subscription', icon: CreditCard },
-    { id: 'orders', label: 'Orders', icon: ShoppingBag, premium: true },
-    { id: 'support', label: 'Support', icon: HelpCircle },
+    { id: 'receipt-generator', label: 'Receipt Studio', icon: Receipt },
     { id: 'resources', label: 'Resources', icon: Globe },
+    { id: 'forex-tools', label: 'Forex Tools', icon: Globe },
+    { id: 'subscription', label: 'Subscription', icon: CreditCard },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'support', label: 'Support', icon: HelpCircle },
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
@@ -116,7 +109,7 @@ export function Sidebar({
       <div className="lg:hidden h-16 bg-brand-card border-b border-emerald-950/40 px-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-2">
           <span className="font-display font-bold text-lg text-white">
-            SimuPay <span className="text-[#00C853]">Pro</span>
+            SlipMint <span className="text-[#00C853]">Pro</span>
           </span>
           {licenseActive && (
             <span className="text-[10px] bg-[#00C853]/20 text-[#00C853] px-2 py-0.5 rounded font-mono font-bold tracking-wider">
@@ -144,7 +137,7 @@ export function Sidebar({
           {!collapsed ? (
             <div className="flex items-center gap-2 overflow-hidden">
               <span className="font-display font-bold text-xl text-white tracking-tight whitespace-nowrap">
-                SimuPay <span className="text-[#00C853]">Pro</span>
+                SlipMint <span className="text-[#00C853]">Pro</span>
               </span>
               {licenseActive && (
                 <span className="text-[10px] bg-[#00C853]/20 text-[#00C853] px-2 py-0.5 rounded font-mono font-bold tracking-wider">
@@ -283,7 +276,7 @@ export function Sidebar({
         {(!collapsed || mobileOpen) && (
           <div className="px-4 py-3 text-center opacity-60 hover:opacity-100 transition-opacity">
             <p className="text-[10px] text-gray-500 font-mono leading-tight">
-              © 2026 SimuPay Pro
+              © 2026 SlipMint
               <br />
               Powered by Luckman Dev World
             </p>
@@ -318,32 +311,32 @@ export function Sidebar({
           <span>Dashboard</span>
         </button>
         <button
-          onClick={() => handleTabClick('wallet')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'wallet' ? 'text-[#00C853]' : 'text-gray-400'}`}
-        >
-          <Wallet className="w-5 h-5" />
-          <span>Wallet</span>
-        </button>
-        <button
-          onClick={() => handleTabClick('flash-transfer')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'flash-transfer' ? 'text-amber-500' : 'text-gray-400'}`}
-        >
-          <Zap className="w-5 h-5 text-amber-500" />
-          <span>Flash</span>
-        </button>
-        <button
           onClick={() => handleTabClick('receipt-generator')}
           className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'receipt-generator' ? 'text-[#00C853]' : 'text-gray-400'}`}
         >
           <Receipt className="w-5 h-5" />
-          <span>Receipt</span>
+          <span>Studio</span>
         </button>
         <button
-          onClick={() => handleTabClick('transactions')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'transactions' ? 'text-[#00C853]' : 'text-gray-400'}`}
+          onClick={() => handleTabClick('forex-tools')}
+          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'forex-tools' ? 'text-[#00C853]' : 'text-gray-400'}`}
         >
-          <History className="w-5 h-5" />
-          <span>History</span>
+          <Globe className="w-5 h-5" />
+          <span>Forex</span>
+        </button>
+        <button
+          onClick={() => handleTabClick('resources')}
+          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'resources' ? 'text-[#00C853]' : 'text-gray-400'}`}
+        >
+          <Globe className="w-5 h-5" />
+          <span>Resources</span>
+        </button>
+        <button
+          onClick={() => handleTabClick('notifications')}
+          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'notifications' ? 'text-[#00C853]' : 'text-gray-400'}`}
+        >
+          <Bell className="w-5 h-5" />
+          <span>Alerts</span>
         </button>
       </div>
 

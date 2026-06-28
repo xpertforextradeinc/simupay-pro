@@ -88,7 +88,7 @@ export function DashboardView({
             Welcome back, {profile?.full_name || 'Merchant'}!
           </h1>
           <p className="text-gray-400 text-sm max-w-xl">
-            SimuPay Pro secure enterprise receipt generation platform. Manage your professional receipts and transaction records.
+            SlipMint secure enterprise receipt generation platform. Manage your professional receipts and transaction records.
           </p>
         </div>
 

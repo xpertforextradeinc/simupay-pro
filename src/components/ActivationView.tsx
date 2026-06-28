@@ -1,28 +1,19 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabase';
 import { useToast } from './Toast';
-import { Key, ShieldCheck, ShieldAlert, Copy, Check, Lock, ArrowRight, Star } from 'lucide-react';
+import { Key, ShieldCheck, ShieldAlert, Check, Lock, ArrowRight, Star, ExternalLink } from 'lucide-react';
 import { Profile } from '../types';
 
 interface ActivationViewProps {
   profile: Profile | null;
   onActivateSuccess: () => void;
+  onNavigate: (tab: any) => void;
 }
 
-export function ActivationView({ profile, onActivateSuccess }: ActivationViewProps) {
+export function ActivationView({ profile, onActivateSuccess, onNavigate }: ActivationViewProps) {
   const [inputKey, setInputKey] = useState('');
   const [activating, setActivating] = useState(false);
-  const [copiedKey, setCopiedKey] = useState(false);
   const { showToast } = useToast();
-
-  const handleCopyKey = () => {
-    if (profile?.activation_key) {
-      navigator.clipboard.writeText(profile.activation_key);
-      setCopiedKey(true);
-      showToast('License Key copied to clipboard!', 'success');
-      setTimeout(() => setCopiedKey(false), 2000);
-    }
-  };
 
   const handleActivate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +46,7 @@ export function ActivationView({ profile, onActivateSuccess }: ActivationViewPro
               {
                 user_id: profile.id,
                 title: 'License Activated',
-                message: 'SimuPay Pro Enterprise license activated. Flash Transfer unlocked.',
+                message: 'SlipMint Enterprise license activated. Flash Transfer unlocked.',
                 created_at: new Date().toISOString()
               }
             ]);
@@ -65,14 +56,12 @@ export function ActivationView({ profile, onActivateSuccess }: ActivationViewPro
         }
 
         onActivateSuccess();
-        showToast('SimuPay Pro license successfully activated!', 'success');
+        showToast('SlipMint license successfully activated!', 'success');
       } else {
         showToast('Invalid activation key. Please check your credentials.', 'error');
       }
     } catch (error: any) {
-      // Session fallback activation
-      onActivateSuccess();
-      showToast('Activated in local workspace session!', 'success');
+      showToast('Failed to validate key. Please try again.', 'error');
     } finally {
       setActivating(false);
     }
@@ -85,7 +74,7 @@ export function ActivationView({ profile, onActivateSuccess }: ActivationViewPro
       {/* Header */}
       <div>
         <h2 className="text-xl font-display font-bold text-white">Activation Terminal</h2>
-        <p className="text-xs text-gray-500">Unlock SimuPay Pro enterprise transfer protocols and advanced ledger tracking.</p>
+        <p className="text-xs text-gray-500">Unlock SlipMint enterprise transfer protocols and advanced ledger tracking.</p>
       </div>
 
       {licenseActive ? (
@@ -111,7 +100,7 @@ export function ActivationView({ profile, onActivateSuccess }: ActivationViewPro
             <div className="bg-brand-bg/60 p-4 border border-emerald-950 rounded-xl space-y-2">
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Active License Key</span>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-mono font-bold text-[#00C853] tracking-widest">{profile?.activation_key || 'SPP-ADMIN-UNLIMITED-2026'}</span>
+                <span className="text-sm font-mono font-bold text-[#00C853] tracking-widest">••••-••••-••••-{profile?.activation_key?.slice(-4) || 'XXXX'}</span>
                 <span className="text-xs text-[#00C853] font-semibold flex items-center gap-1 font-mono bg-[#00C853]/10 px-2 py-0.5 rounded border border-[#00C853]/20">
                   <Star className="w-3 h-3 fill-current" /> SECURED
                 </span>
@@ -125,7 +114,7 @@ export function ActivationView({ profile, onActivateSuccess }: ActivationViewPro
               </div>
               <div className="p-3 bg-brand-bg/40 rounded-xl border border-emerald-950/50">
                 <span className="text-gray-500 block">License Expiration</span>
-                <span className="text-white font-semibold">Lifetime License</span>
+                <span className="text-white font-semibold">{profile?.expiry_date ? new Date(profile.expiry_date).toLocaleDateString() : 'Lifetime License'}</span>
               </div>
             </div>
           </div>
@@ -165,7 +154,7 @@ export function ActivationView({ profile, onActivateSuccess }: ActivationViewPro
               <button
                 type="submit"
                 disabled={activating}
-                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-brand-bg font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-xs cursor-pointer shadow-lg shadow-amber-950/40 disabled:opacity-50 mt-4"
+                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-brand-bg font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 text-xs cursor-pointer shadow-lg shadow-amber-950/40 disabled:opacity-50 mt-4 hover:opacity-90"
               >
                 {activating ? 'Validating Key...' : 'Unlock Premium Features'}
                 <ArrowRight className="w-4 h-4" />
@@ -191,32 +180,29 @@ export function ActivationView({ profile, onActivateSuccess }: ActivationViewPro
             </div>
           </div>
 
-          {/* Sandbox Help / How to retrieve code */}
+          {/* Contact Support / Purchase */}
           <div className="md:col-span-2 bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl flex flex-col justify-between space-y-4">
-            <div className="space-y-2">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider border-b border-emerald-950/50 pb-1.5">Your Assigned Key</h4>
+            <div className="space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider border-b border-emerald-950/50 pb-1.5 flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4 text-amber-500" /> Need an Activation Key?
+              </h4>
               <p className="text-xs text-gray-400 leading-relaxed">
-                For security demonstration and developer validation, copy your unique assigned database sandbox activation key below and activate your account.
+                Enterprise activation keys are issued upon successful subscription payment. If you have recently subscribed, check your email for the key or wait for admin provisioning.
               </p>
-
-              <div className="bg-brand-bg/60 p-3 border border-emerald-950 rounded-xl space-y-1.5 mt-2">
-                <span className="text-[9px] font-mono font-bold text-gray-500">ASSIGNED CODE</span>
-                <div className="flex items-center justify-between gap-1">
-                  <span className="text-xs font-mono font-bold text-amber-500 select-all break-all tracking-wider">
-                    {profile?.activation_key || 'SPP-MOCK-REG-KEY-2026'}
-                  </span>
-                  <button
-                    onClick={handleCopyKey}
-                    className="text-gray-400 hover:text-[#00C853] transition-colors p-1 rounded hover:bg-brand-bg"
-                  >
-                    {copiedKey ? <Check className="w-3.5 h-3.5 text-[#00C853]" /> : <Copy className="w-3.5 h-3.5" />}
-                  </button>
-                </div>
+              
+              <div className="bg-brand-bg/60 p-4 border border-emerald-950 rounded-xl space-y-3 mt-4">
+                <p className="text-xs text-gray-400">Don't have a subscription yet?</p>
+                <button 
+                  onClick={() => onNavigate('subscription')} 
+                  className="w-full text-[11px] font-bold py-2 px-3 bg-[#00C853]/10 text-[#00C853] hover:bg-[#00C853]/20 border border-[#00C853]/30 rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  View Subscription Plans <ExternalLink className="w-3 h-3" />
+                </button>
               </div>
             </div>
 
             <div className="p-3 bg-amber-950/20 border border-amber-500/10 rounded-xl text-[11px] text-amber-500 leading-relaxed font-medium">
-              Note: Key is linked to your email {profile?.email || 'account'}.
+              Note: Key is linked exclusively to your email account: {profile?.email || 'account'}.
             </div>
           </div>
         </div>

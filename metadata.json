@@ -1,5 +1,5 @@
 {
-  "name": "SimuPay Pro",
+  "name": "SlipMint",
   "description": "Premium full-stack transaction and dashboard platform with Supabase integration, licensing validation, and real-time ledger management.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

@@ -14,7 +14,7 @@ export function ResourcesView() {
           </h2>
         </div>
         <p className="text-xs text-gray-500 mt-1 max-w-2xl">
-          Carefully curated tools and platforms to streamline your digital asset transactions. Get exclusive terms by registering through SIMUPAY PRO partner nodes.
+          Carefully curated tools and platforms to streamline your digital asset transactions. Get exclusive terms by registering through SlipMint partner nodes.
         </p>
       </div>
 
@@ -82,6 +82,43 @@ export function ResourcesView() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Trading Resources & Learning Articles */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 space-y-4">
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-emerald-950/30 pb-2">Trading Resources</h3>
+          <div className="space-y-3">
+            {[
+              { title: "Market Analysis Tools", link: "https://www.tradingview.com/markets/" },
+              { title: "Risk Management Templates", link: "https://www.babypips.com/trading-tools" },
+              { title: "Trade Journal System", link: "https://www.edgewonk.com/" },
+              { title: "Asset Correlation Matrix", link: "https://www.myfxbook.com/forex-calculators/correlation" }
+            ].map((item, idx) => (
+              <a key={idx} href={item.link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 bg-brand-bg/40 rounded-xl border border-emerald-950/20 group hover:border-[#00C853]/30 transition-all cursor-pointer">
+                <span className="text-xs text-gray-400 group-hover:text-gray-200">{item.title}</span>
+                <ExternalLink className="w-3 h-3 text-emerald-600 group-hover:text-[#00C853] transition-colors" />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 space-y-4">
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-emerald-950/30 pb-2">Learning Articles</h3>
+          <div className="space-y-3">
+            {[
+              { title: "Introduction to Forex Trading", link: "https://www.babypips.com/learn/forex" },
+              { title: "Understanding Crypto Wallets", link: "https://academy.binance.com/en/articles/crypto-wallet-types-explained" },
+              { title: "Secure Transaction Best Practices", link: "https://www.ledger.com/academy/security" },
+              { title: "Enterprise Risk Mitigation", link: "https://www.investopedia.com/articles/forex/11/forex-risk-management-tools.asp" }
+            ].map((item, idx) => (
+              <a key={idx} href={item.link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 bg-brand-bg/40 rounded-xl border border-emerald-950/20 group hover:border-[#00C853]/30 transition-all cursor-pointer">
+                <span className="text-xs text-gray-400 group-hover:text-gray-200">{item.title}</span>
+                <ExternalLink className="w-3 h-3 text-emerald-600 group-hover:text-[#00C853] transition-colors" />
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Affiliate Disclosure Box */}

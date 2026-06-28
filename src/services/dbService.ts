@@ -140,14 +140,6 @@ export const dbService = {
       
       if (data) {
         let profile = data as Profile;
-        if (profile.email === 'elitedailyearnings@gmail.com' && profile.role !== 'admin') {
-          profile.role = 'admin';
-          try {
-            await supabase.from('profiles').update({ role: 'admin' }).eq('id', userId);
-          } catch (err) {
-            console.warn('Failed to save remote admin role:', err);
-          }
-        }
         // Record last login if it exists
         if (!data.last_login) {
           const nowStr = new Date().toISOString();
@@ -168,17 +160,17 @@ export const dbService = {
         const newProfile: Profile = {
           id: userId,
           email: resolvedEmail,
-          full_name: fullName || 'SimuPay Merchant',
+          full_name: fullName || 'SlipMint Merchant',
           wallet_balance: 35000.00,
           activation_key: generateKey(),
-          license_active: resolvedEmail === 'elitedailyearnings@gmail.com',
-          license_type: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'Enterprise' : 'Standard',
+          license_active: false,
+          license_type: 'Standard',
           expiry_date: undefined,
-          subscription_status: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'Active' : 'N/A',
+          subscription_status: 'N/A',
           avatar_url: '',
           email_alerts: true,
           mempool_clear: false,
-          role: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'admin' : 'user',
+          role: 'user',
           created_at: new Date().toISOString(),
           last_login: new Date().toISOString()
         };
@@ -208,11 +200,6 @@ export const dbService = {
     const localProfiles = getLocalStorageItem<Record<string, Profile>>('spp_profiles', {});
     if (localProfiles[userId]) {
       const existing = localProfiles[userId];
-      if (existing.email === 'elitedailyearnings@gmail.com' && existing.role !== 'admin') {
-        existing.role = 'admin';
-        localProfiles[userId] = existing;
-        setLocalStorageItem('spp_profiles', localProfiles);
-      }
       return existing;
     }
 
@@ -226,17 +213,17 @@ export const dbService = {
     const defaultProfile: Profile = {
       id: userId,
       email: resolvedEmail,
-      full_name: fullName || 'SimuPay Merchant',
+      full_name: fullName || 'SlipMint Merchant',
       wallet_balance: 35000.00,
       activation_key: generateFallbackKey(),
-      license_active: resolvedEmail === 'elitedailyearnings@gmail.com',
-      license_type: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'Enterprise' : 'Standard',
+      license_active: false,
+      license_type: 'Standard',
       expiry_date: undefined,
-      subscription_status: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'Active' : 'N/A',
+      subscription_status: 'N/A',
       avatar_url: '',
       email_alerts: true,
       mempool_clear: false,
-      role: resolvedEmail === 'elitedailyearnings@gmail.com' ? 'admin' : 'user',
+      role: 'user',
       created_at: new Date().toISOString(),
       last_login: new Date().toISOString()
     };
@@ -1007,15 +994,14 @@ export const dbService = {
         category: 'Electronic',
         color_hex: '#00D632',
         required_fields: ['amount', 'recipient_name', 'recipient_tag', 'sender_name', 'sender_tag', 'memo', 'status', 'reference_no'],
-        is_active: true,
-        metadata: { icon: 'dollar-sign' }
+        is_active: true
       },
       {
         id: 'venmo-id',
         name: 'Venmo',
         category: 'Electronic',
         color_hex: '#3D95CE',
-        required_fields: ['amount', 'recipient_name', 'recipient_tag', 'sender_name', 'sender_tag', 'memo', 'status'],
+        required_fields: ['amount', 'recipient_name', 'recipient_tag', 'sender_name', 'memo', 'status'],
         is_active: true
       },
       {
@@ -1031,7 +1017,7 @@ export const dbService = {
         name: 'Zelle',
         category: 'Bank',
         color_hex: '#7414CA',
-        required_fields: ['amount', 'recipient_name', 'recipient_tag', 'memo', 'status', 'reference_no', 'bank_name'],
+        required_fields: ['amount', 'recipient_name', 'bank_name', 'memo', 'status', 'reference_no'],
         is_active: true
       },
       {
@@ -1047,6 +1033,22 @@ export const dbService = {
         name: 'MetaMask',
         category: 'Crypto',
         color_hex: '#F6851B',
+        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'trustwallet-id',
+        name: 'Trust Wallet',
+        category: 'Crypto',
+        color_hex: '#3375BB',
+        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'exodus-id',
+        name: 'Exodus',
+        category: 'Crypto',
+        color_hex: '#2B2E4A',
         required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
         is_active: true
       },
@@ -1071,22 +1073,6 @@ export const dbService = {
         name: 'Bitcoin.com',
         category: 'Crypto',
         color_hex: '#F7931A',
-        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
-        is_active: true
-      },
-      {
-        id: 'trustwallet-id',
-        name: 'Trust Wallet',
-        category: 'Crypto',
-        color_hex: '#3375BB',
-        required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
-        is_active: true
-      },
-      {
-        id: 'exodus-id',
-        name: 'Exodus',
-        category: 'Crypto',
-        color_hex: '#2B2E4A',
         required_fields: ['amount', 'asset', 'network', 'recipient_address', 'status', 'reference_no'],
         is_active: true
       },
@@ -1141,5 +1127,22 @@ export const dbService = {
 
     await dbService.logActivity(userId, 'receipt generation', `Generated local ${record.provider_name} receipt simulation for $${record.amount}`);
     return newRecord;
+  },
+
+  getReceiptRecords: async (userId: string): Promise<ReceiptRecord[]> => {
+    try {
+      const { data, error } = await supabase
+        .from('receipt_records')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        return data as ReceiptRecord[];
+      }
+    } catch (e) {
+      console.warn('Supabase receipts query failed, querying locally.', e);
+    }
+    const localReceipts = getLocalStorageItem<ReceiptRecord[]>('spp_receipt_records', []);
+    return localReceipts.filter(r => r.user_id === userId).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   }
 };
