@@ -31,7 +31,7 @@ export const partners: Partner[] = [
     category: 'Derivatives Exchange',
     description: 'Bybit offers lightning-fast trade execution, low fees, and reliable liquidity for derivatives and spot trading.',
     buttonText: 'Start Trading on Bybit',
-    link: 'https://www.bybit.com/register?affiliate_id=slipmint',
+    link: 'https://partner.bybit.com/b/160846',
     benefits: [
       'Zero downtime matching engine',
       'Unified trading accounts',

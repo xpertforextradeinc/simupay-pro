@@ -92,7 +92,7 @@ export interface Subscription {
 export interface ActivityLog {
   id: string;
   user_id: string;
-  action: 'login' | 'logout' | 'registration' | 'activation' | 'transfers' | 'receipt generation' | 'profile updates' | 'settings update' | 'support';
+  action: 'login' | 'logout' | 'registration' | 'activation' | 'transfers' | 'receipt generation' | 'profile updates' | 'settings update' | 'support' | 'marketplace purchase' | 'marketplace';
   details: string;
   ip_address?: string;
   created_at: string;
@@ -161,4 +161,79 @@ export type ActiveTab =
   | 'db-setup'
   | 'subscription'
   | 'admin-panel'
-  | 'resources';
+  | 'resources'
+  | 'slipmint-market';
+
+export interface Product {
+  id: string;
+  title: string;
+  handle: string;
+  description: string;
+  price: number;
+  currency: string;
+  image_url?: string;
+  category_id?: string;
+  download_url?: string;
+  is_digital: boolean;
+  status: 'Draft' | 'Active';
+  benefits?: string[];
+  created_at: string;
+}
+
+export interface ProductCategory {
+  id: string;
+  title: string;
+  handle: string;
+  description: string;
+  seo_title: string;
+  seo_description: string;
+  sort_order: string;
+  created_at: string;
+}
+
+export interface ProductOrder {
+  id: string;
+  user_id: string;
+  total_amount: number;
+  currency: string;
+  status: 'Pending' | 'Completed' | 'Cancelled';
+  coupon_id?: string;
+  payment_method: string;
+  created_at: string;
+}
+
+export interface OrderItem {
+  id: string;
+  order_id: string;
+  product_id: string;
+  price: number;
+  quantity: number;
+  created_at: string;
+}
+
+export interface ProductDownload {
+  id: string;
+  user_id: string;
+  product_id: string;
+  download_count: number;
+  last_downloaded_at: string;
+}
+
+export interface Coupon {
+  id: string;
+  code: string;
+  discount_percent: number;
+  category_scope?: string;
+  expiry_date: string;
+  is_active: boolean;
+}
+
+export interface ProductReview {
+  id: string;
+  product_id: string;
+  user_id: string;
+  user_name: string;
+  rating: number;
+  comment: string;
+  created_at: string;
+}

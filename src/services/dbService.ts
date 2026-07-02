@@ -10,7 +10,14 @@ import {
   ActivityLog,
   SupportTicket,
   PaymentProvider,
-  ReceiptRecord
+  ReceiptRecord,
+  Product,
+  ProductCategory,
+  ProductOrder,
+  OrderItem,
+  ProductDownload,
+  Coupon,
+  ProductReview
 } from '../types';
 
 // ============================================================================
@@ -586,10 +593,14 @@ export const dbService = {
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.warn('Supabase notifications retrieval failed (non-critical):', error.message);
+        return getLocalStorageItem<AppNotification[]>('spp_notifications', []).filter(n => n.user_id === userId);
+      }
+      
       if (data) return data as AppNotification[];
     } catch (e) {
-      console.warn('Supabase notifications retrieval failed, returning local storage records.', e);
+      console.warn('Supabase notifications retrieval failed (unexpected):', e);
     }
 
     const localNotifs = getLocalStorageItem<AppNotification[]>('spp_notifications', []);
@@ -935,10 +946,14 @@ export const dbService = {
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      if (data && data.length > 0) return data as SupportTicket[];
+      if (error) {
+        console.warn('Supabase support tickets fetch failed (non-critical):', error.message);
+        return getLocalStorageItem<SupportTicket[]>('spp_support_tickets', []).filter(t => t.user_id === userId).sort((a, b) => b.created_at.localeCompare(a.created_at));
+      }
+      
+      if (data) return data as SupportTicket[];
     } catch (e) {
-      console.warn('Supabase support tickets fetch failed, fetching locally.', e);
+      console.warn('Supabase support tickets fetch failed (unexpected):', e);
     }
 
     const localTickets = getLocalStorageItem<SupportTicket[]>('spp_support_tickets', []);
@@ -1144,5 +1159,353 @@ export const dbService = {
     }
     const localReceipts = getLocalStorageItem<ReceiptRecord[]>('spp_receipt_records', []);
     return localReceipts.filter(r => r.user_id === userId).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  },
+
+  // 11. SLIPMINT MARKET COMMERCE OPERATIONS
+  getProductCategories: async (): Promise<ProductCategory[]> => {
+    const defaultCategories: ProductCategory[] = [
+      { id: 'cat-founder-vault', title: 'Founder Vault', handle: 'founder-vault', description: 'Elite membership vault containing digital tools, premium code, and priority access signals.', seo_title: 'Founder Vault - Premium Membership', seo_description: 'Elite membership vault containing digital tools, premium code, and priority access signals.', sort_order: 'best selling', created_at: new Date().toISOString() },
+      { id: 'cat-trading-tools', title: 'Trading Tools', handle: 'trading-tools', description: 'High-performance calculators, lockout tools, and journals to keep you disciplined.', seo_title: 'Trading Tools - Professional Forex & Crypto Utilities', seo_description: 'High-performance calculators, lockout tools, and journals to keep you disciplined.', sort_order: 'best selling', created_at: new Date().toISOString() },
+      { id: 'cat-signals', title: 'Signals', handle: 'signals', description: 'Real-time Telegram feed and automated priority alerts for FX and Crypto trading setups.', seo_title: 'Trading Signals - Live Automated Forex & Crypto Alerts', seo_description: 'Real-time Telegram feed and automated priority alerts for FX and Crypto trading setups.', sort_order: 'best selling', created_at: new Date().toISOString() },
+      { id: 'cat-courses-education', title: 'Courses & Education', handle: 'courses-education', description: 'Masterclass series, tutorial booklets, and full courses on algorithmic trading systems.', seo_title: 'Fintech Courses & Algorithmic Education', seo_description: 'Masterclass series, tutorial booklets, and full courses on algorithmic trading systems.', sort_order: 'best selling', created_at: new Date().toISOString() },
+      { id: 'cat-ai-research', title: 'AI Research', handle: 'ai-research', description: 'Machine learning market prediction models, sentiment analyzers, and AI reports.', seo_title: 'AI Market Research & Quantitative Sentiment Reports', seo_description: 'Machine learning market prediction models, sentiment analyzers, and AI reports.', sort_order: 'best selling', created_at: new Date().toISOString() },
+      { id: 'cat-beginner-resources', title: 'Beginner Resources', handle: 'beginner-resources', description: 'Introduction materials, glossary lists, and safety checklists for retail starters.', seo_title: 'Beginner Trading Resources & Starter Kit', seo_description: 'Introduction materials, glossary lists, and safety checklists for retail starters.', sort_order: 'best selling', created_at: new Date().toISOString() },
+      { id: 'cat-community', title: 'Community', handle: 'community', description: 'Discord invites, private discussion forums, and community events with team members.', seo_title: 'Private Discussion Forums & Trader Community', seo_description: 'Discord invites, private discussion forums, and community events with team members.', sort_order: 'best selling', created_at: new Date().toISOString() }
+    ];
+
+    try {
+      const { data, error } = await supabase.from('product_categories').select('*').order('created_at', { ascending: true });
+      if (!error && data && data.length > 0) {
+        return data as ProductCategory[];
+      }
+    } catch (e) {
+      console.warn('Supabase product categories query failed, fallback to local storage.', e);
+    }
+
+    const localCategories = getLocalStorageItem<ProductCategory[]>('spp_product_categories', []);
+    if (localCategories.length === 0) {
+      setLocalStorageItem('spp_product_categories', defaultCategories);
+      return defaultCategories;
+    }
+    return localCategories;
+  },
+
+  getProducts: async (): Promise<Product[]> => {
+    const defaultProducts: Product[] = [
+      {
+        id: 'prod-founder-vault',
+        title: 'Founder Vault Membership',
+        handle: 'founder-vault-membership',
+        description: 'Gain full access to our monthly elite subscription. Includes advanced artificial intelligence tools, priority institutional level trading signals, private community forums, and masterclass code files.',
+        price: 25000,
+        currency: 'NGN',
+        image_url: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=600&q=80',
+        category_id: 'cat-founder-vault',
+        is_digital: true,
+        status: 'Draft',
+        benefits: [
+          'Instant access to private Discord channels',
+          'Automated daily AI sentiment reports',
+          'Priority trade entry signals via Telegram',
+          'Exclusive monthly founder townhalls'
+        ],
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 'prod-trading-toolkit',
+        title: 'Trading Discipline Toolkit',
+        handle: 'trading-discipline-toolkit',
+        description: 'Stop giving back profits. This professional toolbox features our advanced position sizing calculator, interactive risk-to-reward ratio builder, pre-flight safety checklists, a dynamic revenge trade lockout timer, and an automated trader journal.',
+        price: 15000,
+        currency: 'NGN',
+        image_url: 'https://images.unsplash.com/photo-1642390061910-0f71214e73db?auto=format&fit=crop&w=600&q=80',
+        category_id: 'cat-trading-tools',
+        is_digital: true,
+        status: 'Draft',
+        benefits: [
+          'Pre-flight risk calculator software',
+          'Dynamic revenge trade lockout countdown',
+          'Automated metrics visualizer sheet',
+          'Lifetime software updates'
+        ],
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 'prod-signal-pass',
+        title: 'Signal Pass Add-on',
+        handle: 'signal-pass',
+        description: 'Unlock elite weekly Telegram signals. Integrates seamlessly with your dashboard and delivers high-probability setups directly to your phone with complete take-profit, stop-loss, and invalidation targets.',
+        price: 5000,
+        currency: 'NGN',
+        image_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+        category_id: 'cat-signals',
+        is_digital: true,
+        status: 'Draft',
+        benefits: [
+          'Automated trading channel entry',
+          '24/7 priority forex/crypto alert alerts',
+          'Real-time take-profit/stop-loss updates',
+          'Direct mentorship feedback line'
+        ],
+        created_at: new Date().toISOString()
+      }
+    ];
+
+    try {
+      const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: true });
+      if (!error && data && data.length > 0) {
+        return data as Product[];
+      }
+    } catch (e) {
+      console.warn('Supabase products query failed, fallback to local storage.', e);
+    }
+
+    const localProducts = getLocalStorageItem<Product[]>('spp_products', []);
+    if (localProducts.length === 0) {
+      setLocalStorageItem('spp_products', defaultProducts);
+      return defaultProducts;
+    }
+    return localProducts;
+  },
+
+  updateProductStatus: async (productId: string, status: 'Draft' | 'Active'): Promise<Product> => {
+    try {
+      const { data, error } = await supabase.from('products').update({ status }).eq('id', productId).select().maybeSingle();
+      if (!error && data) {
+        return data as Product;
+      }
+    } catch (e) {
+      console.warn('Supabase update product status failed, persisting locally.', e);
+    }
+
+    const products = getLocalStorageItem<Product[]>('spp_products', []);
+    const updated = products.map(p => p.id === productId ? { ...p, status } : p);
+    setLocalStorageItem('spp_products', updated);
+    return updated.find(p => p.id === productId) as Product;
+  },
+
+  getCoupons: async (): Promise<Coupon[]> => {
+    const defaultCoupons: Coupon[] = [
+      {
+        id: 'coupon-launch15',
+        code: 'LAUNCH15',
+        discount_percent: 15,
+        category_scope: 'cat-founder-vault',
+        expiry_date: new Date(Date.now() + 30 * 24 * 3600 * 1000).toISOString(),
+        is_active: true
+      }
+    ];
+
+    try {
+      const { data, error } = await supabase.from('coupons').select('*');
+      if (!error && data && data.length > 0) {
+        return data as Coupon[];
+      }
+    } catch (e) {
+      console.warn('Supabase coupons query failed, fallback to local storage.', e);
+    }
+
+    const localCoupons = getLocalStorageItem<Coupon[]>('spp_coupons', []);
+    if (localCoupons.length === 0) {
+      setLocalStorageItem('spp_coupons', defaultCoupons);
+      return defaultCoupons;
+    }
+    return localCoupons;
+  },
+
+  getProductReviews: async (productId: string): Promise<ProductReview[]> => {
+    const defaultReviews: ProductReview[] = [
+      { id: 'rev-1', product_id: 'prod-founder-vault', user_id: 'user-xyz', user_name: 'Adekunle S.', rating: 5, comment: 'Simply outstanding. The signals alone recovered my subscription in the first 2 days.', created_at: new Date(Date.now() - 5 * 24 * 3600 * 1000).toISOString() },
+      { id: 'rev-2', product_id: 'prod-trading-toolkit', user_id: 'user-abc', user_name: 'Chinedu O.', rating: 5, comment: 'The revenge trade lockout countdown timer saved my account twice this week. Every emotional trader needs this.', created_at: new Date(Date.now() - 2 * 24 * 3600 * 1000).toISOString() }
+    ];
+
+    try {
+      const { data, error } = await supabase.from('product_reviews').select('*').eq('product_id', productId);
+      if (!error && data && data.length > 0) {
+        return data as ProductReview[];
+      }
+    } catch (e) {
+      console.warn('Supabase reviews query failed, fallback to local storage.', e);
+    }
+
+    const localReviews = getLocalStorageItem<ProductReview[]>('spp_product_reviews', []);
+    if (localReviews.length === 0) {
+      setLocalStorageItem('spp_product_reviews', defaultReviews);
+      return defaultReviews.filter(r => r.product_id === productId);
+    }
+    return localReviews.filter(r => r.product_id === productId);
+  },
+
+  saveProductReview: async (review: Omit<ProductReview, 'id' | 'created_at'>): Promise<ProductReview> => {
+    const newReview: ProductReview = {
+      ...review,
+      id: 'rev-' + Math.random().toString(36).substring(2, 10),
+      created_at: new Date().toISOString()
+    };
+
+    try {
+      const { error } = await supabase.from('product_reviews').insert([newReview]);
+      if (!error) return newReview;
+    } catch (e) {
+      console.warn('Supabase review save failed, storing locally.', e);
+    }
+
+    const reviews = getLocalStorageItem<ProductReview[]>('spp_product_reviews', []);
+    reviews.unshift(newReview);
+    setLocalStorageItem('spp_product_reviews', reviews);
+    return newReview;
+  },
+
+  getProductOrders: async (userId: string): Promise<ProductOrder[]> => {
+    try {
+      const { data, error } = await supabase.from('product_orders').select('*').eq('user_id', userId).order('created_at', { ascending: false });
+      if (!error && data) return data as ProductOrder[];
+    } catch (e) {
+      console.warn('Supabase product orders query failed, querying locally.', e);
+    }
+    const localOrders = getLocalStorageItem<ProductOrder[]>('spp_product_orders', []);
+    return localOrders.filter(o => o.user_id === userId);
+  },
+
+  createProductOrder: async (
+    userId: string, 
+    productId: string, 
+    pricePaid: number, 
+    currency: string, 
+    paymentMethod: string,
+    couponId?: string
+  ): Promise<{ order: ProductOrder; message: string }> => {
+    const orderId = 'order-' + Math.random().toString(36).substring(2, 12);
+    const newOrder: ProductOrder = {
+      id: orderId,
+      user_id: userId,
+      total_amount: pricePaid,
+      currency: currency,
+      status: 'Completed',
+      coupon_id: couponId,
+      payment_method: paymentMethod,
+      created_at: new Date().toISOString()
+    };
+
+    const newOrderItem: OrderItem = {
+      id: 'item-' + Math.random().toString(36).substring(2, 12),
+      order_id: orderId,
+      product_id: productId,
+      price: pricePaid,
+      quantity: 1,
+      created_at: new Date().toISOString()
+    };
+
+    // 1. Save order to DB
+    try {
+      await supabase.from('product_orders').insert([newOrder]);
+      await supabase.from('order_items').insert([newOrderItem]);
+    } catch (e) {
+      console.warn('Supabase product order save failed, executing locally.', e);
+    }
+
+    // Save locally
+    const localOrders = getLocalStorageItem<ProductOrder[]>('spp_product_orders', []);
+    localOrders.unshift(newOrder);
+    setLocalStorageItem('spp_product_orders', localOrders);
+
+    const localOrderItemList = getLocalStorageItem<OrderItem[]>('spp_order_items', []);
+    localOrderItemList.unshift(newOrderItem);
+    setLocalStorageItem('spp_order_items', localOrderItemList);
+
+    // 2. Auto register user's download token
+    const newDownload: ProductDownload = {
+      id: 'dl-' + Math.random().toString(36).substring(2, 12),
+      user_id: userId,
+      product_id: productId,
+      download_count: 0,
+      last_downloaded_at: new Date().toISOString()
+    };
+    try {
+      await supabase.from('product_downloads').insert([newDownload]);
+    } catch (e) {
+      console.warn('Supabase downloads registry failed, saving locally.', e);
+    }
+    const localDownloads = getLocalStorageItem<ProductDownload[]>('spp_product_downloads', []);
+    localDownloads.unshift(newDownload);
+    setLocalStorageItem('spp_product_downloads', localDownloads);
+
+    // 3. Integrate with notifications
+    const productName = productId === 'prod-founder-vault' ? 'Founder Vault Membership' :
+                        productId === 'prod-trading-toolkit' ? 'Trading Discipline Toolkit' : 'Signal Pass Add-on';
+    
+    await dbService.createNotification(
+      userId,
+      'Digital Purchase Success 🛍️',
+      `Your payment of ${currency} ${pricePaid.toLocaleString()} for "${productName}" was successful. Your downloadable file resources are active!`,
+      'success'
+    );
+
+    // 4. Integrate with activity logs
+    await dbService.logActivity(userId, 'marketplace purchase', `Purchased digital product: ${productName} for ${currency} ${pricePaid}`);
+
+    // 5. Integrate with subscriptions if it's the Founder Vault
+    if (productId === 'prod-founder-vault') {
+      try {
+        await dbService.updateProfile(userId, {
+          license_active: true,
+          license_type: 'Enterprise',
+          subscription_status: 'Active',
+          expiry_date: new Date(Date.now() + 30 * 24 * 3600 * 1000).toISOString()
+        });
+
+        // Also add or update subscription table record
+        const newSubscription: Subscription = {
+          id: 'sub-' + Math.random().toString(36).substring(2, 10),
+          user_id: userId,
+          email: 'merchant@simupay.pro',
+          plan_name: 'Founder Vault',
+          status: 'active',
+          billing_cycle: 'Monthly',
+          amount: pricePaid,
+          started_at: new Date().toISOString(),
+          expires_at: new Date(Date.now() + 30 * 24 * 3600 * 1000).toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        
+        try {
+          await supabase.from('subscriptions').insert([newSubscription]);
+        } catch (subErr) {
+          console.warn('Supabase subscription record save failed:', subErr);
+        }
+        
+        const localSubs = getLocalStorageItem<Subscription[]>('spp_subscriptions', []);
+        localSubs.unshift(newSubscription);
+        setLocalStorageItem('spp_subscriptions', localSubs);
+
+      } catch (e) {
+        console.error('Failed to auto-upgrade subscription parameters:', e);
+      }
+    }
+
+    // 6. Integrate with receipts generation!
+    try {
+      await dbService.saveReceiptRecord(userId, {
+        provider_id: paymentMethod,
+        provider_name: paymentMethod === 'wallet' ? 'SimuPay Wallet Balance' : 'Card Processor',
+        amount: pricePaid,
+        currency: currency,
+        status: 'completed',
+        transaction_date: new Date().toLocaleDateString(),
+        transaction_time: new Date().toLocaleTimeString(),
+        reference_no: 'TXN-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
+        sender_name: 'SimuPay Wallet Address',
+        recipient_name: 'SlipMint Market Merchant Account',
+        memo: `Purchase: ${productName}`
+      });
+    } catch (e) {
+      console.warn('Failed to auto-save receipt record for digital purchase:', e);
+    }
+
+    return {
+      order: newOrder,
+      message: `Purchase completed successfully! ${productName} resources are ready for instant download.`
+    };
   }
 };

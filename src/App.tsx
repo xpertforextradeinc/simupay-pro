@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react';
-import { Analytics } from '@vercel/analytics/react';
 import { supabase } from './supabase';
 import { ToastProvider, useToast } from './components/Toast';
 import { Auth } from './components/Auth';
@@ -29,12 +28,12 @@ const SubscriptionView = React.lazy(() => import('./components/SubscriptionView'
 const SecurityCenterView = React.lazy(() => import('./components/SecurityCenterView').then(m => ({ default: m.SecurityCenterView })));
 const AdminPanelView = React.lazy(() => import('./components/AdminPanelView').then(m => ({ default: m.AdminPanelView })));
 const ResourcesView = React.lazy(() => import('./components/ResourcesView').then(m => ({ default: m.ResourcesView })));
+const SlipMintMarketView = React.lazy(() => import('./components/SlipMintMarketView').then(m => ({ default: m.SlipMintMarketView })));
 
 export default function App() {
   return (
     <ToastProvider>
       <AppContent />
-      <Analytics />
     </ToastProvider>
   );
 }
@@ -599,6 +598,13 @@ function AppContent() {
 
           {activeTab === 'resources' && (
             <ResourcesView />
+          )}
+
+          {activeTab === 'slipmint-market' && (
+            <SlipMintMarketView
+              profile={profile}
+              onProfileUpdate={handleProfileUpdate}
+            />
           )}
 
           {activeTab === 'admin-panel' && (

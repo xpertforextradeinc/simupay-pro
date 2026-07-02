@@ -8,34 +8,47 @@ interface TradingViewWidgetProps {
 
 export function TradingViewWidget({ scriptSrc, config, containerId }: TradingViewWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const widgetRef = useRef<HTMLDivElement>(null);
+  const configStr = JSON.stringify(config);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !widgetRef.current) return;
 
-    // Check if script already exists to prevent duplicates on re-render
-    const existingScript = document.getElementById(`tv-script-${containerId}`);
-    if (existingScript) return;
+    // Clear any previous script or loaded iframe inside the container
+    const existingScripts = containerRef.current.querySelectorAll('script');
+    existingScripts.forEach(s => s.remove());
 
+    // Re-create the widget div contents to be clean
+    widgetRef.current.innerHTML = '';
+
+    // Create the script tag
     const script = document.createElement('script');
-    script.id = `tv-script-${containerId}`;
-    script.src = scriptSrc;
+    // Append a unique timestamp to force the browser to execute the script on each mount
+    script.src = `${scriptSrc}?t=${Date.now()}`;
     script.type = 'text/javascript';
     script.async = true;
-    script.innerHTML = JSON.stringify(config);
+    script.innerHTML = configStr;
 
     containerRef.current.appendChild(script);
 
     return () => {
-      // Cleanup script if component unmounts
-      if (containerRef.current && script.parentNode) {
-        containerRef.current.removeChild(script);
+      // Cleanup the script and empty the widget
+      script.remove();
+      if (widgetRef.current) {
+        widgetRef.current.innerHTML = '';
       }
     };
-  }, [scriptSrc, config, containerId]);
+  }, [scriptSrc, containerId, configStr]);
 
   return (
-    <div className="tradingview-widget-container" ref={containerRef} style={{ height: '100%', width: '100%' }}>
-      <div className="tradingview-widget-container__widget" style={{ height: '100%', width: '100%' }}></div>
+    <div 
+      className="tradingview-widget-container absolute inset-0 w-full h-full flex flex-col" 
+      ref={containerRef}
+    >
+      <div 
+        className="tradingview-widget-container__widget flex-1 w-full h-full min-h-[500px]" 
+        ref={widgetRef}
+      />
     </div>
   );
 }

@@ -9,54 +9,61 @@ interface CopilotMessage {
   timestamp: Date;
 }
 
-export function AdminCopilot() {
+interface AdminCopilotProps {
+  profiles?: any[];
+  subscriptions?: any[];
+  tickets?: any[];
+  receiptsCount?: number;
+  systemHealth?: {
+    dbConnected: boolean;
+    serverStatus: string;
+    localBackupActive: boolean;
+  };
+}
+
+export function AdminCopilot({ 
+  profiles = [], 
+  subscriptions = [], 
+  tickets = [], 
+  receiptsCount = 0,
+  systemHealth
+}: AdminCopilotProps) {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<CopilotMessage[]>([{
     id: 'msg-1',
     role: 'assistant',
-    content: "Hello! I'm your AI Copilot. How can I assist you with platform administration today?",
+    content: "Hello! I'm your AI Copilot. I'm connected to the platform database and system metrics. How can I assist you with platform administration today?",
     timestamp: new Date()
   }]);
 
-  // Reusable Action Registry for future Gemini Integration
-  const actionRegistry: Record<string, { description: string, placeholderResponse: string }> = {
-    search_users: {
-      description: "Search Users",
-      placeholderResponse: "User search functionality will be activated once Gemini is connected. This will invoke the `search_users` function call to query the database."
-    },
-    search_transactions: {
-      description: "Search Transactions",
-      placeholderResponse: "Transaction search functionality will be activated once Gemini is connected. This will invoke the `search_transactions` function call to filter ledger records."
-    },
-    review_subscriptions: {
-      description: "Review Subscriptions",
-      placeholderResponse: "Subscription review functionality will be activated once Gemini is connected. This will invoke the `review_subscriptions` function call to analyze plans."
-    },
-    summarize_activity: {
-      description: "Summarize Platform Activity",
-      placeholderResponse: "Activity summarization will be activated once Gemini is connected. This will invoke the `summarize_activity` function call to analyze recent platform metrics."
-    },
-    generate_reports: {
-      description: "Generate Reports",
-      placeholderResponse: "Report generation will be activated once Gemini is connected. This will invoke the `generate_reports` function call to compile data."
-    },
-    view_audit_logs: {
-      description: "View Audit Logs",
-      placeholderResponse: "Audit log viewing will be activated once Gemini is connected. This will invoke the `view_audit_logs` function call to retrieve system events."
-    }
-  };
-
   const suggestedActions = [
-    { id: 'search_users', label: "Search Users", icon: Search },
-    { id: 'search_transactions', label: "Search Transactions", icon: Search },
-    { id: 'review_subscriptions', label: "Review Subscriptions", icon: Shield },
-    { id: 'summarize_activity', label: "Summarize Platform Activity", icon: Zap },
-    { id: 'generate_reports', label: "Generate Reports", icon: Terminal },
-    { id: 'view_audit_logs', label: "View Audit Logs", icon: Terminal }
+    { label: "Summarize Platform Activity", icon: Zap },
+    { label: "Search Premium Merchants", icon: Search },
+    { label: "Audit Support Tickets", icon: Shield },
+    { label: "System Health Report", icon: Terminal }
   ];
 
-  const handleSend = (e?: React.FormEvent, customInput?: string) => {
+  const renderMessageContent = (content: string) => {
+    return content.split('\n').map((line, i) => {
+      // Replace **text** with <strong>text</strong>
+      const parts = line.split('**');
+      const renderedLine = parts.map((part, j) => {
+        if (j % 2 === 1) {
+          return <strong key={j} className="text-white font-bold">{part}</strong>;
+        }
+        return part;
+      });
+
+      return (
+        <div key={i} className={line.trim() === '' ? 'h-2' : 'min-h-[1.25rem]'}>
+          {renderedLine}
+        </div>
+      );
+    });
+  };
+
+  const handleSend = async (e?: React.FormEvent, customInput?: string) => {
     e?.preventDefault();
     const query = customInput || input;
     if (!query.trim()) return;
@@ -69,29 +76,77 @@ export function AdminCopilot() {
       timestamp: new Date()
     };
     
-    setMessages(prev => [...prev, userMsg]);
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
     setInput('');
     setIsTyping(true);
 
-    // Determine if it matches an action registry item (for demo purposes)
-    let aiResponse = "I'm currently in UI-only mode. Gemini integration will be activated in a future update to handle natural language requests.";
-    
-    const matchedAction = Object.values(actionRegistry).find(a => query.toLowerCase().includes(a.description.toLowerCase()));
-    if (matchedAction) {
-      aiResponse = matchedAction.placeholderResponse;
-    }
+    try {
+      // Extract active premium users
+      const activePremiumCount = profiles.filter(p => p.license_active).length;
 
-    // Simulate AI response delay
-    setTimeout(() => {
+      // Build context payload
+      const contextPayload = {
+        profilesCount: profiles.length,
+        activePremiumCount,
+        subscriptionsCount: subscriptions.length,
+        ticketsCount: tickets.length,
+        receiptsCount,
+        systemHealthStatus: systemHealth?.serverStatus || 'HEALTHY',
+        userSample: profiles.slice(0, 8).map(p => ({
+          name: p.full_name,
+          email: p.email,
+          role: p.role,
+          balance: p.wallet_balance,
+          license: p.license_active ? 'Premium' : 'Free'
+        })),
+        ticketSample: tickets.filter(t => t.status !== 'resolved').slice(0, 5).map(t => ({
+          id: t.id,
+          subject: t.subject,
+          status: t.status,
+          priority: t.priority
+        }))
+      };
+
+      const response = await fetch('/api/copilot/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: updatedMessages.map(m => ({
+            role: m.role,
+            content: m.content
+          })),
+          context: contextPayload
+        })
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || 'Failed to communicate with AI Copilot');
+      }
+
+      const data = await response.json();
+
       const aiMsg: CopilotMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: aiResponse,
+        content: data.reply,
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, aiMsg]);
+
+    } catch (err: any) {
+      const aiMsg: CopilotMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: `⚠️ Error: ${err.message || 'Something went wrong while contacting the Copilot service.'}`,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, aiMsg]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const handleSuggestedClick = (actionLabel: string) => {
@@ -108,8 +163,8 @@ export function AdminCopilot() {
         <div>
           <h2 className="text-white font-display font-bold flex items-center gap-2">
             AI Copilot
-            <span className="bg-[#00C853]/20 text-[#00C853] text-[10px] px-2 py-0.5 rounded-full uppercase tracking-widest font-mono">
-              Beta
+            <span className="bg-[#00C853]/20 text-[#00C853] text-[10px] px-2 py-0.5 rounded-full uppercase tracking-widest font-mono animate-pulse">
+              Gemini Enabled
             </span>
           </h2>
           <p className="text-[#9CB1AC] text-xs">Platform intelligence and administrative assistance</p>
@@ -131,12 +186,12 @@ export function AdminCopilot() {
               {msg.role === 'user' ? <User className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
             </div>
             
-            <div className={`max-w-[75%] rounded-2xl p-4 text-sm ${
+            <div className={`max-w-[75%] rounded-2xl p-4 text-sm leading-relaxed ${
               msg.role === 'user' 
                 ? 'bg-[#16362F] text-white rounded-tr-sm' 
-                : 'bg-[#050E0C] border border-[#16362F] text-[#9CB1AC] rounded-tl-sm'
+                : 'bg-[#050E0C] border border-[#16362F] text-[#9CB1AC] rounded-tl-sm space-y-1'
             }`}>
-              {msg.content}
+              {msg.role === 'user' ? msg.content : renderMessageContent(msg.content)}
             </div>
           </motion.div>
         ))}
@@ -167,7 +222,7 @@ export function AdminCopilot() {
               <button
                 key={idx}
                 onClick={() => handleSuggestedClick(action.label)}
-                className="flex items-center gap-1.5 text-xs bg-[#050E0C] border border-[#16362F] text-[#9CB1AC] px-3 py-1.5 rounded-full hover:bg-[#16362F] hover:text-white transition-colors"
+                className="flex items-center gap-1.5 text-xs bg-[#050E0C] border border-[#16362F] text-[#9CB1AC] px-3 py-1.5 rounded-full hover:bg-[#16362F] hover:text-white transition-colors cursor-pointer"
               >
                 <action.icon className="w-3 h-3 text-[#00C853]" />
                 {action.label}
@@ -179,24 +234,24 @@ export function AdminCopilot() {
 
       {/* Input Area */}
       <div className="p-4 bg-[#050E0C] border-t border-[#16362F]">
-        <form onSubmit={handleSend} className="relative flex items-center">
+        <form onSubmit={(e) => handleSend(e)} className="relative flex items-center">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask Copilot to search users, summarize data, or review limits..."
+            placeholder="Ask Copilot to summarize metrics, audit users, or check licenses..."
             className="w-full bg-[#091714] border border-[#16362F] text-white px-4 py-3 pr-12 rounded-xl focus:outline-none focus:border-[#00C853] placeholder:text-[#9CB1AC]/50 text-sm"
           />
           <button
             type="submit"
             disabled={!input.trim() || isTyping}
-            className="absolute right-2 p-2 bg-[#00C853] text-[#050E0C] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#00E676] transition-colors"
+            className="absolute right-2 p-2 bg-[#00C853] text-[#050E0C] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#00E676] transition-colors cursor-pointer"
           >
             <Send className="w-4 h-4" />
           </button>
         </form>
         <p className="text-center text-[10px] text-[#9CB1AC]/50 mt-2">
-          AI Copilot may produce inaccurate results. Verify administrative actions manually.
+          AI Copilot uses live telemetry & Google Gemini 3.5. Action audits should be verified.
         </p>
       </div>
     </div>

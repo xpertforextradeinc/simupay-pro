@@ -390,7 +390,13 @@ export function AdminPanelView({ currentUserId, profile, onNavigate }: AdminPane
         )}
 
         {activeSubTab === 'copilot' && (
-          <AdminCopilot />
+          <AdminCopilot 
+            profiles={profiles}
+            subscriptions={subscriptions}
+            tickets={tickets}
+            receiptsCount={receipts.length}
+            systemHealth={systemHealth}
+          />
         )}
       </div>
 

@@ -66,6 +66,7 @@ export function Sidebar({
   const baseMenuItems: MenuItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'receipt-generator', label: 'Receipt Studio', icon: Receipt },
+    { id: 'slipmint-market', label: 'SlipMint Market', icon: ShoppingBag },
     { id: 'resources', label: 'Resources', icon: Globe },
     { id: 'forex-tools', label: 'Forex Tools', icon: Globe },
     { id: 'subscription', label: 'Subscription', icon: CreditCard },

@@ -38,7 +38,7 @@ export function AdminUsers({ profiles, onUpdateProfile, onDeleteProfile }: Admin
     const matchesRole = 
       roleFilter === 'all' || 
       p.role === roleFilter || 
-      (roleFilter === 'owner' && p.role === 'owner');
+      (roleFilter === 'owner' && (p.role as any) === 'owner');
       
     const matchesLicense = 
       licenseFilter === 'all' ||
