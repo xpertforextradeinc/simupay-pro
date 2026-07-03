@@ -181,7 +181,7 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
   const [ticketSent, setTicketSent] = useState(false);
   const { showToast } = useToast();
 
-  const [tgBotLink, setTgBotLink] = useState(() => localStorage.getItem('spp_telegram_bot_link') || adminService.getSystemSettings().telegramSupportLink || 'https://t.me/SimuPay_Pro_Support_Bot');
+  const [tgBotLink, setTgBotLink] = useState(() => localStorage.getItem('spp_telegram_bot_link') || adminService.getSystemSettings().telegramSupportLink || 'https://t.me/slipmintsignals');
   const [isEditingTgLink, setIsEditingTgLink] = useState(false);
   const [tempTgLink, setTempTgLink] = useState(tgBotLink);
 

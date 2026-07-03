@@ -296,9 +296,9 @@ const DEFAULT_SYSTEM_SETTINGS: SystemSettings = {
     ipWhitelisting: false,
     failedAttemptsLimit: 5
   },
-  discordInviteLink: 'https://discord.gg/simupay-fintech-elite',
-  telegramSupportLink: 'https://t.me/SimuPay_Pro_Support_Bot',
-  telegramChannelLink: 'https://t.me/simupay_priority_signals'
+  discordInviteLink: 'https://discord.gg/S4RpdYnCR',
+  telegramSupportLink: 'https://t.me/slipmintsignals',
+  telegramChannelLink: 'https://t.me/slipmintsignals'
 };
 
 const DEFAULT_SUBSCRIPTION_PLANS: SubscriptionPlan[] = [

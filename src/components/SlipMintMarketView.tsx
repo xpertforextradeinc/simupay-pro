@@ -1243,7 +1243,7 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                   title: 'Founder Vault Membership', 
                   category: 'Founder Vault', 
                   details: 'Elite monthly license key active on your profile. Your Discord Invite and Signal API key are authorized.',
-                  link: adminService.getSystemSettings().discordInviteLink || 'https://discord.gg/simupay-fintech-elite', 
+                  link: adminService.getSystemSettings().discordInviteLink || 'https://discord.gg/S4RpdYnCR', 
                   linkText: 'Join Discord Private Server',
                   image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=600&q=80'
                 },
@@ -1261,7 +1261,7 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                   title: 'Signal Pass Add-on', 
                   category: 'Signals', 
                   details: 'Your automated Telegram channel link has been verified and mapped to your registration.',
-                  link: adminService.getSystemSettings().telegramChannelLink || 'https://t.me/simupay_priority_signals', 
+                  link: adminService.getSystemSettings().telegramChannelLink || 'https://t.me/slipmintsignals', 
                   linkText: 'Enter Private Telegram Channel',
                   image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80'
                 }
