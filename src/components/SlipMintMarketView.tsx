@@ -882,14 +882,14 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                   <div>
                     <span className="text-[10px] text-gray-500 block uppercase font-bold font-mono">SimuPay Balance</span>
                     <strong className="text-xl font-display font-bold text-white block mt-0.5">
-                      ${profile?.wallet_balance?.toLocaleString() || '35,000.00'}
+                      ${profile?.wallet_balance?.toLocaleString() ?? '0.00'}
                     </strong>
                   </div>
 
                   <div className="p-3.5 bg-brand-bg/50 border border-emerald-950/30 rounded-xl space-y-1">
                     <span className="text-[9px] text-gray-500 uppercase font-mono font-bold block">Naira Equivalent</span>
                     <strong className="text-sm font-semibold text-[#00C853] block">
-                      ₦{((profile?.wallet_balance || 35000) * NGN_TO_USD_RATE).toLocaleString()} NGN
+                      ₦{((profile?.wallet_balance ?? 0) * NGN_TO_USD_RATE).toLocaleString()} NGN
                     </strong>
                     <span className="text-[8px] text-gray-500 block">Exchange Index: 1 USD = 1,500 NGN</span>
                   </div>
@@ -1195,22 +1195,61 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                 </div>
 
                 {/* Execution button */}
-                <button
-                  type="button"
-                  onClick={handleExecutePurchase}
-                  disabled={paymentProcessing}
-                  className="w-full bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg disabled:opacity-50"
-                >
-                  {paymentProcessing ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 animate-spin" /> Authorizing Payment Gateway...
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle className="w-4 h-4" /> Confirm & Pay via Simulated Wallet
-                    </>
-                  )}
-                </button>
+                <div className="flex flex-col gap-2">
+                  <button
+                    type="button"
+                    onClick={handleExecutePurchase}
+                    disabled={paymentProcessing}
+                    className="w-full bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg disabled:opacity-50"
+                  >
+                    {paymentProcessing ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" /> Authorizing Payment Gateway...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-4 h-4" /> Confirm & Pay via Simulated Wallet
+                      </>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      setPaymentProcessing(true);
+                      const basePrice = checkoutProduct.price;
+                      const discountAmount = appliedCoupon ? (basePrice * appliedCoupon.discount_percent) / 100 : 0;
+                      const finalPriceNGN = basePrice - discountAmount;
+                      const tx_ref = `tx_${Date.now()}`;
+                      
+                      try {
+                        const response = await fetch('/api/payment/initiate', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            amount: finalPriceNGN,
+                            currency: 'NGN',
+                            email: profile?.email,
+                            tx_ref,
+                          }),
+                        });
+                        const data = await response.json();
+                        if (data.status === 'success') {
+                          window.open(data.data.link, '_blank');
+                        } else {
+                          showToast('Failed to initiate payment', 'error');
+                        }
+                      } catch (error) {
+                        showToast('Failed to initiate payment', 'error');
+                      } finally {
+                        setPaymentProcessing(false);
+                      }
+                    }}
+                    disabled={paymentProcessing}
+                    className="w-full bg-white hover:bg-gray-200 text-black font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg disabled:opacity-50"
+                  >
+                    Pay via Flutterwave
+                  </button>
+                </div>
 
                 <p className="text-[9px] text-center text-gray-500 leading-relaxed font-sans">
                   By completing payment, your digital assets are registered in real time. NGN to USD conversion index is secured natively.

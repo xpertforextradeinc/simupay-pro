@@ -92,7 +92,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
             id: user.id,
             email: user.email,
             full_name: fullName,
-            wallet_balance: 10000.00, // starting balance for awesome premium trial
+            wallet_balance: 0.00, // starting balance
             activation_key: activationKey,
             license_active: false,
             created_at: new Date().toISOString(),

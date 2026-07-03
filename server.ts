@@ -3,9 +3,15 @@ import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI, Type, FunctionDeclaration } from '@google/genai';
 import dotenv from 'dotenv';
+import Flutterwave from 'flutterwave-node-v3';
 
 // Load environment variables
 dotenv.config();
+
+const flw = new Flutterwave(
+  process.env.FLUTTERWAVE_PUBLIC_KEY || '',
+  process.env.FLUTTERWAVE_SECRET_KEY || ''
+);
 
 async function startServer() {
   const app = express();
@@ -177,6 +183,37 @@ async function startServer() {
   // API Routes
   app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', hasGeminiKey: !!apiKey });
+  });
+
+  // Flutterwave payment endpoint
+  app.post('/api/payment/initiate', async (req, res) => {
+    try {
+      const { amount, currency, email, tx_ref } = req.body;
+      const response = await flw.Payment.initiate({
+        tx_ref,
+        amount,
+        currency,
+        redirect_url: `${process.env.APP_URL}/api/payment/verify`,
+        customer: { email },
+      });
+      res.json(response);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to initiate payment' });
+    }
+  });
+
+  app.get('/api/payment/verify', async (req, res) => {
+    try {
+      const { transaction_id } = req.query;
+      const response = await flw.Transaction.verify({ id: transaction_id });
+      if (response.status === 'success') {
+        res.json({ status: 'success' });
+      } else {
+        res.json({ status: 'failed' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to verify payment' });
+    }
   });
 
   app.get('/api/market/prices', async (req, res) => {
