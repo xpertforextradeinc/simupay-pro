@@ -216,6 +216,36 @@ async function startServer() {
     }
   });
 
+  app.post('/api/webhook/flutterwave', express.json(), async (req, res) => {
+    try {
+      const { transaction_id, status, tx_ref } = req.body;
+      
+      // Verify with Flutterwave
+      const response = await flw.Transaction.verify({ id: transaction_id });
+      
+      if (response.status === 'success' && response.data.status === 'successful') {
+        // Update transaction in DB
+        await fetch(`${process.env.SUPABASE_URL}/rest/v1/transactions?id=eq.${tx_ref}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': process.env.SUPABASE_ANON_KEY || '',
+            'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify({ status: 'completed' })
+        });
+        
+        res.status(200).send('Webhook processed');
+      } else {
+        res.status(400).send('Transaction verification failed');
+      }
+    } catch (error) {
+      console.error('Webhook error:', error);
+      res.status(500).json({ error: 'Webhook processing failed' });
+    }
+  });
+
   app.get('/api/market/prices', async (req, res) => {
     try {
       const cgApiKey = process.env.COINGECKO_API_KEY;

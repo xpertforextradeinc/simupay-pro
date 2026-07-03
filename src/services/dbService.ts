@@ -690,6 +690,21 @@ export const dbService = {
     setLocalStorageItem('spp_notifications', updated);
   },
 
+  updateTransactionStatus: async (txId: string, status: 'success' | 'failed'): Promise<void> => {
+    try {
+      const { error } = await supabase
+        .from('transactions')
+        .update({ status })
+        .eq('id', txId);
+      
+      if (!error) {
+        await dbService.logActivity('system', 'webhook', `Transaction ${txId} updated to ${status}`);
+      }
+    } catch (e) {
+      console.warn('Supabase transaction status update failed', e);
+    }
+  },
+
   // 7. SUBSCRIPTION OPERATIONS
   getSubscriptions: async (userId: string): Promise<Subscription[]> => {
     try {
