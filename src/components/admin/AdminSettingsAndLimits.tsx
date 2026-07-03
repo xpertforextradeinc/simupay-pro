@@ -159,6 +159,45 @@ export function AdminSettingsAndLimits() {
               />
             </div>
 
+            <div className="border-t border-[#16362F]/50 pt-3 space-y-3">
+              <span className="text-[10px] font-bold text-[#00C853] uppercase tracking-wider block">Community & Social Links</span>
+              
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Discord Invite Link</label>
+                <input
+                  type="text"
+                  value={settings.discordInviteLink || ''}
+                  onChange={(e) => setSettings({ ...settings, discordInviteLink: e.target.value })}
+                  className="w-full bg-[#050E0C] border border-[#16362F] rounded-lg p-2.5 text-white font-mono text-[11px]"
+                  placeholder="https://discord.gg/..."
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Telegram Support Bot Link</label>
+                  <input
+                    type="text"
+                    value={settings.telegramSupportLink || ''}
+                    onChange={(e) => setSettings({ ...settings, telegramSupportLink: e.target.value })}
+                    className="w-full bg-[#050E0C] border border-[#16362F] rounded-lg p-2.5 text-white font-mono text-[11px]"
+                    placeholder="https://t.me/..."
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Telegram Signals Channel Link</label>
+                  <input
+                    type="text"
+                    value={settings.telegramChannelLink || ''}
+                    onChange={(e) => setSettings({ ...settings, telegramChannelLink: e.target.value })}
+                    className="w-full bg-[#050E0C] border border-[#16362F] rounded-lg p-2.5 text-white font-mono text-[11px]"
+                    placeholder="https://t.me/..."
+                  />
+                </div>
+              </div>
+            </div>
+
             <button
               onClick={handleSaveSettings}
               className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1"

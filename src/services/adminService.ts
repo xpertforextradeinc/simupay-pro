@@ -39,6 +39,9 @@ export interface SystemSettings {
     ipWhitelisting: boolean;
     failedAttemptsLimit: number;
   };
+  discordInviteLink?: string;
+  telegramSupportLink?: string;
+  telegramChannelLink?: string;
 }
 
 export interface SubscriptionPlan {
@@ -292,7 +295,10 @@ const DEFAULT_SYSTEM_SETTINGS: SystemSettings = {
     twoFactorRequired: false,
     ipWhitelisting: false,
     failedAttemptsLimit: 5
-  }
+  },
+  discordInviteLink: 'https://discord.gg/simupay-fintech-elite',
+  telegramSupportLink: 'https://t.me/SimuPay_Pro_Support_Bot',
+  telegramChannelLink: 'https://t.me/simupay_priority_signals'
 };
 
 const DEFAULT_SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
