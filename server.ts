@@ -179,6 +179,35 @@ async function startServer() {
     res.json({ status: 'ok', hasGeminiKey: !!apiKey });
   });
 
+  app.get('/api/market/prices', async (req, res) => {
+    try {
+      const cgApiKey = process.env.COINGECKO_API_KEY;
+      let url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd&include_24hr_change=true';
+      const headers: Record<string, string> = {
+        'Accept': 'application/json'
+      };
+
+      if (cgApiKey) {
+        if (cgApiKey.startsWith('CG-pro-') || cgApiKey.includes('pro')) {
+          url = 'https://pro-api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd&include_24hr_change=true';
+          headers['x-cg-pro-api-key'] = cgApiKey;
+        } else {
+          headers['x-cg-demo-api-key'] = cgApiKey;
+        }
+      }
+
+      const cgRes = await fetch(url, { headers });
+      if (!cgRes.ok) {
+        throw new Error(`CoinGecko responded with status: ${cgRes.status}`);
+      }
+      const data = await cgRes.json();
+      res.json(data);
+    } catch (err: any) {
+      console.warn('[CoinGecko Proxy Error]:', err.message);
+      res.status(502).json({ error: 'Failed to retrieve prices from CoinGecko', details: err.message });
+    }
+  });
+
   app.post('/api/copilot/chat', async (req, res) => {
     try {
       const { messages, context } = req.body;
@@ -247,24 +276,33 @@ Always answer using information retrieved from these tools when appropriate.
 
       // Handle Function/Tool Calls
       if (response.functionCalls && response.functionCalls.length > 0) {
-        const call = response.functionCalls[0];
-        const result = await executeFunctionCall(call.name, call.args);
+        console.log(`[AI Copilot] Executing ${response.functionCalls.length} function calls from model in parallel.`);
+        
+        const functionResponses = await Promise.all(
+          response.functionCalls.map(async (call) => {
+            const result = await executeFunctionCall(call.name, call.args);
+            return {
+              name: call.name,
+              response: result
+            };
+          })
+        );
 
         // Append the assistant call turn
         contents.push(response.candidates?.[0]?.content || {
           role: 'model',
-          parts: [{ functionCall: call }]
+          parts: response.functionCalls.map(call => ({ functionCall: call }))
         });
 
-        // Append the function response turn
+        // Append the function responses turn
         contents.push({
           role: 'user',
-          parts: [{
+          parts: functionResponses.map(fr => ({
             functionResponse: {
-              name: call.name,
-              response: result
+              name: fr.name,
+              response: fr.response
             }
-          }]
+          }))
         });
 
         // Run next turn to generate final textual answer

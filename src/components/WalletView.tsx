@@ -59,6 +59,94 @@ export function WalletView({
     onRefreshNotifications
   );
 
+  // MetaMask integration states
+  const [metaMaskAddress, setMetaMaskAddress] = useState<string | null>(null);
+  const [metaMaskBalance, setMetaMaskBalance] = useState<string | null>(null);
+  const [metaMaskNetwork, setMetaMaskNetwork] = useState<string | null>(null);
+  const [isConnectingMetaMask, setIsConnectingMetaMask] = useState(false);
+
+  // Auto-reconnect MetaMask on load if previously connected
+  useEffect(() => {
+    const wasConnected = localStorage.getItem('spp_metamask_connected') === 'true';
+    if (wasConnected && typeof window !== 'undefined' && (window as any).ethereum) {
+      reconnectMetaMask();
+    }
+  }, []);
+
+  const reconnectMetaMask = async () => {
+    try {
+      const eth = (window as any).ethereum;
+      const accounts = await eth.request({ method: 'eth_accounts' });
+      if (accounts && accounts.length > 0) {
+        await handleMetaMaskConnection(accounts[0]);
+      } else {
+        localStorage.removeItem('spp_metamask_connected');
+      }
+    } catch (err) {
+      console.warn('Auto-reconnecting to MetaMask failed', err);
+    }
+  };
+
+  const handleMetaMaskConnection = async (account: string) => {
+    const eth = (window as any).ethereum;
+    setMetaMaskAddress(account);
+    localStorage.setItem('spp_metamask_connected', 'true');
+
+    try {
+      // Get balance in wei hex
+      const balanceHex = await eth.request({
+        method: 'eth_getBalance',
+        params: [account, 'latest']
+      });
+      // Convert wei to ETH
+      const wei = BigInt(balanceHex);
+      const ethVal = Number(wei) / 1e18;
+      setMetaMaskBalance(ethVal.toFixed(4));
+
+      // Get chain ID
+      const chainIdHex = await eth.request({ method: 'eth_chainId' });
+      const chainId = parseInt(chainIdHex, 16);
+      let networkName = 'Unknown Chain';
+      if (chainId === 1) networkName = 'Ethereum Mainnet';
+      else if (chainId === 11155111) networkName = 'Sepolia Testnet';
+      else if (chainId === 137) networkName = 'Polygon Mainnet';
+      else if (chainId === 56) networkName = 'BNB Smart Chain';
+      else if (chainId === 42161) networkName = 'Arbitrum One';
+      setMetaMaskNetwork(networkName);
+    } catch (e) {
+      console.error('Error fetching MetaMask details:', e);
+    }
+  };
+
+  const connectMetaMask = async () => {
+    if (typeof window === 'undefined' || !(window as any).ethereum) {
+      showToast('MetaMask extension is not detected. Please install it on Chrome, Safari, or Firefox.', 'error');
+      return;
+    }
+    setIsConnectingMetaMask(true);
+    try {
+      const eth = (window as any).ethereum;
+      const accounts = await eth.request({ method: 'eth_requestAccounts' });
+      if (accounts && accounts.length > 0) {
+        await handleMetaMaskConnection(accounts[0]);
+        showToast('Successfully connected to MetaMask!', 'success');
+      }
+    } catch (err: any) {
+      console.error('MetaMask connection failed:', err);
+      showToast(err.message || 'Failed to connect to MetaMask.', 'error');
+    } finally {
+      setIsConnectingMetaMask(false);
+    }
+  };
+
+  const disconnectMetaMask = () => {
+    setMetaMaskAddress(null);
+    setMetaMaskBalance(null);
+    setMetaMaskNetwork(null);
+    localStorage.removeItem('spp_metamask_connected');
+    showToast('MetaMask disconnected.', 'info');
+  };
+
   useEffect(() => {
     loadMarketData();
   }, []);
@@ -373,6 +461,75 @@ export function WalletView({
                 <p className="text-sm text-[#9CB1AC]">
                   Send assets directly to these secure cold-storage vault addresses. Ensure you use the correct network.
                 </p>
+              </div>
+
+              {/* MetaMask Integration Panel */}
+              <div className="bg-[#050E0C] border border-[#16362F] p-6 rounded-2xl relative overflow-hidden space-y-4">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <span className="p-2.5 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/25">
+                      <Wallet className="w-5.5 h-5.5" />
+                    </span>
+                    <div>
+                      <h4 className="text-sm font-bold text-white font-display">MetaMask Sovereign Ledger Connection</h4>
+                      <p className="text-xs text-[#9CB1AC] mt-0.5">Integrate your active MetaMask wallet for on-chain balances.</p>
+                    </div>
+                  </div>
+
+                  {metaMaskAddress ? (
+                    <button
+                      onClick={disconnectMetaMask}
+                      className="px-4 py-2 bg-red-950/40 hover:bg-red-900/50 text-red-400 border border-red-900/40 rounded-xl text-xs font-bold transition-all"
+                    >
+                      Disconnect Wallet
+                    </button>
+                  ) : (
+                    <button
+                      onClick={connectMetaMask}
+                      disabled={isConnectingMetaMask}
+                      className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-[#050E0C] font-bold rounded-xl text-xs transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.2)] disabled:opacity-50"
+                    >
+                      {isConnectingMetaMask ? (
+                        <>
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                          Connecting...
+                        </>
+                      ) : (
+                        <>
+                          Connect MetaMask
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+
+                {metaMaskAddress ? (
+                  <div className="bg-[#091714] p-4 rounded-xl border border-[#16362F]/50 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                    <div>
+                      <span className="text-gray-500 block uppercase font-bold tracking-wider font-mono text-[9px]">Connected Address</span>
+                      <span className="text-gray-200 font-mono font-medium block mt-1 select-all break-all">
+                        {metaMaskAddress}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 block uppercase font-bold tracking-wider font-mono text-[9px]">Current Chain</span>
+                      <span className="text-[#00C853] font-semibold block mt-1">
+                        {metaMaskNetwork || 'Querying...'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 block uppercase font-bold tracking-wider font-mono text-[9px]">Ether Balance</span>
+                      <span className="text-white font-bold block mt-1 text-sm font-mono">
+                        {metaMaskBalance !== null ? `${metaMaskBalance} ETH` : 'Querying...'}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-[#091714]/30 p-3.5 rounded-xl border border-[#16362F]/30 text-xs text-[#9CB1AC] leading-relaxed">
+                    MetaMask is disconnected. Connecting MetaMask allows the SlipMint console to monitor on-chain smart contract interactions, gas fees, and token supply structures directly from your Web3 browser sandbox.
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -58,13 +58,13 @@ export const MarketDataService = {
       const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 seconds timeout
 
       const response = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd&include_24hr_change=true',
+        '/api/market/prices',
         { signal: controller.signal }
       );
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw new Error(`CoinGecko API returned status ${response.status}`);
+        throw new Error(`Market price API returned status ${response.status}`);
       }
 
       const data = await response.json();
@@ -84,7 +84,7 @@ export const MarketDataService = {
         }
       };
     } catch (error) {
-      console.warn('[MarketDataService] CoinGecko API failed or timed out, falling back to static mock rates:', error);
+      console.warn('[MarketDataService] Backend proxy failed or timed out, falling back to static mock rates:', error);
       // High-quality offline fallback rates
       return {
         bitcoin: { usd: 67420.50, change24h: 2.34 },
