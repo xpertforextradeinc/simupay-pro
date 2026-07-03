@@ -280,7 +280,12 @@ function AppContent() {
   };
 
   const handleCopyWalletAddress = () => {
-    navigator.clipboard.writeText('0x71C7656EC7ab88b098defB751B7401B5f6d8976F');
+    if (!profile) {
+      showToast('No active profile found.', 'error');
+      return;
+    }
+    const derivedEthAddress = '0x' + profile.id.replace(/[^a-f0-9]/gi, '').padEnd(40, 'f').substring(0, 40);
+    navigator.clipboard.writeText(derivedEthAddress);
     showToast('Secure vault address copied!', 'success');
   };
 

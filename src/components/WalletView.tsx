@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabase';
 import { useToast } from './Toast';
 import {
@@ -15,13 +15,15 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   RefreshCcw,
-  QrCode
+  QrCode,
+  Coins
 } from 'lucide-react';
 import { Profile, Transaction } from '../types';
 import { useTransactionNotifier } from './TransactionNotifications';
 import { TransactionProviderSelector } from './TransactionProviderSelector';
 import { ProviderCategory } from '../data/paymentProviders';
 import { WalletInsights } from './WalletInsights';
+import { MarketDataService, MarketPrices, SPPTokenInfo } from '../services/MarketDataService';
 
 interface WalletViewProps {
   profile: Profile | null;
@@ -45,23 +47,68 @@ export function WalletView({
   const [provider, setProvider] = useState('');
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [isDepositing, setIsDepositing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'deposit' | 'addresses' | 'insights'>('insights');
+  const [activeTab, setActiveTab] = useState<'deposit' | 'addresses' | 'insights' | 'market'>('insights');
+  const [marketPrices, setMarketPrices] = useState<MarketPrices | null>(null);
+  const [sppInfo, setSppInfo] = useState<SPPTokenInfo | null>(null);
+  const [loadingMarket, setLoadingMarket] = useState(false);
+  const [contractInput, setContractInput] = useState('');
+  const [isEditingContract, setIsEditingContract] = useState(false);
   const { showToast } = useToast();
   const { notifyTransaction } = useTransactionNotifier(
     profile?.id ?? '',
     onRefreshNotifications
   );
 
+  useEffect(() => {
+    loadMarketData();
+  }, []);
+
+  const loadMarketData = async () => {
+    setLoadingMarket(true);
+    try {
+      const prices = await MarketDataService.getPrices();
+      setMarketPrices(prices);
+      const info = MarketDataService.getSPPTokenInfo();
+      setSppInfo(info);
+      setContractInput(info.contractAddress);
+    } catch (e) {
+      console.error('Failed to load market data:', e);
+    } finally {
+      setLoadingMarket(false);
+    }
+  };
+
+  const handleUpdateContract = () => {
+    if (!contractInput.trim() || !contractInput.startsWith('0x')) {
+      showToast('Please enter a valid Ethereum ERC-20 contract address starting with 0x.', 'warning');
+      return;
+    }
+    MarketDataService.updateSPPContractAddress(contractInput.trim());
+    const info = MarketDataService.getSPPTokenInfo();
+    setSppInfo(info);
+    setIsEditingContract(false);
+    showToast('SPP Token contract address updated successfully!', 'success');
+  };
+
   const totalBalance = profile?.wallet_balance ?? 0;
   const availableBalance = totalBalance * 0.85;
   const pendingBalance = totalBalance * 0.10;
   const lockedBalance = totalBalance * 0.05;
 
+  const userId = profile?.id || 'demo-user-id';
+  const cleanHex = userId.replace(/[^a-f0-9]/gi, '').padEnd(40, 'f');
+  const cleanBase58 = userId.replace(/[^a-zA-Z0-9]/gi, '').padEnd(34, 'X');
+  
+  const btcAddress = `bc1q${cleanHex.substring(0, 38)}`;
+  const ethAddress = `0x${cleanHex.substring(0, 40)}`;
+  const usdtTrcAddress = `T${cleanBase58.substring(0, 33)}`;
+  const usdtBepAddress = `0x${cleanHex.split('').reverse().join('').substring(0, 40)}`;
+
   const networkAddresses = [
-    { name: 'BTC (Bitcoin)', label: 'BTC Address', address: 'bc1q9f58g0epslkyxsc0a77t489n6p7e4qsh87r49v', network: 'BTC' },
-    { name: 'ETH (Ethereum)', label: 'ETH Address', address: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F', network: 'ERC20' },
-    { name: 'USDT (TRC20)', label: 'USDT TRC20 Address', address: 'TY6XepvMMy6F84gGZveVf7vPqKPh1Tsw8f', network: 'TRC20' },
-    { name: 'USDT (BEP20)', label: 'USDT BEP20 Address', address: '0x3f61A639B079db88b098defB751B7401B5f6d528f', network: 'BEP20' },
+    { name: 'BTC (Bitcoin)', label: 'BTC Address', address: btcAddress, network: 'BTC' },
+    { name: 'ETH (Ethereum)', label: 'ETH Address', address: ethAddress, network: 'ERC20' },
+    { name: 'USDT (TRC20)', label: 'USDT TRC20 Address', address: usdtTrcAddress, network: 'TRC20' },
+    { name: 'USDT (BEP20)', label: 'USDT BEP20 Address', address: usdtBepAddress, network: 'BEP20' },
   ];
 
   const handleCopyAddress = (name: string, address: string) => {
@@ -242,6 +289,12 @@ export function WalletView({
           >
             Vault Addresses
           </button>
+          <button 
+            onClick={() => setActiveTab('market')}
+            className={`flex-1 min-w-[150px] py-4 text-sm font-bold tracking-wide border-b-2 transition-colors ${activeTab === 'market' ? 'border-[#00C853] text-[#00C853]' : 'border-transparent text-[#9CB1AC] hover:text-white hover:bg-[#16362F]/30'}`}
+          >
+            Market & SPP Token
+          </button>
         </div>
 
         <div className="p-6 md:p-8">
@@ -357,6 +410,177 @@ export function WalletView({
                 <p className="text-xs text-[#9CB1AC] leading-relaxed">
                   <strong className="text-white">Security Notice:</strong> Sending funds to the wrong network or address type may result in permanent loss. Always double-check the recipient address and selected network before confirming any external transfer.
                 </p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'market' && (
+            <div className="space-y-6 max-w-4xl mx-auto">
+              <div className="text-center space-y-2 mb-8">
+                <h3 className="text-xl font-display font-bold text-white flex items-center justify-center gap-2">
+                  <Coins className="w-5 h-5 text-[#00C853]" /> Sovereign Token & CoinGecko Market Data
+                </h3>
+                <p className="text-sm text-[#9CB1AC]">
+                  View live multi-chain cryptocurrency market indices and the native SimuPay (SPP) ERC-20 utility token status.
+                </p>
+              </div>
+
+              {/* CoinGecko Live Market Rates Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-[#050E0C] p-5 border border-[#16362F] rounded-2xl space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-mono font-bold text-gray-400">BTC / USD</span>
+                    <span className="text-[10px] bg-[#16362F]/40 text-gray-500 border border-[#16362F]/30 px-1.5 py-0.5 rounded font-mono font-bold">COINGECKO LIVE</span>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-2xl font-mono font-bold text-white">
+                      ${marketPrices?.bitcoin?.usd?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? '...'}
+                    </div>
+                    <div className={`text-xs font-semibold ${(marketPrices?.bitcoin?.change24h ?? 0) >= 0 ? 'text-[#00C853]' : 'text-red-400'}`}>
+                      {(marketPrices?.bitcoin?.change24h ?? 0) >= 0 ? '▲ +' : '▼ '}
+                      {marketPrices?.bitcoin?.change24h?.toFixed(2) ?? '0.00'}% (24h)
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-[#050E0C] p-5 border border-[#16362F] rounded-2xl space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-mono font-bold text-gray-400">ETH / USD</span>
+                    <span className="text-[10px] bg-[#16362F]/40 text-gray-500 border border-[#16362F]/30 px-1.5 py-0.5 rounded font-mono font-bold">COINGECKO LIVE</span>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-2xl font-mono font-bold text-white">
+                      ${marketPrices?.ethereum?.usd?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? '...'}
+                    </div>
+                    <div className={`text-xs font-semibold ${(marketPrices?.ethereum?.change24h ?? 0) >= 0 ? 'text-[#00C853]' : 'text-red-400'}`}>
+                      {(marketPrices?.ethereum?.change24h ?? 0) >= 0 ? '▲ +' : '▼ '}
+                      {marketPrices?.ethereum?.change24h?.toFixed(2) ?? '0.00'}% (24h)
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-[#050E0C] p-5 border border-[#16362F] rounded-2xl space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-mono font-bold text-gray-400">USDT / USD</span>
+                    <span className="text-[10px] bg-[#16362F]/40 text-gray-500 border border-[#16362F]/30 px-1.5 py-0.5 rounded font-mono font-bold">COINGECKO LIVE</span>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-2xl font-mono font-bold text-white">
+                      ${marketPrices?.tether?.usd?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? '...'}
+                    </div>
+                    <div className={`text-xs font-semibold ${(marketPrices?.tether?.change24h ?? 0) >= 0 ? 'text-[#00C853]' : 'text-red-400'}`}>
+                      {(marketPrices?.tether?.change24h ?? 0) >= 0 ? '▲ +' : '▼ '}
+                      {marketPrices?.tether?.change24h?.toFixed(2) ?? '0.00'}% (24h)
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* SPP Native Token Card */}
+              <div className="bg-[#050E0C] border border-[#16362F] p-6 rounded-2xl space-y-6 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#00C853]/5 rounded-full blur-2xl pointer-events-none" />
+                
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#16362F]/50 pb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="p-2.5 rounded-xl bg-[#00C853]/10 text-[#00C853] border border-[#00C853]/25">
+                      <Layers className="w-5.5 h-5.5 animate-pulse" />
+                    </span>
+                    <div>
+                      <h4 className="text-base font-bold text-white font-display">{sppInfo?.name} ({sppInfo?.symbol})</h4>
+                      <p className="text-xs text-[#9CB1AC] mt-0.5">Sovereign settlement utility ERC-20 ledger on Ethereum</p>
+                    </div>
+                  </div>
+
+                  <span className="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/30">
+                    {sppInfo?.status}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4 text-xs">
+                      <div>
+                        <span className="text-gray-500 block uppercase font-bold tracking-wider font-mono">Total Supply</span>
+                        <span className="text-white font-medium block mt-1">{sppInfo?.totalSupply} SPP</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block uppercase font-bold tracking-wider font-mono">Decimals</span>
+                        <span className="text-white font-medium block mt-1">{sppInfo?.decimals}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block uppercase font-bold tracking-wider font-mono">Market Valuation</span>
+                        <span className="text-gray-400 block mt-1">Not Listed Yet</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block uppercase font-bold tracking-wider font-mono">Trading Price</span>
+                        <span className="text-amber-500 font-bold block mt-1">Awaiting DEX Listing</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-[#091714] p-4 rounded-xl border border-[#16362F]/40 space-y-2">
+                      <span className="text-[10px] text-gray-500 uppercase font-mono font-bold block">Blockchain Source of Truth</span>
+                      <p className="text-xs text-[#9CB1AC] leading-relaxed">
+                        SPP balances and token distribution remain strictly on-chain. This platform does not simulate fake ledger valuations or offline staking rewards.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="space-y-1">
+                      <span className="text-[10px] text-[#9CB1AC] uppercase font-mono font-bold block">Configurable Contract Address</span>
+                      {isEditingContract ? (
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            value={contractInput}
+                            onChange={(e) => setContractInput(e.target.value)}
+                            className="w-full bg-[#091714] border border-[#16362F] text-white rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#00C853]"
+                            placeholder="0x..."
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              onClick={handleUpdateContract}
+                              className="px-3 py-1.5 bg-[#00C853] hover:bg-[#00E676] text-[#050E0C] font-bold rounded-lg text-xs"
+                            >
+                              Save Address
+                            </button>
+                            <button
+                              onClick={() => {
+                                setIsEditingContract(false);
+                                setContractInput(sppInfo?.contractAddress || '');
+                              }}
+                              className="px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg text-xs"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-mono text-gray-300 bg-[#091714] border border-[#16362F]/40 px-3 py-2 rounded-xl break-all flex-1 select-all">
+                            {sppInfo?.contractAddress}
+                          </span>
+                          <button
+                            onClick={() => setIsEditingContract(true)}
+                            className="p-2 bg-[#16362F] hover:bg-[#204e43] text-[#00C853] border border-[#16362F] hover:border-[#00C853] rounded-xl text-xs transition-colors font-bold"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex gap-3 pt-2">
+                      <button
+                        onClick={loadMarketData}
+                        className="flex-1 py-3 px-4 bg-[#16362F] hover:bg-[#1f4a40] text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border border-[#16362F]"
+                      >
+                        <RefreshCw className={`w-3.5 h-3.5 ${loadingMarket ? 'animate-spin text-[#00C853]' : ''}`} />
+                        Refresh Markets
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}

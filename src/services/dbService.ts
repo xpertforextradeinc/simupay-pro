@@ -67,12 +67,20 @@ const seedActivationKeys = (userId?: string): ActivationKey[] => {
 
 // Seed starting wallets
 const seedWallets = (userId: string): Wallet[] => {
+  const cleanHex = userId.replace(/[^a-f0-9]/gi, '').padEnd(40, 'f');
+  const cleanBase58 = userId.replace(/[^a-zA-Z0-9]/gi, '').padEnd(34, 'X');
+  
+  const btcAddress = `bc1q${cleanHex.substring(0, 38)}`;
+  const ethAddress = `0x${cleanHex.substring(0, 40)}`;
+  const usdtTrcAddress = `T${cleanBase58.substring(0, 33)}`;
+  const usdtBepAddress = `0x${cleanHex.split('').reverse().join('').substring(0, 40)}`;
+
   return [
     {
       id: 'w-1',
       user_id: userId,
       name: 'TRON Vault Node',
-      address: 'TY6XepvMMy6F84gGZveVf7vPqKPh1Tsw8f',
+      address: usdtTrcAddress,
       network: 'USDT (TRC20)',
       balance: 19250.00,
       created_at: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString()
@@ -81,7 +89,7 @@ const seedWallets = (userId: string): Wallet[] => {
       id: 'w-2',
       user_id: userId,
       name: 'Ethereum Custody Bridge',
-      address: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
+      address: ethAddress,
       network: 'USDT (ERC20)',
       balance: 8750.00,
       created_at: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString()
@@ -90,7 +98,7 @@ const seedWallets = (userId: string): Wallet[] => {
       id: 'w-3',
       user_id: userId,
       name: 'BNB Smart Yield',
-      address: '0x3f61A639B079db88b098defB751B7401B5f6d528f',
+      address: usdtBepAddress,
       network: 'USDT (BEP20)',
       balance: 3500.00,
       created_at: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString()
@@ -99,7 +107,7 @@ const seedWallets = (userId: string): Wallet[] => {
       id: 'w-4',
       user_id: userId,
       name: 'Bitcoin Cold Safe',
-      address: 'bc1q9f58g0epslkyxsc0a77t489n6p7e4qsh87r49v',
+      address: btcAddress,
       network: 'BTC (Bitcoin)',
       balance: 3500.00,
       created_at: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString()

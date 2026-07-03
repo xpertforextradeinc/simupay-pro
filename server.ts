@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, Type, FunctionDeclaration } from '@google/genai';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -28,6 +28,151 @@ async function startServer() {
       }
     });
   }
+
+  // Function declarations for Gemini Function Calling
+  const searchUsers: FunctionDeclaration = {
+    name: 'searchUsers',
+    description: 'Search for users registered on the platform by name, email, or ID.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        query: {
+          type: Type.STRING,
+          description: 'A search query (email, name, or part of ID).'
+        }
+      },
+      required: ['query']
+    }
+  };
+
+  const searchTransactions: FunctionDeclaration = {
+    name: 'searchTransactions',
+    description: 'Search transaction logs by transaction ID or network type (e.g. TRC20, ERC20).',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        query: {
+          type: Type.STRING,
+          description: 'A transaction ID or blockchain network name.'
+        }
+      },
+      required: ['query']
+    }
+  };
+
+  const getPlatformStatistics: FunctionDeclaration = {
+    name: 'getPlatformStatistics',
+    description: 'Fetch aggregate platform usage stats including volume, active users, success rates, etc.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {}
+    }
+  };
+
+  const getSubscriptionSummary: FunctionDeclaration = {
+    name: 'getSubscriptionSummary',
+    description: 'Fetch monthly recurring revenue (MRR), active subscriptions count, and plan breakdowns.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {}
+    }
+  };
+
+  const getRecentActivity: FunctionDeclaration = {
+    name: 'getRecentActivity',
+    description: 'Fetch a list of the most recent system activity logs (e.g. upgrades, logins, signups).',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {
+        limit: {
+          type: Type.INTEGER,
+          description: 'Number of recent activity entries to fetch.'
+        }
+      }
+    }
+  };
+
+  const getDashboardMetrics: FunctionDeclaration = {
+    name: 'getDashboardMetrics',
+    description: 'Fetch high-level business growth metrics, open tickets count, and general health status.',
+    parameters: {
+      type: Type.OBJECT,
+      properties: {}
+    }
+  };
+
+  const executeFunctionCall = async (name: string, args: any) => {
+    console.log(`[AI Copilot] Backend executing function call: ${name} with args:`, args);
+    switch (name) {
+      case 'searchUsers': {
+        const query = (args.query || '').toLowerCase();
+        const mockUsers = [
+          { id: 'usr-1', email: 'john.doe@example.com', name: 'John Doe', role: 'user', status: 'active', balance: 4500, created_at: new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString() },
+          { id: 'usr-2', email: 'jane.smith@example.com', name: 'Jane Smith', role: 'user', status: 'active', balance: 12500, created_at: new Date(Date.now() - 60 * 24 * 3600 * 1000).toISOString() },
+          { id: 'usr-3', email: 'admin@simupay.pro', name: 'SimuPay Admin', role: 'admin', status: 'active', balance: 0, created_at: new Date(Date.now() - 365 * 24 * 3600 * 1000).toISOString() }
+        ];
+        const filtered = mockUsers.filter(u => 
+          !query || 
+          u.email.toLowerCase().includes(query) || 
+          u.name.toLowerCase().includes(query) || 
+          u.id.includes(query)
+        );
+        return { users: filtered };
+      }
+      case 'searchTransactions': {
+        const query = (args.query || '').toLowerCase();
+        const mockTxs = [
+          { id: 'tx-1', userId: 'usr-1', amount: 1500, status: 'completed', network: 'TRC20', date: new Date().toISOString() },
+          { id: 'tx-2', userId: 'usr-2', amount: 50000, status: 'pending', network: 'ERC20', date: new Date().toISOString() }
+        ];
+        const filtered = mockTxs.filter(t => 
+          !query || 
+          t.id.includes(query) || 
+          t.network.toLowerCase().includes(query)
+        );
+        return { transactions: filtered };
+      }
+      case 'getPlatformStatistics': {
+        return {
+          totalUsers: 1254,
+          activeUsers24h: 342,
+          totalVolume: 4500000,
+          successRate: 98.5
+        };
+      }
+      case 'getSubscriptionSummary': {
+        return {
+          activeSubscriptions: 850,
+          mrr: 154000, // Monthly recurring revenue
+          churnRate: 1.2,
+          planBreakdown: {
+            basic: 400,
+            pro: 300,
+            enterprise: 150
+          }
+        };
+      }
+      case 'getRecentActivity': {
+        const limit = args.limit || 5;
+        const mockActivities = [
+          { id: 'act-1', type: 'user_signup', user: 'new_user@example.com', timestamp: new Date(Date.now() - 5000).toISOString() },
+          { id: 'act-2', type: 'large_transaction', amount: 150000, user: 'whale@example.com', timestamp: new Date(Date.now() - 15000).toISOString() },
+          { id: 'act-3', type: 'subscription_upgrade', user: 'john.doe@example.com', plan: 'pro', timestamp: new Date(Date.now() - 60000).toISOString() }
+        ];
+        return { activities: mockActivities.slice(0, limit) };
+      }
+      case 'getDashboardMetrics': {
+        return {
+          revenueGrowth: 15.4, // %
+          userGrowth: 8.2, // %
+          systemHealth: 'Optimal',
+          openSupportTickets: 12
+        };
+      }
+      default:
+        throw new Error(`Function ${name} not supported`);
+    }
+  };
 
   // API Routes
   app.get('/api/health', (req, res) => {
@@ -69,23 +214,70 @@ ${contextStr}
 Use this context to answer administrative queries intelligently, perform analysis, summarize data, or compose professional support replies.
 Provide clean, concise, and professional answers using Markdown formatting. Use tables, bold text, lists, or code blocks where appropriate.
 If the administrator asks about search, statistics, or reports, reference the facts and metrics from the platform context above.
-If they ask for actions like searching a user or viewing logs, explain how the context maps to their request and give a highly detailed, data-informed response.
+You can call functions (tools) like searchUsers, searchTransactions, getPlatformStatistics, getSubscriptionSummary, getRecentActivity, or getDashboardMetrics to query real-time mock database parameters.
+Always answer using information retrieved from these tools when appropriate.
 `;
 
       // Map messages for Gemini
-      const contents = messages.map((msg: any) => ({
+      const contents: any[] = messages.map((msg: any) => ({
         role: msg.role === 'user' ? 'user' : 'model',
         parts: [{ text: msg.content }]
       }));
 
-      const response = await ai.models.generateContent({
+      const toolsList = [{
+        functionDeclarations: [
+          searchUsers,
+          searchTransactions,
+          getPlatformStatistics,
+          getSubscriptionSummary,
+          getRecentActivity,
+          getDashboardMetrics
+        ]
+      }];
+
+      let response = await ai.models.generateContent({
         model: 'gemini-3.5-flash',
         contents,
         config: {
           systemInstruction,
           temperature: 0.7,
+          tools: toolsList
         }
       });
+
+      // Handle Function/Tool Calls
+      if (response.functionCalls && response.functionCalls.length > 0) {
+        const call = response.functionCalls[0];
+        const result = await executeFunctionCall(call.name, call.args);
+
+        // Append the assistant call turn
+        contents.push(response.candidates?.[0]?.content || {
+          role: 'model',
+          parts: [{ functionCall: call }]
+        });
+
+        // Append the function response turn
+        contents.push({
+          role: 'user',
+          parts: [{
+            functionResponse: {
+              name: call.name,
+              response: result
+            }
+          }]
+        });
+
+        // Run next turn to generate final textual answer
+        response = await ai.models.generateContent({
+          model: 'gemini-3.5-flash',
+          contents,
+          config: {
+            systemInstruction,
+            temperature: 0.7,
+            tools: toolsList
+          }
+        });
+      }
 
       const reply = response.text || 'I was unable to generate a response. Please check back later.';
       res.json({ reply });

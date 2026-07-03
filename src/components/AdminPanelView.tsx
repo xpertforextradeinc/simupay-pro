@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Shield, Users, CreditCard, Layout, Sliders, Bell, HelpCircle, 
-  RefreshCw, Layers, ShieldCheck, Activity, Terminal, ArrowLeft, ShieldAlert, Bot
+  RefreshCw, Layers, ShieldCheck, Activity, Terminal, ArrowLeft, ShieldAlert, Bot, TrendingUp
 } from 'lucide-react';
 import { useToast } from './Toast';
 import { dbService } from '../services/dbService';
@@ -16,6 +16,7 @@ import { AdminSettingsAndLimits } from './admin/AdminSettingsAndLimits';
 import { AdminNotificationsAndSupport } from './admin/AdminNotificationsAndSupport';
 import { AdminSecurity } from './admin/AdminSecurity';
 import { AdminCopilot } from './admin/AdminCopilot';
+import { AdminTradingDashboard } from './admin/AdminTradingDashboard';
 
 interface AdminPanelViewProps {
   currentUserId: string;
@@ -307,6 +308,7 @@ export function AdminPanelView({ currentUserId, profile, onNavigate }: AdminPane
       <div className="flex items-center overflow-x-auto pb-1 gap-1 border-b border-[#16362F]/40 scrollbar-none">
         {[
           { id: 'dashboard', label: 'Dashboard', icon: Layout },
+          { id: 'trading', label: 'Trading Desk', icon: TrendingUp },
           { id: 'users', label: 'Merchants', icon: Users },
           { id: 'subscriptions', label: 'Billing & Keys', icon: CreditCard },
           { id: 'providers', label: 'Gateways (Dynamic)', icon: Layers },
@@ -345,6 +347,12 @@ export function AdminPanelView({ currentUserId, profile, onNavigate }: AdminPane
             receiptsTodayCount={receiptsTodayCount}
             systemHealth={systemHealth}
             onNavigateTab={(tab) => setActiveSubTab(tab)}
+          />
+        )}
+
+        {activeSubTab === 'trading' && (
+          <AdminTradingDashboard 
+            systemHealth={systemHealth}
           />
         )}
 
