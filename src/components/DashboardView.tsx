@@ -87,6 +87,7 @@ export function DashboardView({
 
   const totalTx = transactions.length;
   const recentTransactions = transactions.slice(0, 5);
+  const chartData = useMemo(() => getLast30DaysData(transactions), [transactions]);
 
   return (
     <div className="space-y-6">

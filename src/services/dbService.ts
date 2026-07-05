@@ -698,7 +698,7 @@ export const dbService = {
         .eq('id', txId);
       
       if (!error) {
-        await dbService.logActivity('system', 'webhook', `Transaction ${txId} updated to ${status}`);
+        await dbService.logActivity('system', 'transfers', `Transaction ${txId} updated to ${status}`);
       }
     } catch (e) {
       console.warn('Supabase transaction status update failed', e);

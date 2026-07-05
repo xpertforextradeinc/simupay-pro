@@ -677,7 +677,11 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
 
                   <div className="text-center space-y-2">
                     <div className="text-4xl font-display font-black text-white tracking-tight">
-                      {formData.amount?.toLocaleString('en-US', { style: 'currency', currency: formData.currency || 'USD' })}
+                      {['USD', 'EUR', 'GBP', 'NGN', 'CAD', 'AUD', 'JPY', 'INR'].includes(formData.currency || '') ? (
+                        formData.amount?.toLocaleString('en-US', { style: 'currency', currency: formData.currency || 'USD' })
+                      ) : (
+                        `${formData.currency || 'USDT'} ${(formData.amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
+                      )}
                     </div>
                     <div className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
                       ${formData.status === 'completed' ? 'bg-[#00C853]/10 text-[#00C853]' : 

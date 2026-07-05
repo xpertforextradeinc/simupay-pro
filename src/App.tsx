@@ -59,7 +59,7 @@ function AppContent() {
       'dashboard', 'account', 'wallet', 'activation', 'flash-transfer', 'forex-tools', 
       'receipt-generator', 'transactions', 'analytics', 'sms-center', 'notifications', 
       'orders', 'support', 'settings', 'security-center', 'db-setup', 'subscription', 
-      'admin-panel', 'resources', 'slipmint-market'
+      'admin-panel', 'resources', 'slipmint-market', 'airtime', 'data-bundles'
     ];
     if (validTabs.includes(tabFromPath)) return tabFromPath;
     return 'dashboard';

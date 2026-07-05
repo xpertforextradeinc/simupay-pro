@@ -9,12 +9,6 @@ export function AirtimeView({ userEmail }: { userEmail: string }) {
   const [phone, setPhone] = useState('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
-  const [loadingOptions, setLoadingOptions] = useState(true);
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => setLoadingOptions(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handlePurchase = async () => {
     if (!network || !phone || !amount) {
@@ -62,21 +56,17 @@ export function AirtimeView({ userEmail }: { userEmail: string }) {
       </div>
 
       <div className="space-y-4">
-        {loadingOptions ? (
-          <div className="w-full bg-brand-bg border border-emerald-950/40 rounded-xl p-4 animate-pulse h-12" />
-        ) : (
-          <select 
-            className="w-full bg-brand-bg border border-emerald-950/40 rounded-xl p-3 text-white"
-            value={network}
-            onChange={(e) => setNetwork(e.target.value)}
-          >
-            <option value="">Select Network</option>
-            <option value="mtn">MTN</option>
-            <option value="airtel">Airtel</option>
-            <option value="glo">Glo</option>
-            <option value="9mobile">9Mobile</option>
-          </select>
-        )}
+        <select 
+          className="w-full bg-brand-bg border border-emerald-950/40 rounded-xl p-3 text-white"
+          value={network}
+          onChange={(e) => setNetwork(e.target.value)}
+        >
+          <option value="">Select Network</option>
+          <option value="mtn">MTN</option>
+          <option value="airtel">Airtel</option>
+          <option value="glo">Glo</option>
+          <option value="9mobile">9Mobile</option>
+        </select>
 
         <input 
           type="text" 
