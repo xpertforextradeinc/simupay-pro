@@ -68,7 +68,7 @@ export default function ForexToolsView() {
           {activeTool === 'calendar' && (
             <iframe 
               src="https://widget.myfxbook.com/widget/calendar.html?lang=en&impacts=0,1,2,3&symbols=AUD,CAD,CHF,CNY,EUR,GBP,JPY,NZD,USD" 
-              className="w-full h-full absolute inset-0 border-0 bg-transparent grayscale invert opacity-90 contrast-125"
+              className="w-full h-full absolute inset-0 border-0 bg-transparent grayscale opacity-90 contrast-125"
               title="Economic Calendar"
               loading="lazy"
             />

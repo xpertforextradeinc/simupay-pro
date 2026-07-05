@@ -162,7 +162,9 @@ export type ActiveTab =
   | 'subscription'
   | 'admin-panel'
   | 'resources'
-  | 'slipmint-market';
+  | 'slipmint-market'
+  | 'airtime'
+  | 'data-bundles';
 
 export interface Product {
   id: string;

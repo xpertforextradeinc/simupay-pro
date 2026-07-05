@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   TrendingUp,
   ArrowUpRight,
@@ -16,8 +16,32 @@ import {
   Settings,
   CreditCard
 } from 'lucide-react';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts';
 import { Profile, Transaction, AppNotification } from '../types';
 import { DISCLOSURE_TEXT } from '../data/partners';
+
+// Helper to get last 30 days data
+const getLast30DaysData = (transactions: Transaction[]) => {
+  const now = new Date();
+  const last30Days = Array.from({ length: 30 }).map((_, i) => {
+    const d = new Date();
+    d.setDate(now.getDate() - (29 - i));
+    return d.toISOString().split('T')[0];
+  });
+  
+  const volumeByDate = transactions.reduce((acc, tx) => {
+    const date = tx.created_at.split('T')[0];
+    if (last30Days.includes(date)) {
+      acc[date] = (acc[date] || 0) + tx.amount;
+    }
+    return acc;
+  }, {} as Record<string, number>);
+  
+  return last30Days.map(date => ({
+    date: date.substring(5), // M-D format
+    volume: volumeByDate[date] || 0
+  }));
+};
 
 interface DashboardViewProps {
   profile: Profile | null;
@@ -62,20 +86,6 @@ export function DashboardView({
   const isPremium = profile?.subscription_status === 'Active';
 
   const totalTx = transactions.length;
-
-  // Chart configuration and metrics
-  const chartPoints = [15, 30, 25, 45, 60, 55, 80];
-  const width = 500;
-  const height = 150;
-  const padding = 20;
-  const pointsPath = chartPoints
-    .map((val, idx) => {
-      const x = padding + (idx * (width - padding * 2)) / (chartPoints.length - 1);
-      const y = height - padding - (val * (height - padding * 2)) / 100;
-      return `${x},${y}`;
-    })
-    .join(' ');
-
   const recentTransactions = transactions.slice(0, 5);
 
   return (
@@ -294,67 +304,25 @@ export function DashboardView({
               </span>
             </div>
 
-            {/* Glowing Custom Line Graph */}
-            <div className="pt-2 relative">
-              <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto overflow-visible select-none">
-                <defs>
-                  <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#00C853" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#00C853" stopOpacity="0.0" />
-                  </linearGradient>
-                </defs>
-
-                {/* Grid Lines */}
-                <line x1="0" y1="20" x2={width} y2="20" stroke="#0e2924" strokeWidth="1" strokeDasharray="4,4" />
-                <line x1="0" y1="60" x2={width} y2="60" stroke="#0e2924" strokeWidth="1" strokeDasharray="4,4" />
-                <line x1="0" y1="100" x2={width} y2="100" stroke="#0e2924" strokeWidth="1" strokeDasharray="4,4" />
-
-                {/* Fill Gradient */}
-                <path
-                  d={`M ${padding},${height - padding} L ${pointsPath} L ${width - padding},${height - padding} Z`}
-                  fill="url(#chartGradient)"
-                />
-
-                {/* Connecting Line */}
-                <polyline
-                  fill="none"
-                  stroke="#00C853"
-                  strokeWidth="2.5"
-                  points={pointsPath}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-
-                {/* Interactive points */}
-                {chartPoints.map((val, idx) => {
-                  const x = padding + (idx * (width - padding * 2)) / (chartPoints.length - 1);
-                  const y = height - padding - (val * (height - padding * 2)) / 100;
-                  return (
-                    <g key={idx} className="cursor-pointer group">
-                      <circle
-                        cx={x}
-                        cy={y}
-                        r="4"
-                        fill="#050E0C"
-                        stroke="#00C853"
-                        strokeWidth="2"
-                        className="transition-all hover:r-6"
-                      />
-                    </g>
-                  );
-                })}
-              </svg>
-
-              {/* X-Axis labels */}
-              <div className="flex justify-between text-[10px] text-gray-500 font-mono mt-2 px-1">
-                <span>MON</span>
-                <span>TUE</span>
-                <span>WED</span>
-                <span>THU</span>
-                <span>FRI</span>
-                <span>SAT</span>
-                <span>SUN</span>
-              </div>
+            {/* Recharts Area Chart */}
+            <div className="h-[200px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#00C853" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#00C853" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="date" hide />
+                  <YAxis hide />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#050E0C', border: '1px solid #064E3B', fontSize: '12px' }}
+                    itemStyle={{ color: '#00C853' }}
+                  />
+                  <Area type="monotone" dataKey="volume" stroke="#00C853" fillOpacity={1} fill="url(#chartGradient)" />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
           </div>
 

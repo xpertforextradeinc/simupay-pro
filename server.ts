@@ -188,13 +188,14 @@ async function startServer() {
   // Flutterwave payment endpoint
   app.post('/api/payment/initiate', async (req, res) => {
     try {
-      const { amount, currency, email, tx_ref } = req.body;
+      const { amount, currency, email, tx_ref, meta } = req.body;
       const response = await flw.Payment.initiate({
         tx_ref,
         amount,
         currency,
         redirect_url: `${process.env.APP_URL}/api/payment/verify`,
         customer: { email },
+        meta: meta || {},
       });
       res.json(response);
     } catch (error) {
@@ -224,6 +225,30 @@ async function startServer() {
       const response = await flw.Transaction.verify({ id: transaction_id });
       
       if (response.status === 'success' && response.data.status === 'successful') {
+        const meta = response.data.meta || {};
+        const amount = response.data.amount;
+
+        // Process Bills for Airtime and Data
+        if (meta.type === 'AIRTIME' || meta.type === 'DATA_BUNDLE') {
+          try {
+            const billPayload = {
+              country: 'NG',
+              customer: meta.phone,
+              amount: amount,
+              recurrence: 'ONCE',
+              type: meta.type,
+              reference: tx_ref,
+              biller_name: meta.network
+            };
+            const billResponse = await flw.Bills.create_bill(billPayload);
+            if (billResponse.status !== 'success') {
+               console.error('Bill payment failed:', billResponse);
+            }
+          } catch (err) {
+            console.error('Error paying bill:', err);
+          }
+        }
+
         // Update transaction in DB
         await fetch(`${process.env.SUPABASE_URL}/rest/v1/transactions?id=eq.${tx_ref}`, {
           method: 'PATCH',
@@ -235,6 +260,10 @@ async function startServer() {
           },
           body: JSON.stringify({ status: 'completed' })
         });
+        
+        // Also create a Receipt and ActivityLog here in a full implementation.
+        // E.g., await createReceipt(...)
+        // await createActivityLog(...)
         
         res.status(200).send('Webhook processed');
       } else {
@@ -390,6 +419,36 @@ Always answer using information retrieved from these tools when appropriate.
     } catch (error: any) {
       console.error('[Gemini API Error]:', error);
       res.status(500).json({ error: error?.message || 'Internal server error while calling Gemini' });
+    }
+  });
+
+  app.post('/api/user/chat', async (req, res) => {
+    try {
+      const { messages } = req.body;
+      if (!messages || !Array.isArray(messages)) {
+        return res.status(400).json({ error: 'messages array is required' });
+      }
+
+      if (!ai) {
+        return res.status(500).json({ error: 'AI not configured' });
+      }
+
+      const contents: any[] = messages.map((msg: any) => ({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.content }]
+      }));
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-3.5-flash',
+        contents,
+        config: {
+          systemInstruction: "You are a helpful, entertaining, and insightful trading assistant for the SlipMint platform. Focus on explaining trading concepts, helping with platform navigation, and encouraging a positive trading experience. Keep answers concise and engaging."
+        }
+      });
+
+      res.json({ reply: response.text || '...' });
+    } catch (error: any) {
+      res.status(500).json({ error: 'Chat failed' });
     }
   });
 

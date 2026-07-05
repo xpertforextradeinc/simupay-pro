@@ -8,6 +8,7 @@ import { ActiveTab, Profile, Transaction, AppNotification, SupportTicket } from 
 import { KeyRound, ShieldAlert, LogOut, Search, Bell, ChevronDown, User, Settings, Database, Loader2 } from 'lucide-react';
 import { useShortcuts } from './hooks/useShortcuts';
 import { TransactionNotificationBell } from './components/TransactionNotifications';
+import { UserChat } from './components/UserChat';
 
 const DashboardView = React.lazy(() => import('./components/DashboardView').then(m => ({ default: m.DashboardView })));
 const AccountView = React.lazy(() => import('./components/AccountView').then(m => ({ default: m.AccountView })));
@@ -29,6 +30,8 @@ const SecurityCenterView = React.lazy(() => import('./components/SecurityCenterV
 const AdminPanelView = React.lazy(() => import('./components/AdminPanelView').then(m => ({ default: m.AdminPanelView })));
 const ResourcesView = React.lazy(() => import('./components/ResourcesView').then(m => ({ default: m.ResourcesView })));
 const SlipMintMarketView = React.lazy(() => import('./components/SlipMintMarketView').then(m => ({ default: m.SlipMintMarketView })));
+const AirtimeView = React.lazy(() => import('./components/AirtimeView').then(m => ({ default: m.AirtimeView })));
+const DataBundlesView = React.lazy(() => import('./components/DataBundlesView').then(m => ({ default: m.DataBundlesView })));
 
 export default function App() {
   return (
@@ -42,8 +45,28 @@ function AppContent() {
   const [session, setSession] = useState<any>(null);
   const currentSessionRef = useRef<any>(null);
   const [loading, setLoading] = useState(true);
+  // Helper to map tab to path
+  const tabToPath = (tab: ActiveTab): string => {
+    if (tab === 'dashboard') return '/';
+    return `/${tab}`;
+  };
+
+  // Helper to map path to tab
+  const pathToTab = (path: string): ActiveTab => {
+    if (path.startsWith('/admin')) return 'admin-panel';
+    const tabFromPath = path.substring(1) as ActiveTab;
+    const validTabs: ActiveTab[] = [
+      'dashboard', 'account', 'wallet', 'activation', 'flash-transfer', 'forex-tools', 
+      'receipt-generator', 'transactions', 'analytics', 'sms-center', 'notifications', 
+      'orders', 'support', 'settings', 'security-center', 'db-setup', 'subscription', 
+      'admin-panel', 'resources', 'slipmint-market'
+    ];
+    if (validTabs.includes(tabFromPath)) return tabFromPath;
+    return 'dashboard';
+  };
+
   const [activeTab, setActiveTab] = useState<ActiveTab>(() => {
-    return window.location.pathname.startsWith('/admin') ? 'admin-panel' : 'dashboard';
+    return pathToTab(window.location.pathname);
   });
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -60,7 +83,7 @@ function AppContent() {
 
   // Sync URL with activeTab
   useEffect(() => {
-    const path = activeTab === 'admin-panel' ? '/admin' : '/';
+    const path = tabToPath(activeTab);
     if (window.location.pathname !== path) {
       window.history.pushState({}, '', path);
     }
@@ -69,7 +92,7 @@ function AppContent() {
   // Handle browser back button
   useEffect(() => {
     const handlePopState = () => {
-      setActiveTab(window.location.pathname.startsWith('/admin') ? 'admin-panel' : 'dashboard');
+      setActiveTab(pathToTab(window.location.pathname));
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -612,6 +635,14 @@ function AppContent() {
             />
           )}
 
+          {activeTab === 'airtime' && (
+            <AirtimeView userEmail={profile?.email || 'user@example.com'} />
+          )}
+
+          {activeTab === 'data-bundles' && (
+            <DataBundlesView userEmail={profile?.email || 'user@example.com'} />
+          )}
+
           {activeTab === 'admin-panel' && (
             <AdminPanelView
               currentUserId={profile?.id || ''}
@@ -620,6 +651,7 @@ function AppContent() {
             />
           )}
         </Suspense>
+        <UserChat />
       </main>
     </div>
   );

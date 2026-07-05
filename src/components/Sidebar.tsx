@@ -67,6 +67,8 @@ export function Sidebar({
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'receipt-generator', label: 'Receipt Studio', icon: Receipt },
     { id: 'slipmint-market', label: 'SlipMint Market', icon: ShoppingBag },
+    { id: 'airtime', label: 'Airtime', icon: Smartphone },
+    { id: 'data-bundles', label: 'Data Bundles', icon: Database },
     { id: 'resources', label: 'Resources', icon: Globe },
     { id: 'forex-tools', label: 'Forex Tools', icon: Globe },
     { id: 'subscription', label: 'Subscription', icon: CreditCard },
@@ -313,11 +315,18 @@ export function Sidebar({
           <span>Dashboard</span>
         </button>
         <button
-          onClick={() => handleTabClick('receipt-generator')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'receipt-generator' ? 'text-[#00C853]' : 'text-gray-400'}`}
+          onClick={() => handleTabClick('airtime')}
+          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'airtime' ? 'text-[#00C853]' : 'text-gray-400'}`}
         >
-          <Receipt className="w-5 h-5" />
-          <span>Studio</span>
+          <Smartphone className="w-5 h-5" />
+          <span>Airtime</span>
+        </button>
+        <button
+          onClick={() => handleTabClick('data-bundles')}
+          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'data-bundles' ? 'text-[#00C853]' : 'text-gray-400'}`}
+        >
+          <Database className="w-5 h-5" />
+          <span>Data</span>
         </button>
         <button
           onClick={() => handleTabClick('forex-tools')}
@@ -325,13 +334,6 @@ export function Sidebar({
         >
           <Globe className="w-5 h-5" />
           <span>Forex</span>
-        </button>
-        <button
-          onClick={() => handleTabClick('resources')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'resources' ? 'text-[#00C853]' : 'text-gray-400'}`}
-        >
-          <Globe className="w-5 h-5" />
-          <span>Resources</span>
         </button>
         <button
           onClick={() => handleTabClick('notifications')}
