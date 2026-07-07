@@ -949,6 +949,102 @@ Always answer using information retrieved from these tools when appropriate.
     }
   });
 
+  app.post('/api/smart-workspace-update', async (req, res) => {
+    try {
+      const { marketPayload, workspaceMetrics } = req.body;
+
+      const defaultMarketPayload = {
+        goldPrice: "$2,350/oz",
+        dxy: "104.2",
+        tenYearYield: "2.1%"
+      };
+
+      const defaultWorkspaceMetrics = {
+        financialApiLatency: "850ms",
+        supabaseConnectionPool: "88% full",
+        lastCacheFlush: "48 hours ago"
+      };
+
+      const finalMarketPayload = marketPayload || defaultMarketPayload;
+      const finalWorkspaceMetrics = workspaceMetrics || defaultWorkspaceMetrics;
+
+      const smartWorkspacePrompt = `You are an advanced, automated Operations & Strategy Agent embedded inside the SimuPay Pro workspace. Your objective is twofold: analyze precious metals data and optimize business/system efficiency.
+
+When provided with market payloads alongside system health metrics, analyze the data and split your output into two clear domains:
+
+=== DOMAIN 1: GOLD MARKET ANALYSIS ===
+## Directional Bias
+[State Bullish | Bearish | Neutral with a certainty percentage]
+## Key Drivers Analyzed
+[Bullet points of macro data: DXY, yields, news]
+## Fundamental Justification
+[Brief explanation of why the market is moving this way]
+
+=== DOMAIN 2: WORKSPACE & BUSINESS MAINTENANCE ===
+## System Health & Efficiency
+[Identify anomalies in the workspace telemetry like high API latency, data drift, or stale cache]
+## Actionable Technical Improvement
+[Provide one specific, concrete code or database optimization for the workspace to prevent failure]
+## Business Process Recommendation
+[Suggest a business workflow improvement based on current market conditions, e.g., hedging strategies or transaction fee adjustments]`;
+
+      const combinedContext = `
+        [MARKET DATA]: ${JSON.stringify(finalMarketPayload)}
+        [WORKSPACE TELEMETRY]: ${JSON.stringify(finalWorkspaceMetrics)}
+      `;
+
+      if (!ai) {
+        // Fallback simulated intelligence in case of missing API Key to keep UX flawless and robust
+        const simulatedText = `=== DOMAIN 1: GOLD MARKET ANALYSIS ===
+## Directional Bias
+Bullish (78% confidence)
+
+## Key Drivers Analyzed
+* **DXY (US Dollar Index):** Currently trading at ${finalMarketPayload.dxy || '104.2'} level, displaying soft resistance.
+* **10-Year Treasury Yield:** Positioned at ${finalMarketPayload.tenYearYield || '2.1%'}, reducing opportunity cost of holding non-yielding gold.
+* **Geopolitical Risk:** Safe haven demand remains primary catalyst.
+
+## Fundamental Justification
+Precious metals display high macro resiliency. Lower sovereign bond yields coupled with strong central bank demand continue to support spot prices near recent records.
+
+=== DOMAIN 2: WORKSPACE & BUSINESS MAINTENANCE ===
+## System Health & Efficiency
+Anomalies detected in telemetry payload:
+* **API Latency:** Slightly elevated response times (${finalWorkspaceMetrics.financialApiLatency || '850ms'}).
+* **Connection Load:** Supabase connection pool is currently high (${finalWorkspaceMetrics.supabaseConnectionPool || '88%'}).
+* **Cache Expiry:** Last cache flush was ${finalWorkspaceMetrics.lastCacheFlush || '48 hours ago'} (stale threshold exceeded).
+
+## Actionable Technical Improvement
+Implement connection pooling throttling and an automated redis cache flush middleware:
+\`\`\`typescript
+// Flush stale cache after 24h
+if (Date.now() - lastFlushTime > 24 * 60 * 60 * 1000) {
+  await cache.flushAll();
+}
+\`\`\`
+
+## Business Process Recommendation
+Adjust dynamic client transaction margins upward by 0.15% during high-latency periods to mitigate currency/commodity slippage risks. Initiate a cache-clear trigger to free up memory overhead.`;
+
+        return res.json({ dashboardUpdate: simulatedText, isSimulated: true });
+      }
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: `Process the current workspace and market payload: ${combinedContext}`,
+        config: {
+          systemInstruction: smartWorkspacePrompt,
+          temperature: 0.2,
+        },
+      });
+
+      res.json({ dashboardUpdate: response.text || 'No response generated.', isSimulated: false });
+    } catch (error: any) {
+      console.error('Smart Workspace Error:', error);
+      res.status(500).json({ error: 'Failed to generate workspace insights.' });
+    }
+  });
+
   // Vite Integration
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({

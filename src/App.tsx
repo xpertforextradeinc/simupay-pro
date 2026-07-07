@@ -567,7 +567,7 @@ function AppContent() {
 
           {activeTab === 'forex-tools' && (
             <React.Suspense fallback={<div className="p-8 text-center text-brand-text-dim animate-pulse font-mono text-xs">LOADING_TRADING_SUITE...</div>}>
-              <ForexToolsView />
+              <ForexToolsView profile={profile} />
             </React.Suspense>
           )}
 
