@@ -115,10 +115,11 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
     setIsDropdownOpen(false);
     setShowFinalReceipt(false);
     
+    const cat = (provider.category || '').toLowerCase();
     // Reset form for new provider (Empty by default)
     setFormData({
       amount: 0,
-      currency: provider.category === 'Crypto' ? 'USDT' : 'USD',
+      currency: cat === 'crypto' ? 'USDT' : 'USD',
       status: 'completed',
       transaction_date: new Date().toISOString().split('T')[0],
       transaction_time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
@@ -130,9 +131,9 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
       recipient_name: '',
       recipient_tag: '',
       recipient_address: '',
-      asset: provider.category === 'Crypto' ? 'USDT' : '',
-      network: provider.category === 'Crypto' ? 'TRC-20' : '',
-      bank_name: provider.category === 'Bank' ? 'Chase Bank' : '',
+      asset: cat === 'crypto' ? 'USDT' : '',
+      network: cat === 'crypto' ? 'TRC-20' : '',
+      bank_name: cat === 'bank' ? 'Chase Bank' : '',
       memo: '',
     });
     
@@ -155,7 +156,8 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
     }
 
     // Validation
-    const missingFields = selectedProvider.required_fields.filter(f => !formData[f as keyof ReceiptRecord]);
+    const reqFields = Array.isArray(selectedProvider.required_fields) ? selectedProvider.required_fields : [];
+    const missingFields = reqFields.filter(f => !formData[f as keyof ReceiptRecord]);
     if (missingFields.length > 0) {
       showToast(`Missing required fields: ${missingFields.join(', ')}`, 'error');
       return;
@@ -186,7 +188,10 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
   };
 
   const isFieldRequired = (fieldName: string) => {
-    return selectedProvider?.required_fields.includes(fieldName);
+    if (!selectedProvider || !Array.isArray(selectedProvider.required_fields)) {
+      return false;
+    }
+    return selectedProvider.required_fields.includes(fieldName);
   };
 
   const generationProgressSteps = [
@@ -678,9 +683,9 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                   <div className="text-center space-y-2">
                     <div className="text-4xl font-display font-black text-white tracking-tight">
                       {['USD', 'EUR', 'GBP', 'NGN', 'CAD', 'AUD', 'JPY', 'INR'].includes(formData.currency || '') ? (
-                        formData.amount?.toLocaleString('en-US', { style: 'currency', currency: formData.currency || 'USD' })
+                        Number(formData.amount || 0).toLocaleString('en-US', { style: 'currency', currency: formData.currency || 'USD' })
                       ) : (
-                        `${formData.currency || 'USDT'} ${(formData.amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
+                        `${formData.currency || 'USDT'} ${Number(formData.amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
                       )}
                     </div>
                     <div className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider

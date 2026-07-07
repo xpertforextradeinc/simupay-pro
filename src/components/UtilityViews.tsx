@@ -97,8 +97,11 @@ export function SmsCenterView() {
 /* ==========================================
    ORDERS VIEW
    ========================================== */
-export function OrdersView() {
+export function OrdersView({ profile, setActiveTab }: { profile: any; setActiveTab?: (tab: any) => void }) {
   const { showToast } = useToast();
+  const [activeSubTab, setActiveSubTab] = useState<'licenses' | 'airtime'>('licenses');
+  const [airtimeOrders, setAirtimeOrders] = useState<any[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
 
   const licenses = [
     { name: 'Standard Key', price: 299, limit: 'Up to $10k per Transfer', desc: 'Secure lifetime activation key for small-scale merchants.' },
@@ -109,59 +112,243 @@ export function OrdersView() {
     showToast(`Order request created for ${licName}! Check your profile key.`, 'success');
   };
 
+  const fetchAirtimeOrders = async () => {
+    if (!profile?.id) return;
+    setLoadingOrders(true);
+    try {
+      const data = await dbService.getAirtimeOrders(profile.id);
+      setAirtimeOrders(data);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
+
+  React.useEffect(() => {
+    if (activeSubTab === 'airtime') {
+      fetchAirtimeOrders();
+    }
+  }, [activeSubTab, profile?.id]);
+
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-display font-bold text-white">License Key Orders</h2>
-        <p className="text-xs text-gray-500">Acquire secured corporate access codes to instantly unlock premium ledger tools.</p>
+      {/* Tab Switcher */}
+      <div className="flex gap-2 border-b border-emerald-950/40 pb-4">
+        <button
+          onClick={() => setActiveSubTab('licenses')}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer
+            ${activeSubTab === 'licenses' 
+              ? 'bg-[#00C853] text-brand-bg shadow-lg shadow-emerald-500/10' 
+              : 'bg-brand-card text-gray-400 border border-emerald-950/40 hover:text-white'
+            }
+          `}
+        >
+          <CreditCard className="w-3.5 h-3.5" /> License Key Orders
+        </button>
+        <button
+          onClick={() => setActiveSubTab('airtime')}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer
+            ${activeSubTab === 'airtime' 
+              ? 'bg-[#00C853] text-brand-bg shadow-lg shadow-emerald-500/10' 
+              : 'bg-brand-card text-gray-400 border border-emerald-950/40 hover:text-white'
+            }
+          `}
+        >
+          <Smartphone className="w-3.5 h-3.5" /> Airtime & Data Purchases
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
-        {licenses.map((lic) => (
-          <div
-            key={lic.name}
-            className={`bg-brand-card p-6 rounded-xl border shadow-xl flex flex-col justify-between space-y-4 relative overflow-hidden
-              ${lic.recommended ? 'border-[#00C853]/40' : 'border-emerald-950/40'}
-            `}
-          >
-            {lic.recommended && (
-              <span className="absolute top-3 right-3 text-[9px] font-bold font-mono bg-[#00C853]/15 text-[#00C853] border border-[#00C853]/30 px-2 py-0.5 rounded-full">
-                RECOMMENDED
-              </span>
-            )}
-
-            <div className="space-y-2">
-              <span className="text-[10px] text-gray-500 font-mono font-bold tracking-wider">SimuPay Pro License Option</span>
-              <h3 className="text-lg font-display font-bold text-white">{lic.name}</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">{lic.desc}</p>
-              
-              <div className="py-2.5 border-y border-emerald-950/40 text-xs font-mono space-y-1.5">
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Limits:</span>
-                  <span className="text-white font-bold">{lic.limit}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Validity:</span>
-                  <span className="text-[#00C853] font-bold">Lifetime Keys</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between pt-2">
-              <div className="font-display">
-                <span className="text-2xl font-bold text-white">${lic.price}</span>
-                <span className="text-xs text-gray-500 font-medium"> / flat</span>
-              </div>
-              <button
-                onClick={() => handleOrder(lic.name)}
-                className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 cursor-pointer shadow-lg transition-all"
-              >
-                <CreditCard className="w-3.5 h-3.5" /> Buy License Key
-              </button>
-            </div>
+      {activeSubTab === 'licenses' ? (
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-xl font-display font-bold text-white">License Key Orders</h2>
+            <p className="text-xs text-gray-500">Acquire secured corporate access codes to instantly unlock premium ledger tools.</p>
           </div>
-        ))}
-      </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
+            {licenses.map((lic) => (
+              <div
+                key={lic.name}
+                className={`bg-brand-card p-6 rounded-xl border shadow-xl flex flex-col justify-between space-y-4 relative overflow-hidden
+                  ${lic.recommended ? 'border-[#00C853]/40' : 'border-emerald-950/40'}
+                `}
+              >
+                {lic.recommended && (
+                  <span className="absolute top-3 right-3 text-[9px] font-bold font-mono bg-[#00C853]/15 text-[#00C853] border border-[#00C853]/30 px-2 py-0.5 rounded-full">
+                    RECOMMENDED
+                  </span>
+                )}
+
+                <div className="space-y-2">
+                  <span className="text-[10px] text-gray-500 font-mono font-bold tracking-wider">SimuPay Pro License Option</span>
+                  <h3 className="text-lg font-display font-bold text-white">{lic.name}</h3>
+                  <p className="text-xs text-gray-400 leading-relaxed">{lic.desc}</p>
+                  
+                  <div className="py-2.5 border-y border-emerald-950/40 text-xs font-mono space-y-1.5">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Limits:</span>
+                      <span className="text-white font-bold">{lic.limit}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Validity:</span>
+                      <span className="text-[#00C853] font-bold">Lifetime Keys</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2">
+                  <div className="font-display">
+                    <span className="text-2xl font-bold text-white">${lic.price}</span>
+                    <span className="text-xs text-gray-500 font-medium"> / flat</span>
+                  </div>
+                  <button
+                    onClick={() => handleOrder(lic.name)}
+                    className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 cursor-pointer shadow-lg transition-all"
+                  >
+                    <CreditCard className="w-3.5 h-3.5" /> Buy License Key
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-xl font-display font-bold text-white">Mobile Topup Purchases</h2>
+              <p className="text-xs text-gray-500">Track real-time Flutterwave-funded airtime and data Topups.</p>
+            </div>
+            <button
+              onClick={fetchAirtimeOrders}
+              disabled={loadingOrders}
+              className="px-3 py-1.5 bg-[#16362F]/40 border border-[#16362F] text-[#00C853] hover:bg-[#16362F]/60 rounded-lg text-xs font-medium cursor-pointer transition-all flex items-center gap-1.5"
+            >
+              Sync Records
+            </button>
+          </div>
+
+          {loadingOrders ? (
+            <div className="bg-brand-card p-12 rounded-2xl border border-emerald-950/40 flex flex-col items-center justify-center space-y-3 shadow-xl">
+              <div className="w-6 h-6 border-2 border-[#00C853] border-t-transparent rounded-full animate-spin"></div>
+              <span className="text-xs text-gray-400 font-mono">Synchronizing airtime orders ledger...</span>
+            </div>
+          ) : airtimeOrders.length === 0 ? (
+            <div className="bg-brand-card p-12 rounded-2xl border border-emerald-950/40 flex flex-col items-center justify-center text-center space-y-4 shadow-xl">
+              <span className="p-4 rounded-full bg-emerald-950/10 text-[#00C853] border border-emerald-950/30">
+                <Smartphone className="w-8 h-8" />
+              </span>
+              <div className="space-y-1 max-w-sm">
+                <h3 className="text-sm font-bold text-white">No Topup Orders Found</h3>
+                <p className="text-xs text-gray-500">You haven't initiated any Flutterwave airtime or data topup orders yet.</p>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-brand-card rounded-2xl border border-emerald-950/40 shadow-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-[#091714] border-b border-emerald-950/50 text-[10px] font-mono uppercase tracking-wider text-gray-500">
+                      <th className="p-4">Order ID & Date</th>
+                      <th className="p-4">Details</th>
+                      <th className="p-4">Recipient</th>
+                      <th className="p-4">Amount</th>
+                      <th className="p-4">Status</th>
+                      <th className="p-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-emerald-950/20 text-xs font-sans text-gray-300">
+                    {airtimeOrders.map((order) => {
+                      const dateStr = new Date(order.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+                      const timeStr = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                      
+                      const isData = order.network?.toLowerCase().includes('data');
+                      const networkName = order.network?.replace(' Airtime', '').replace(' Data', '');
+                      
+                      const getNetworkBadge = (name: string) => {
+                        const n = name.toLowerCase();
+                        if (n.includes('mtn')) return 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20';
+                        if (n.includes('airtel')) return 'bg-red-500/10 text-red-500 border border-red-500/20';
+                        if (n.includes('glo')) return 'bg-green-500/10 text-green-500 border border-green-500/20';
+                        return 'bg-teal-500/10 text-teal-500 border border-teal-500/20';
+                      };
+
+                      return (
+                        <tr key={order.id} className="hover:bg-[#16362F]/10 transition-all">
+                          <td className="p-4">
+                            <div className="font-mono font-bold text-white text-[11px]">{order.id}</div>
+                            <div className="text-[10px] text-gray-500 flex items-center gap-1 mt-0.5">
+                              <Clock className="w-3 h-3" /> {dateStr} at {timeStr}
+                            </div>
+                          </td>
+                          <td className="p-4">
+                            <div className="flex items-center gap-2">
+                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase font-mono ${getNetworkBadge(networkName)}`}>
+                                {networkName}
+                              </span>
+                              <span className="text-[10px] text-gray-400 font-mono">
+                                {isData ? 'DATA' : 'AIRTIME'}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="p-4 font-mono font-bold text-gray-300">
+                            {order.phone_number}
+                          </td>
+                          <td className="p-4 font-mono font-bold text-[#00C853] text-[13px]">
+                            ₦{Number(order.amount).toLocaleString()}
+                          </td>
+                          <td className="p-4">
+                            <span className={`inline-flex items-center gap-1 text-[9px] font-bold font-mono px-2 py-1 rounded-full uppercase border
+                              ${order.status === 'successful' 
+                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25' 
+                                : order.status === 'failed'
+                                ? 'bg-red-500/10 text-red-400 border-red-500/25'
+                                : order.status === 'processing' || order.status === 'paid'
+                                ? 'bg-blue-500/10 text-blue-400 border-blue-500/25'
+                                : 'bg-amber-500/10 text-amber-400 border-amber-500/25'
+                              }
+                            `}>
+                              <span className={`w-1.5 h-1.5 rounded-full animate-pulse
+                                ${order.status === 'successful' 
+                                  ? 'bg-emerald-400' 
+                                  : order.status === 'failed'
+                                  ? 'bg-red-400'
+                                  : order.status === 'processing' || order.status === 'paid'
+                                  ? 'bg-blue-400'
+                                  : 'bg-amber-400'
+                                }
+                              `}></span>
+                              {order.status}
+                            </span>
+                          </td>
+                          <td className="p-4 text-right">
+                            {order.status === 'successful' && setActiveTab ? (
+                              <button
+                                onClick={() => {
+                                  setActiveTab('receipt-generator');
+                                  showToast('Opening generated topup receipt in Receipt Studio!', 'info');
+                                }}
+                                className="px-2.5 py-1 bg-[#00C853]/10 hover:bg-[#00C853]/20 border border-[#00C853]/30 text-[#00C853] rounded-lg text-[10px] font-bold font-mono cursor-pointer transition-all flex items-center gap-1 ml-auto"
+                              >
+                                <FileText className="w-3.5 h-3.5" /> View Receipt
+                              </button>
+                            ) : order.status === 'failed' ? (
+                              <span className="text-[10px] text-red-400 font-mono">Failed</span>
+                            ) : (
+                              <span className="text-[10px] text-gray-500 font-mono">Verifying...</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

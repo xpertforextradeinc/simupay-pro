@@ -8,47 +8,39 @@ interface TradingViewWidgetProps {
 
 export function TradingViewWidget({ scriptSrc, config, containerId }: TradingViewWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const widgetRef = useRef<HTMLDivElement>(null);
-  const configStr = JSON.stringify(config);
 
   useEffect(() => {
-    if (!containerRef.current || !widgetRef.current) return;
+    if (!containerRef.current) return;
 
-    // Clear any previous script or loaded iframe inside the container
-    const existingScripts = containerRef.current.querySelectorAll('script');
-    existingScripts.forEach(s => s.remove());
+    // Clean up any existing content
+    containerRef.current.innerHTML = '';
 
-    // Re-create the widget div contents to be clean
-    widgetRef.current.innerHTML = '';
+    // Create the widget wrapper
+    const widgetContainer = document.createElement('div');
+    widgetContainer.className = 'tradingview-widget-container__widget w-full h-full min-h-[500px]';
 
     // Create the script tag
     const script = document.createElement('script');
-    // Append a unique timestamp to force the browser to execute the script on each mount
-    script.src = `${scriptSrc}?t=${Date.now()}`;
+    script.src = scriptSrc;
     script.type = 'text/javascript';
     script.async = true;
-    script.innerHTML = configStr;
+    script.innerHTML = JSON.stringify(config);
 
+    // Append to container
+    containerRef.current.appendChild(widgetContainer);
     containerRef.current.appendChild(script);
 
     return () => {
-      // Cleanup the script and empty the widget
-      script.remove();
-      if (widgetRef.current) {
-        widgetRef.current.innerHTML = '';
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
       }
     };
-  }, [scriptSrc, containerId, configStr]);
+  }, [scriptSrc, JSON.stringify(config), containerId]);
 
   return (
     <div 
       className="tradingview-widget-container absolute inset-0 w-full h-full flex flex-col" 
       ref={containerRef}
-    >
-      <div 
-        className="tradingview-widget-container__widget flex-1 w-full h-full min-h-[500px]" 
-        ref={widgetRef}
-      />
-    </div>
+    />
   );
 }

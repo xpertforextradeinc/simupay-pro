@@ -48,11 +48,13 @@ function AppContent() {
   // Helper to map tab to path
   const tabToPath = (tab: ActiveTab): string => {
     if (tab === 'dashboard') return '/';
+    if (tab === 'account') return '/profile';
     return `/${tab}`;
   };
 
   // Helper to map path to tab
   const pathToTab = (path: string): ActiveTab => {
+    if (path === '/profile') return 'account';
     if (path.startsWith('/admin')) return 'admin-panel';
     const tabFromPath = path.substring(1) as ActiveTab;
     const validTabs: ActiveTab[] = [
@@ -97,6 +99,31 @@ function AppContent() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  // Handle Flutterwave callback redirects and trigger profile/ledger sync
+  useEffect(() => {
+    if (!session) return;
+    const params = new URLSearchParams(window.location.search);
+    const statusParam = params.get('status');
+    const refParam = params.get('tx_ref') || params.get('ref');
+
+    if (statusParam) {
+      setActiveTab('orders');
+      
+      // Clean up URL query parameters to keep the client path pristine
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, '', newUrl);
+
+      if (statusParam === 'success') {
+        showToast(`Topup payment completed successfully! Order ${refParam || ''} is being delivered.`, 'success');
+      } else if (statusParam === 'failed') {
+        showToast(`Topup payment failed or cancelled for order ${refParam || ''}.`, 'error');
+      }
+      
+      // Trigger full database sync
+      syncUserData(session.user);
+    }
+  }, [session]);
 
   // Register Global Keyboard Shortcuts
   useShortcuts((tab) => {
@@ -564,7 +591,7 @@ function AppContent() {
           )}
 
           {activeTab === 'sms-center' && <SmsCenterView />}
-          {activeTab === 'orders' && <OrdersView />}
+          {activeTab === 'orders' && <OrdersView profile={profile} setActiveTab={setActiveTab} />}
           {activeTab === 'support' && (
             <SupportView
               userId={profile?.id || ''}
@@ -636,11 +663,11 @@ function AppContent() {
           )}
 
           {activeTab === 'airtime' && (
-            <AirtimeView userEmail={profile?.email || 'user@example.com'} />
+            <AirtimeView userEmail={profile?.email || 'user@example.com'} userId={profile?.id || ''} />
           )}
 
           {activeTab === 'data-bundles' && (
-            <DataBundlesView userEmail={profile?.email || 'user@example.com'} />
+            <DataBundlesView userEmail={profile?.email || 'user@example.com'} userId={profile?.id || ''} />
           )}
 
           {activeTab === 'admin-panel' && (

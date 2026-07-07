@@ -1059,6 +1059,70 @@ export const dbService = {
         is_active: true
       },
       {
+        id: 'mtn-airtime-id',
+        name: 'MTN Airtime',
+        category: 'Electronic',
+        color_hex: '#FFCC00',
+        required_fields: ['amount', 'recipient_name', 'memo', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'airtel-airtime-id',
+        name: 'Airtel Airtime',
+        category: 'Electronic',
+        color_hex: '#FF0000',
+        required_fields: ['amount', 'recipient_name', 'memo', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'glo-airtime-id',
+        name: 'Glo Airtime',
+        category: 'Electronic',
+        color_hex: '#00FF00',
+        required_fields: ['amount', 'recipient_name', 'memo', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: '9mobile-airtime-id',
+        name: '9mobile Airtime',
+        category: 'Electronic',
+        color_hex: '#006600',
+        required_fields: ['amount', 'recipient_name', 'memo', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'mtn-data-id',
+        name: 'MTN Data',
+        category: 'Electronic',
+        color_hex: '#FFCC33',
+        required_fields: ['amount', 'recipient_name', 'memo', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'airtel-data-id',
+        name: 'Airtel Data',
+        category: 'Electronic',
+        color_hex: '#FF3333',
+        required_fields: ['amount', 'recipient_name', 'memo', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: 'glo-data-id',
+        name: 'Glo Data',
+        category: 'Electronic',
+        color_hex: '#33FF33',
+        required_fields: ['amount', 'recipient_name', 'memo', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
+        id: '9mobile-data-id',
+        name: '9mobile Data',
+        category: 'Electronic',
+        color_hex: '#336633',
+        required_fields: ['amount', 'recipient_name', 'memo', 'status', 'reference_no'],
+        is_active: true
+      },
+      {
         id: 'coinbase-id',
         name: 'Coinbase',
         category: 'Crypto',
@@ -1530,5 +1594,17 @@ export const dbService = {
       order: newOrder,
       message: `Purchase completed successfully! ${productName} resources are ready for instant download.`
     };
+  },
+
+  getAirtimeOrders: async (userId: string): Promise<any[]> => {
+    try {
+      const response = await fetch(`/api/airtime-orders?userId=${userId}`);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (e) {
+      console.error('[dbService] Failed to fetch airtime orders:', e);
+    }
+    return [];
   }
 };

@@ -3,7 +3,7 @@ import { Smartphone, Check, CreditCard, RefreshCw } from 'lucide-react';
 import { useToast } from './Toast';
 import { dbService } from '../services/dbService';
 
-export function AirtimeView({ userEmail }: { userEmail: string }) {
+export function AirtimeView({ userEmail, userId }: { userEmail: string; userId?: string }) {
   const { showToast } = useToast();
   const [network, setNetwork] = useState('');
   const [phone, setPhone] = useState('');
@@ -21,9 +21,10 @@ export function AirtimeView({ userEmail }: { userEmail: string }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount,
+          amount: Number(amount),
           currency: 'NGN',
           email: userEmail, 
+          userId: userId,
           tx_ref: `airtime-${Date.now()}`,
           meta: {
             phone,
@@ -33,14 +34,14 @@ export function AirtimeView({ userEmail }: { userEmail: string }) {
         })
       });
       const data = await response.json();
-      if (data.status === 'success') {
+      if (response.ok && data.status === 'success') {
         window.location.href = data.data.link;
       } else {
-        throw new Error('Payment initiation failed');
+        throw new Error(data.error || 'Payment initiation failed');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      showToast('Failed to initiate payment', 'error');
+      showToast(error.message || 'Failed to initiate payment', 'error');
     } finally {
       setLoading(false);
     }

@@ -3,7 +3,9 @@ export const cryptoProviders = [
 ];
 
 export const digitalWalletProviders = [
-  'Cash App', 'PayPal', 'Venmo', 'Zelle', 'Apple Pay', 'Google Pay', 'Chime', 'Wise', 'Skrill', 'Neteller', 'Strike'
+  'Cash App', 'PayPal', 'Venmo', 'Zelle', 'Apple Pay', 'Google Pay', 'Chime', 'Wise', 'Skrill', 'Neteller', 'Strike',
+  'MTN Airtime', 'Airtel Airtime', 'Glo Airtime', '9mobile Airtime',
+  'MTN Data', 'Airtel Data', 'Glo Data', '9mobile Data'
 ];
 
 export const bankProviders = [

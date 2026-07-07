@@ -3,7 +3,7 @@ import { Database, Check, CreditCard, RefreshCw } from 'lucide-react';
 import { useToast } from './Toast';
 import { dbService } from '../services/dbService';
 
-export function DataBundlesView({ userEmail }: { userEmail: string }) {
+export function DataBundlesView({ userEmail, userId }: { userEmail: string; userId?: string }) {
   const { showToast } = useToast();
   const [network, setNetwork] = useState('');
   const [phone, setPhone] = useState('');
@@ -25,6 +25,7 @@ export function DataBundlesView({ userEmail }: { userEmail: string }) {
           amount,
           currency: 'NGN',
           email: userEmail,
+          userId: userId,
           tx_ref: `data-${Date.now()}`,
           meta: {
             phone,
@@ -35,14 +36,14 @@ export function DataBundlesView({ userEmail }: { userEmail: string }) {
         })
       });
       const data = await response.json();
-      if (data.status === 'success') {
+      if (response.ok && data.status === 'success') {
         window.location.href = data.data.link;
       } else {
-        throw new Error('Payment initiation failed');
+        throw new Error(data.error || 'Payment initiation failed');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      showToast('Failed to initiate payment', 'error');
+      showToast(error.message || 'Failed to initiate payment', 'error');
     } finally {
       setLoading(false);
     }
