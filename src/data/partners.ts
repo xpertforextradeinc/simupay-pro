@@ -16,7 +16,7 @@ export const partners: Partner[] = [
     category: 'Cryptocurrency Exchange',
     description: 'Gate is a top-tier global cryptocurrency exchange offering trading for hundreds of digital assets, spot and futures markets, high liquidity, and robust digital asset management services.',
     buttonText: 'Create Free Account',
-    link: 'https://www.gate.com/share/slipmint',
+    link: 'https://www.gate.com/share/APPLYGAT',
     badge: 'Highly Recommended',
     benefits: [
       'Comprehensive spot, margin, and futures trading options',

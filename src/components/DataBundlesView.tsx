@@ -35,11 +35,19 @@ export function DataBundlesView({ userEmail, userId }: { userEmail: string; user
           }
         })
       });
-      const data = await response.json();
+      let data;
+      const text = await response.text();
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch (e) {
+        console.error('Non-JSON response:', text);
+        throw new Error(`Server returned invalid response (${response.status})`);
+      }
+
       if (response.ok && data.status === 'success') {
         window.location.href = data.data.link;
       } else {
-        throw new Error(data.error || 'Payment initiation failed');
+        throw new Error(data.error || data.message || 'Payment initiation failed');
       }
     } catch (error: any) {
       console.error(error);
@@ -50,17 +58,17 @@ export function DataBundlesView({ userEmail, userId }: { userEmail: string; user
   };
 
   return (
-    <div className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl space-y-6 max-w-lg mx-auto">
+    <div className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl space-y-6 max-w-lg mx-auto">
       <div className="flex items-center gap-3">
-        <span className="p-3 rounded-xl bg-[#00C853]/10 text-[#00C853] border border-[#00C853]/25">
+        <span className="p-3 rounded-xl bg-brand-accent/10 text-brand-accent border border-brand-accent/25">
           <Database className="w-6 h-6" />
         </span>
-        <h2 className="text-xl font-bold text-white">Buy Data Bundle</h2>
+        <h2 className="text-xl font-bold text-brand-text">Buy Data Bundle</h2>
       </div>
 
       <div className="space-y-4">
         <select 
-          className="w-full bg-brand-bg border border-emerald-950/40 rounded-xl p-3 text-white"
+          className="w-full bg-brand-bg border border-brand-border/40 rounded-xl p-3 text-brand-text"
           value={network}
           onChange={(e) => setNetwork(e.target.value)}
         >
@@ -74,12 +82,12 @@ export function DataBundlesView({ userEmail, userId }: { userEmail: string; user
         <input 
           type="text" 
           placeholder="Phone Number" 
-          className="w-full bg-brand-bg border border-emerald-950/40 rounded-xl p-3 text-white"
+          className="w-full bg-brand-bg border border-brand-border/40 rounded-xl p-3 text-brand-text"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         />
         <select 
-          className="w-full bg-brand-bg border border-emerald-950/40 rounded-xl p-3 text-white"
+          className="w-full bg-brand-bg border border-brand-border/40 rounded-xl p-3 text-brand-text"
           value={plan}
           onChange={(e) => setPlan(e.target.value)}
         >
@@ -92,7 +100,7 @@ export function DataBundlesView({ userEmail, userId }: { userEmail: string; user
         <button 
           onClick={handlePurchase}
           disabled={loading}
-          className="w-full bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold py-3 rounded-xl flex items-center justify-center gap-2"
+          className="w-full bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold py-3 rounded-xl flex items-center justify-center gap-2"
         >
           {loading ? <RefreshCw className="animate-spin w-5 h-5" /> : <CreditCard className="w-5 h-5" />}
           Pay with Flutterwave

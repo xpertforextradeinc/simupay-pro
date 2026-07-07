@@ -162,13 +162,13 @@ export function Auth({ onAuthSuccess }: AuthProps) {
       >
         {/* Logo and Brand */}
         <div className="flex flex-col items-center mb-8">
-          <div className="flex items-center justify-center w-14 h-14 bg-emerald-950/40 border border-[#00C853]/30 rounded-2xl mb-4 shadow-inner">
-            <ShieldCheck className="w-8 h-8 text-[#00C853]" />
+          <div className="flex items-center justify-center w-14 h-14 bg-emerald-950/40 border border-brand-accent/30 rounded-2xl mb-4 shadow-inner">
+            <ShieldCheck className="w-8 h-8 text-brand-accent" />
           </div>
-          <h1 className="text-3xl font-display font-bold tracking-tight text-white mb-1">
-            SimuPay <span className="text-[#00C853]">Pro</span>
+          <h1 className="text-3xl font-display font-bold tracking-tight text-brand-text mb-1">
+            SimuPay <span className="text-brand-accent">Pro</span>
           </h1>
-          <p className="text-gray-400 text-sm text-center">
+          <p className="text-brand-text-muted text-sm text-center">
             {isReset
               ? 'Reset your platform security key'
               : isSignUp
@@ -181,11 +181,11 @@ export function Auth({ onAuthSuccess }: AuthProps) {
         {isReset ? (
           <form onSubmit={handleResetPassword} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-brand-text-muted mb-1.5">
                 Email Address
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-text-dim">
                   <Mail className="w-5 h-5" />
                 </span>
                 <input
@@ -193,7 +193,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
-                  className="w-full bg-brand-bg/50 border border-emerald-950/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-[#00C853] transition-colors text-sm"
+                  className="w-full bg-brand-bg/50 border border-brand-border/50 rounded-xl py-3 pl-11 pr-4 text-brand-text placeholder-gray-500 focus:outline-none focus:border-brand-accent transition-colors text-sm"
                   required
                 />
               </div>
@@ -202,7 +202,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 mt-6 cursor-pointer shadow-lg shadow-emerald-950/50 disabled:opacity-50"
+              className="w-full bg-brand-accent hover:bg-emerald-500 text-brand-bg font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 mt-6 cursor-pointer shadow-lg shadow-emerald-950/50 disabled:opacity-50"
             >
               {loading ? 'Sending Request...' : 'Send Reset Link'}
               <ArrowRight className="w-4 h-4" />
@@ -212,7 +212,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
               <button
                 type="button"
                 onClick={() => setIsReset(false)}
-                className="text-xs text-[#00C853] hover:underline"
+                className="text-xs text-brand-accent hover:underline"
               >
                 Back to Login
               </button>
@@ -222,11 +222,11 @@ export function Auth({ onAuthSuccess }: AuthProps) {
           <form onSubmit={isSignUp ? handleSignUp : handleLogin} className="space-y-4">
             {isSignUp && (
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-brand-text-muted mb-1.5">
                   Full Name
                 </label>
                 <div className="relative">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-text-dim">
                     <User className="w-5 h-5" />
                   </span>
                   <input
@@ -234,7 +234,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="John Doe"
-                    className="w-full bg-brand-bg/50 border border-emerald-950/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-[#00C853] transition-colors text-sm"
+                    className="w-full bg-brand-bg/50 border border-brand-border/50 rounded-xl py-3 pl-11 pr-4 text-brand-text placeholder-gray-500 focus:outline-none focus:border-brand-accent transition-colors text-sm"
                     required={isSignUp}
                   />
                 </div>
@@ -242,11 +242,11 @@ export function Auth({ onAuthSuccess }: AuthProps) {
             )}
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-brand-text-muted mb-1.5">
                 Email Address
               </label>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-text-dim">
                   <Mail className="w-5 h-5" />
                 </span>
                 <input
@@ -254,7 +254,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
-                  className="w-full bg-brand-bg/50 border border-emerald-950/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-[#00C853] transition-colors text-sm"
+                  className="w-full bg-brand-bg/50 border border-brand-border/50 rounded-xl py-3 pl-11 pr-4 text-brand-text placeholder-gray-500 focus:outline-none focus:border-brand-accent transition-colors text-sm"
                   required
                 />
               </div>
@@ -262,21 +262,21 @@ export function Auth({ onAuthSuccess }: AuthProps) {
 
             <div>
               <div className="flex justify-between items-center mb-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-brand-text-muted">
                   Password
                 </label>
                 {!isSignUp && (
                   <button
                     type="button"
                     onClick={() => setIsReset(true)}
-                    className="text-xs text-gray-500 hover:text-white hover:underline transition-colors"
+                    className="text-xs text-brand-text-dim hover:text-brand-text hover:underline transition-colors"
                   >
                     Forgot?
                   </button>
                 )}
               </div>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-text-dim">
                   <Lock className="w-5 h-5" />
                 </span>
                 <input
@@ -284,7 +284,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-brand-bg/50 border border-emerald-950/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-[#00C853] transition-colors text-sm"
+                  className="w-full bg-brand-bg/50 border border-brand-border/50 rounded-xl py-3 pl-11 pr-4 text-brand-text placeholder-gray-500 focus:outline-none focus:border-brand-accent transition-colors text-sm"
                   required
                 />
               </div>
@@ -293,7 +293,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 mt-6 cursor-pointer shadow-lg shadow-[#00C853]/10 disabled:opacity-50"
+              className="w-full bg-brand-accent hover:bg-emerald-500 text-brand-bg font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 mt-6 cursor-pointer shadow-lg shadow-[#00C853]/10 disabled:opacity-50"
             >
               {loading ? (
                 <span>Processing...</span>
@@ -307,10 +307,10 @@ export function Auth({ onAuthSuccess }: AuthProps) {
 
             <div className="relative mt-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-emerald-950/50"></div>
+                <div className="w-full border-t border-brand-border/50"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-brand-card text-gray-500">Or continue with</span>
+                <span className="px-2 bg-brand-card text-brand-text-dim">Or continue with</span>
               </div>
             </div>
 
@@ -356,15 +356,15 @@ export function Auth({ onAuthSuccess }: AuthProps) {
               <button
                 type="button"
                 onClick={() => setIsSignUp(!isSignUp)}
-                className="text-xs text-gray-400 hover:text-[#00C853] transition-colors"
+                className="text-xs text-brand-text-muted hover:text-brand-accent transition-colors"
               >
                 {isSignUp ? (
                   <span>
-                    Already have an account? <strong className="text-[#00C853] hover:underline">Log in</strong>
+                    Already have an account? <strong className="text-brand-accent hover:underline">Log in</strong>
                   </span>
                 ) : (
                   <span>
-                    Don't have an account? <strong className="text-[#00C853] hover:underline">Register</strong>
+                    Don't have an account? <strong className="text-brand-accent hover:underline">Register</strong>
                   </span>
                 )}
               </button>
@@ -373,7 +373,7 @@ export function Auth({ onAuthSuccess }: AuthProps) {
         )}
 
         {/* Security watermark */}
-        <div className="mt-8 pt-4 border-t border-emerald-950/60 flex flex-col items-center justify-center gap-3 text-xs text-gray-500 font-mono">
+        <div className="mt-8 pt-4 border-t border-emerald-950/60 flex flex-col items-center justify-center gap-3 text-xs text-brand-text-dim font-mono">
           <div className="flex items-center gap-2">
             <Key className="w-3.5 h-3.5 text-emerald-600" />
             <span>256-BIT SSL SECURED ENCRYPTION</span>

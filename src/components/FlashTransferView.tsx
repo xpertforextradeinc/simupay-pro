@@ -133,19 +133,19 @@ export function FlashTransferView({
 
   return (
     <div className="space-y-6 max-w-5xl">
-      <div className="border-b border-[#16362F]/60 pb-5">
-        <h2 className="text-2xl font-display font-bold text-white tracking-tight">Flash Asset Transfer</h2>
+      <div className="border-b border-brand-border/60 pb-5">
+        <h2 className="text-2xl font-display font-bold text-brand-text tracking-tight">Flash Asset Transfer</h2>
         <p className="text-xs text-[#9CB1AC]">Perform accelerated, high-volume transactional simulator bridging cross-chain nodes instantly.</p>
       </div>
 
       {!licenseActive ? (
-        <div className="bg-[#091714] p-8 rounded-2xl border border-[#16362F] shadow-2xl space-y-6 flex flex-col items-center text-center max-w-xl mx-auto my-6">
-          <div className="w-16 h-16 rounded-full bg-[#00C853]/15 border-2 border-[#00C853]/35 flex items-center justify-center text-[#00C853]">
+        <div className="bg-brand-card p-8 rounded-2xl border border-brand-border shadow-2xl space-y-6 flex flex-col items-center text-center max-w-xl mx-auto my-6">
+          <div className="w-16 h-16 rounded-full bg-brand-accent/15 border-2 border-brand-accent/35 flex items-center justify-center text-brand-accent">
             <Lock className="w-8 h-8" />
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-lg font-display font-bold text-white">Enterprise License Tunnel Required</h3>
+            <h3 className="text-lg font-display font-bold text-brand-text">Enterprise License Tunnel Required</h3>
             <p className="text-xs text-[#9CB1AC] leading-relaxed">
               Flash Transfer is a premium, enterprise-tier ledger bridging feature. Access is currently locked. To activate high-speed cross-chain simulations, choose your path below:
             </p>
@@ -154,13 +154,13 @@ export function FlashTransferView({
           <div className="flex flex-col sm:flex-row gap-4 w-full justify-center pt-2">
             <button
               onClick={() => onNavigate('subscription')}
-              className="px-5 py-3 bg-[#00C853] hover:bg-emerald-400 text-[#050E0C] rounded-xl font-bold text-xs font-display tracking-wide transition-all shadow-lg cursor-pointer flex items-center justify-center gap-1.5 flex-1"
+              className="px-5 py-3 bg-brand-accent hover:bg-emerald-400 text-[#050E0C] rounded-xl font-bold text-xs font-display tracking-wide transition-all shadow-lg cursor-pointer flex items-center justify-center gap-1.5 flex-1"
             >
               <Zap className="w-4 h-4 fill-current" /> Subscribe & Upgrade
             </button>
             <button
               onClick={() => onNavigate('activation')}
-              className="px-5 py-3 bg-transparent hover:bg-[#16362F]/50 text-[#00C853] border border-[#00C853] rounded-xl font-bold text-xs font-display tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5 flex-1"
+              className="px-5 py-3 bg-transparent hover:bg-brand-surface/50 text-brand-accent border border-brand-accent rounded-xl font-bold text-xs font-display tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5 flex-1"
             >
               <Key className="w-4 h-4" /> Use Activation Key
             </button>
@@ -169,10 +169,10 @@ export function FlashTransferView({
       ) : (
         <div className="max-w-2xl mx-auto">
           {sendingPhase === 'idle' ? (
-            <form onSubmit={handleTransfer} className="bg-[#091714] p-6 rounded-2xl border border-[#16362F] shadow-xl space-y-4">
-              <div className="flex items-center gap-2 border-b border-[#16362F] pb-3">
-                <Zap className="w-5 h-5 text-[#00C853]" />
-                <h3 className="text-sm font-semibold text-white">Pro Flash Transfer Core</h3>
+            <form onSubmit={handleTransfer} className="bg-brand-card p-6 rounded-2xl border border-brand-border shadow-xl space-y-4">
+              <div className="flex items-center gap-2 border-b border-brand-border pb-3">
+                <Zap className="w-5 h-5 text-brand-accent" />
+                <h3 className="text-sm font-semibold text-brand-text">Pro Flash Transfer Core</h3>
               </div>
 
               <p className="text-xs text-[#9CB1AC] leading-relaxed">
@@ -189,10 +189,10 @@ export function FlashTransferView({
               />
 
               <div className="flex justify-between items-center pt-2 text-xs">
-                <span className="text-gray-500 font-mono">Vault Balance: ${(profile?.wallet_balance ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                <span className="text-brand-text-dim font-mono">Vault Balance: ${(profile?.wallet_balance ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                 <button
                   type="submit"
-                  className="bg-[#00C853] hover:bg-emerald-500 text-[#050E0C] font-semibold px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 text-xs font-display cursor-pointer shadow-lg"
+                  className="bg-brand-accent hover:bg-emerald-500 text-[#050E0C] font-semibold px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 text-xs font-display cursor-pointer shadow-lg"
                 >
                   <span>Execute Flash Transfer</span>
                   <ArrowRight className="w-4 h-4" />
@@ -200,20 +200,20 @@ export function FlashTransferView({
               </div>
             </form>
           ) : (
-            <div className="bg-[#091714] p-8 rounded-2xl border border-[#16362F] shadow-xl space-y-6 flex flex-col items-center text-center">
+            <div className="bg-brand-card p-8 rounded-2xl border border-brand-border shadow-xl space-y-6 flex flex-col items-center text-center">
               {sendingPhase !== 'done' ? (
                 <div className="relative w-20 h-20 flex items-center justify-center">
-                  <RefreshCw className="w-12 h-12 text-[#00C853] animate-spin absolute" />
-                  <span className="text-[10px] font-mono font-bold text-[#00C853]">⚡</span>
+                  <RefreshCw className="w-12 h-12 text-brand-accent animate-spin absolute" />
+                  <span className="text-[10px] font-mono font-bold text-brand-accent">⚡</span>
                 </div>
               ) : (
-                <div className="w-16 h-16 rounded-full bg-[#00C853]/10 border-2 border-[#00C853]/40 flex items-center justify-center text-[#00C853] mb-2 shadow-inner">
+                <div className="w-16 h-16 rounded-full bg-brand-accent/10 border-2 border-brand-accent/40 flex items-center justify-center text-brand-accent mb-2 shadow-inner">
                   <CheckCircle className="w-10 h-10" />
                 </div>
               )}
 
               <div className="space-y-2 w-full">
-                <h3 className="text-lg font-display font-bold text-white">
+                <h3 className="text-lg font-display font-bold text-brand-text">
                   {sendingPhase === 'preparing' && 'Preparing transaction...'}
                   {sendingPhase === 'signing' && 'Signing transaction...'}
                   {sendingPhase === 'verifying' && 'Verifying blockchain...'}
@@ -229,7 +229,7 @@ export function FlashTransferView({
                 </p>
               </div>
 
-              <div className="w-full bg-[#050E0C] h-2 rounded-full overflow-hidden border border-[#16362F]/40 relative mt-2">
+              <div className="w-full bg-brand-bg h-2 rounded-full overflow-hidden border border-brand-border/40 relative mt-2">
                 <div 
                   className="bg-gradient-to-r from-[#00C853] to-emerald-400 h-full transition-all duration-500 ease-out"
                   style={{ width: `${getProgressPercent()}%` }}
@@ -240,13 +240,13 @@ export function FlashTransferView({
                 <div className="flex gap-2 w-full justify-center pt-2">
                   <button
                     onClick={() => onNavigate('receipt-generator')}
-                    className="flex-1 max-w-[180px] px-4 py-2.5 bg-[#050E0C] border border-[#16362F] hover:border-[#00C853]/30 text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                    className="flex-1 max-w-[180px] px-4 py-2.5 bg-brand-bg border border-brand-border hover:border-brand-accent/30 text-brand-text font-semibold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                   >
-                    <FileText className="w-3.5 h-3.5 text-[#00C853]" /> Print Receipt
+                    <FileText className="w-3.5 h-3.5 text-brand-accent" /> Print Receipt
                   </button>
                   <button
                     onClick={resetForm}
-                    className="flex-1 max-w-[180px] px-4 py-2.5 bg-[#00C853] hover:bg-emerald-500 text-[#050E0C] font-semibold rounded-xl text-xs transition-all cursor-pointer"
+                    className="flex-1 max-w-[180px] px-4 py-2.5 bg-brand-accent hover:bg-emerald-500 text-[#050E0C] font-semibold rounded-xl text-xs transition-all cursor-pointer"
                   >
                     Send Another
                   </button>

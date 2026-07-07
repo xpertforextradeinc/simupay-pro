@@ -56,9 +56,9 @@ export function NotificationsView({ userId, notifications, onRefresh }: Notifica
       case 'success':
         return {
           icon: Shield,
-          color: 'text-[#00C853]',
-          bg: 'bg-[#00C853]/10',
-          border: 'border-[#00C853]/20',
+          color: 'text-brand-accent',
+          bg: 'bg-brand-accent/10',
+          border: 'border-brand-accent/20',
         };
       case 'warning':
         return {
@@ -88,31 +88,31 @@ export function NotificationsView({ userId, notifications, onRefresh }: Notifica
   return (
     <div className="space-y-6 max-w-4xl">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#16362F]/60 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-brand-border/60 pb-5">
         <div>
-          <h2 className="text-2xl font-display font-bold text-white tracking-tight">Security Notifications</h2>
+          <h2 className="text-2xl font-display font-bold text-brand-text tracking-tight">Security Notifications</h2>
           <p className="text-xs text-[#9CB1AC]">Review system telemetry notices, ledger updates, and license allocation alerts.</p>
         </div>
         
         {notifications.length > 0 && (
           <button
             onClick={handleMarkAllRead}
-            className="flex items-center gap-1.5 bg-[#16362F] hover:bg-[#1f4e43] text-white px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer transition-all border border-emerald-950/40"
+            className="flex items-center gap-1.5 bg-brand-surface hover:bg-[#1f4e43] text-brand-text px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer transition-all border border-brand-border/40"
           >
-            <CheckSquare className="w-4 h-4 text-[#00C853]" />
+            <CheckSquare className="w-4 h-4 text-brand-accent" />
             <span>Mark All as Read</span>
           </button>
         )}
       </div>
 
       {notifications.length === 0 ? (
-        <div className="bg-brand-card p-12 rounded-2xl border border-emerald-950/40 shadow-xl text-center space-y-3 flex flex-col items-center">
-          <div className="p-4 bg-emerald-950/30 rounded-full border border-emerald-900/30">
+        <div className="bg-brand-card p-12 rounded-2xl border border-brand-border/40 shadow-xl text-center space-y-3 flex flex-col items-center">
+          <div className="p-4 bg-brand-surface/30 rounded-full border border-emerald-900/30">
             <Bell className="w-8 h-8 text-emerald-800" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-sm font-semibold text-white">Your log is completely clear</h3>
-            <p className="text-xs text-gray-500 max-w-xs leading-relaxed">
+            <h3 className="text-sm font-semibold text-brand-text">Your log is completely clear</h3>
+            <p className="text-xs text-brand-text-dim max-w-xs leading-relaxed">
               No recent security logs or audit notifications have been dispatched to your merchant node.
             </p>
           </div>
@@ -137,15 +137,15 @@ export function NotificationsView({ userId, notifications, onRefresh }: Notifica
                   
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h4 className="text-xs font-bold text-white tracking-wide">{notif.title}</h4>
+                      <h4 className="text-xs font-bold text-brand-text tracking-wide">{notif.title}</h4>
                       {!notif.read && (
-                        <span className="text-[9px] bg-[#00C853]/15 text-[#00C853] font-mono font-bold px-1.5 py-0.2 rounded">
+                        <span className="text-[9px] bg-brand-accent/15 text-brand-accent font-mono font-bold px-1.5 py-0.2 rounded">
                           NEW
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-gray-400 leading-relaxed max-w-2xl">{notif.message}</p>
-                    <span className="text-[10px] text-gray-500 font-mono block pt-1">
+                    <p className="text-xs text-brand-text-muted leading-relaxed max-w-2xl">{notif.message}</p>
+                    <span className="text-[10px] text-brand-text-dim font-mono block pt-1">
                       {new Date(notif.created_at).toLocaleString()}
                     </span>
                   </div>
@@ -155,7 +155,7 @@ export function NotificationsView({ userId, notifications, onRefresh }: Notifica
                   {!notif.read && (
                     <button
                       onClick={() => handleMarkRead(notif.id)}
-                      className="p-1.5 rounded-lg bg-emerald-950/40 text-[#00C853] hover:bg-[#00C853]/15 border border-[#00C853]/10 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg bg-emerald-950/40 text-brand-accent hover:bg-brand-accent/15 border border-brand-accent/10 transition-colors cursor-pointer"
                       title="Mark as read"
                     >
                       <Check className="w-3.5 h-3.5" />

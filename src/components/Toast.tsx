@@ -64,26 +64,26 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: (id: string) => 
     switch (toast.type) {
       case 'success':
         return {
-          bg: 'bg-[#091714] border-l-4 border-[#00C853]',
-          text: 'text-[#00C853]',
-          icon: <CheckCircle2 className="w-5 h-5 text-[#00C853]" />,
+          bg: 'bg-brand-card border-l-4 border-brand-accent',
+          text: 'text-brand-accent',
+          icon: <CheckCircle2 className="w-5 h-5 text-brand-accent" />,
         };
       case 'error':
         return {
-          bg: 'bg-[#091714] border-l-4 border-red-500',
+          bg: 'bg-brand-card border-l-4 border-red-500',
           text: 'text-red-400',
           icon: <AlertCircle className="w-5 h-5 text-red-500" />,
         };
       case 'warning':
         return {
-          bg: 'bg-[#091714] border-l-4 border-[#FFD700]',
+          bg: 'bg-brand-card border-l-4 border-[#FFD700]',
           text: 'text-[#FFD700]',
           icon: <AlertTriangle className="w-5 h-5 text-[#FFD700]" />,
         };
       case 'info':
       default:
         return {
-          bg: 'bg-[#091714] border-l-4 border-[#2563EB]',
+          bg: 'bg-brand-card border-l-4 border-[#2563EB]',
           text: 'text-blue-400',
           icon: <Info className="w-5 h-5 text-[#2563EB]" />,
         };
@@ -98,13 +98,13 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: (id: string) => 
       initial={{ opacity: 0, y: 50, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.15 } }}
-      className={`pointer-events-auto flex items-start gap-3 p-4 rounded-lg shadow-xl border border-emerald-950/40 ${styles.bg}`}
+      className={`pointer-events-auto flex items-start gap-3 p-4 rounded-lg shadow-xl border border-brand-border/40 ${styles.bg}`}
     >
       <div className="flex-shrink-0 mt-0.5">{styles.icon}</div>
       <div className="flex-1 text-sm font-medium text-gray-200">{toast.message}</div>
       <button
         onClick={() => onClose(toast.id)}
-        className="flex-shrink-0 text-gray-400 hover:text-white transition-colors ml-2"
+        className="flex-shrink-0 text-brand-text-muted hover:text-brand-text transition-colors ml-2"
       >
         <X className="w-4 h-4" />
       </button>

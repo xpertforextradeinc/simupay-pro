@@ -66,7 +66,7 @@ const DEFAULT_PROVIDERS: DynamicProvider[] = [
       accent: '#0052FF',
       accentText: 'text-[#0052FF]',
       headerBg: 'bg-[#0052FF]',
-      headerText: 'text-white',
+      headerText: 'text-brand-text',
       tagline: 'COINBASE COMPLIANCE TRANSACTION',
       logoColor: 'text-[#0052FF]'
     },
@@ -116,7 +116,7 @@ const DEFAULT_PROVIDERS: DynamicProvider[] = [
       accent: '#00D632',
       accentText: 'text-[#00D632]',
       headerBg: 'bg-[#00D632]',
-      headerText: 'text-white',
+      headerText: 'text-brand-text',
       tagline: 'CASH APP SETTLEMENT RECEIPT',
       logoColor: 'text-[#00D632]'
     },
@@ -140,7 +140,7 @@ const DEFAULT_PROVIDERS: DynamicProvider[] = [
       accent: '#003087',
       accentText: 'text-[#003087]',
       headerBg: 'bg-[#003087]',
-      headerText: 'text-white',
+      headerText: 'text-brand-text',
       tagline: 'PAYPAL OFFICIAL INVOICE TRANSACTION',
       logoColor: 'text-[#003087]'
     },
@@ -163,7 +163,7 @@ const DEFAULT_PROVIDERS: DynamicProvider[] = [
       accent: '#111827',
       accentText: 'text-gray-900',
       headerBg: 'bg-gray-900',
-      headerText: 'text-white',
+      headerText: 'text-brand-text',
       tagline: 'CHASE BANK OFFICIAL RECORD',
       logoColor: 'text-gray-800'
     },
@@ -194,11 +194,11 @@ cryptoProviders.forEach(p => {
       theme: {
         bg: 'bg-[#12161A]',
         accent: '#00C853',
-        accentText: 'text-[#00C853]',
-        headerBg: 'bg-[#091714]',
-        headerText: 'text-white',
+        accentText: 'text-brand-accent',
+        headerBg: 'bg-brand-card',
+        headerText: 'text-brand-text',
         tagline: `${p.toUpperCase()} CRYPTO CLEARING NODE`,
-        logoColor: 'text-[#00C853]'
+        logoColor: 'text-brand-accent'
       },
       fields: [
         { name: 'network', label: 'Network', type: 'text', placeholder: 'e.g. TRC20, ERC20' },
@@ -225,11 +225,11 @@ digitalWalletProviders.forEach(p => {
       theme: {
         bg: 'bg-white',
         accent: '#00C853',
-        accentText: 'text-[#00C853]',
+        accentText: 'text-brand-accent',
         headerBg: 'bg-emerald-950',
-        headerText: 'text-[#00C853]',
+        headerText: 'text-brand-accent',
         tagline: `${p.toUpperCase()} DIRECT TRANSIT AUDIT`,
-        logoColor: 'text-[#00C853]'
+        logoColor: 'text-brand-accent'
       },
       fields: [
         { name: 'email', label: 'Recipient Email', type: 'text', placeholder: 'client@domain.com' },
@@ -256,7 +256,7 @@ bankProviders.forEach(p => {
         accent: '#1F2937',
         accentText: 'text-gray-900',
         headerBg: 'bg-slate-900',
-        headerText: 'text-white',
+        headerText: 'text-brand-text',
         tagline: `${p.toUpperCase()} CLEARING GATEWAY`,
         logoColor: 'text-slate-800'
       },

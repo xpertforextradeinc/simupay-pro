@@ -20,19 +20,19 @@ export function ReceiptTemplate({ provider, data }: ReceiptTemplateProps) {
 
   return (
     <div className="bg-white text-gray-900 p-8 rounded-2xl shadow-xl max-w-md mx-auto">
-      <div className={`${bgColor} text-white p-4 rounded-t-xl text-center font-bold text-lg`}>
+      <div className={`${bgColor} text-brand-text p-4 rounded-t-xl text-center font-bold text-lg`}>
         {provider} Receipt
       </div>
       <div className="p-6 space-y-4">
         <div className="text-center">
-          <p className="text-sm text-gray-500">Amount</p>
+          <p className="text-sm text-brand-text-dim">Amount</p>
           <h2 className="text-4xl font-bold">${parseFloat(data.amount || '0').toLocaleString()}</h2>
         </div>
         
         <div className="border-t pt-4 space-y-2">
           {Object.entries(data).map(([key, value]) => (
             <div key={key} className="flex justify-between">
-              <span className="text-sm text-gray-500 capitalize">{key}</span>
+              <span className="text-sm text-brand-text-dim capitalize">{key}</span>
               <span className="text-sm font-medium">{value}</span>
             </div>
           ))}

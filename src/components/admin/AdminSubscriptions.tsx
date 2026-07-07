@@ -92,15 +92,15 @@ export function AdminSubscriptions({
     <div className="space-y-6">
       
       {/* SECTION 1: SYSTEM PRICING PLANS */}
-      <div className="bg-[#091714] p-6 rounded-2xl border border-[#16362F] space-y-4 shadow-xl">
-        <div className="flex justify-between items-center border-b border-[#16362F] pb-3">
+      <div className="bg-brand-card p-6 rounded-2xl border border-brand-border space-y-4 shadow-xl">
+        <div className="flex justify-between items-center border-b border-brand-border pb-3">
           <div className="flex items-center gap-2">
-            <CreditCard className="w-5 h-5 text-[#00C853]" />
-            <h3 className="text-xs font-bold text-white uppercase tracking-wider font-mono">Dynamic Billing & Subscription Plans</h3>
+            <CreditCard className="w-5 h-5 text-brand-accent" />
+            <h3 className="text-xs font-bold text-brand-text uppercase tracking-wider font-mono">Dynamic Billing & Subscription Plans</h3>
           </div>
           <button
             onClick={handleCreatePlan}
-            className="px-3 py-1.5 bg-[#00C853] hover:bg-emerald-400 text-[#050E0C] font-bold text-[10px] rounded-lg uppercase tracking-wide flex items-center gap-1 transition-all cursor-pointer"
+            className="px-3 py-1.5 bg-brand-accent hover:bg-emerald-400 text-[#050E0C] font-bold text-[10px] rounded-lg uppercase tracking-wide flex items-center gap-1 transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" /> Create New Plan
           </button>
@@ -114,7 +114,7 @@ export function AdminSubscriptions({
               <div 
                 key={plan.id} 
                 className={`p-4 rounded-xl border flex flex-col justify-between transition-all duration-300
-                  ${isEditing ? 'bg-[#050E0C] border-[#00C853]' : 'bg-black/30 border-[#16362F]'}
+                  ${isEditing ? 'bg-brand-bg border-brand-accent' : 'bg-black/30 border-brand-border'}
                 `}
               >
                 {isEditing ? (
@@ -123,20 +123,20 @@ export function AdminSubscriptions({
                       type="text"
                       value={planName}
                       onChange={(e) => setPlanName(e.target.value)}
-                      className="w-full bg-brand-bg/50 border border-[#16362F] rounded p-1.5 text-white"
+                      className="w-full bg-brand-bg/50 border border-brand-border rounded p-1.5 text-brand-text"
                       placeholder="Plan name"
                     />
                     <input
                       type="number"
                       value={planPrice}
                       onChange={(e) => setPlanPrice(parseInt(e.target.value) || 0)}
-                      className="w-full bg-brand-bg/50 border border-[#16362F] rounded p-1.5 text-white"
+                      className="w-full bg-brand-bg/50 border border-brand-border rounded p-1.5 text-brand-text"
                       placeholder="Price in ₦"
                     />
                     <select
                       value={planCycle}
                       onChange={(e) => setPlanCycle(e.target.value as any)}
-                      className="w-full bg-brand-bg/50 border border-[#16362F] rounded p-1.5 text-white"
+                      className="w-full bg-brand-bg/50 border border-brand-border rounded p-1.5 text-brand-text"
                     >
                       <option value="Monthly">Monthly</option>
                       <option value="Quarterly">Quarterly</option>
@@ -147,25 +147,25 @@ export function AdminSubscriptions({
                       type="number"
                       value={planTrial}
                       onChange={(e) => setPlanTrial(parseInt(e.target.value) || 0)}
-                      className="w-full bg-brand-bg/50 border border-[#16362F] rounded p-1.5 text-white"
+                      className="w-full bg-brand-bg/50 border border-brand-border rounded p-1.5 text-brand-text"
                       placeholder="Trial Period days"
                     />
                     <textarea
                       value={planDesc}
                       onChange={(e) => setPlanDesc(e.target.value)}
-                      className="w-full bg-brand-bg/50 border border-[#16362F] rounded p-1.5 text-white h-12"
+                      className="w-full bg-brand-bg/50 border border-brand-border rounded p-1.5 text-brand-text h-12"
                       placeholder="Description"
                     />
                     <div className="flex gap-2 justify-end">
                       <button
                         onClick={() => handleSavePlan(plan.id)}
-                        className="p-1 bg-[#00C853] text-black rounded"
+                        className="p-1 bg-brand-accent text-black rounded"
                       >
                         <Check className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => setEditingPlanId(null)}
-                        className="p-1 bg-gray-700 text-white rounded"
+                        className="p-1 bg-gray-700 text-brand-text rounded"
                       >
                         <X className="w-3.5 h-3.5" />
                       </button>
@@ -175,7 +175,7 @@ export function AdminSubscriptions({
                   <>
                     <div className="space-y-2">
                       <div className="flex justify-between items-start">
-                        <span className="text-[10px] bg-emerald-950 text-[#00C853] px-2 py-0.5 rounded font-bold font-mono tracking-wider uppercase">
+                        <span className="text-[10px] bg-emerald-950 text-brand-accent px-2 py-0.5 rounded font-bold font-mono tracking-wider uppercase">
                           {plan.billingCycle}
                         </span>
                         <div className="flex gap-1">
@@ -188,7 +188,7 @@ export function AdminSubscriptions({
                               setPlanTrial(plan.trialPeriodDays);
                               setPlanDesc(plan.description);
                             }}
-                            className="text-gray-400 hover:text-white p-0.5 transition-colors"
+                            className="text-brand-text-muted hover:text-brand-text p-0.5 transition-colors"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                           </button>
@@ -201,16 +201,16 @@ export function AdminSubscriptions({
                         </div>
                       </div>
 
-                      <h4 className="text-sm font-bold text-white font-display mt-1">{plan.name}</h4>
-                      <h3 className="text-xl font-bold text-[#00C853] font-mono">
+                      <h4 className="text-sm font-bold text-brand-text font-display mt-1">{plan.name}</h4>
+                      <h3 className="text-xl font-bold text-brand-accent font-mono">
                         ₦{plan.price.toLocaleString()}
                       </h3>
-                      <p className="text-[10px] text-gray-500 leading-normal">{plan.description}</p>
+                      <p className="text-[10px] text-brand-text-dim leading-normal">{plan.description}</p>
                     </div>
 
-                    <div className="border-t border-[#16362F]/40 pt-2.5 mt-4 text-[10px] font-mono text-gray-500 flex justify-between">
+                    <div className="border-t border-brand-border/40 pt-2.5 mt-4 text-[10px] font-mono text-brand-text-dim flex justify-between">
                       <span>Trial days: {plan.trialPeriodDays}</span>
-                      <span className="text-[#00C853]">● Active Plan</span>
+                      <span className="text-brand-accent">● Active Plan</span>
                     </div>
                   </>
                 )}
@@ -224,19 +224,19 @@ export function AdminSubscriptions({
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         
         {/* Active subscriptions list */}
-        <div className="lg:col-span-3 bg-[#091714] border border-[#16362F] rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between">
+        <div className="lg:col-span-3 bg-brand-card border border-brand-border rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between">
           <div>
-            <div className="px-6 py-4 bg-[#050E0C] border-b border-[#16362F] flex items-center justify-between">
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+            <div className="px-6 py-4 bg-brand-bg border-b border-brand-border flex items-center justify-between">
+              <h3 className="text-xs font-bold text-brand-text uppercase tracking-wider font-mono">
                 Subscription Registry
               </h3>
-              <span className="text-[10px] font-mono text-gray-500">{subscriptions.length} active logs</span>
+              <span className="text-[10px] font-mono text-brand-text-dim">{subscriptions.length} active logs</span>
             </div>
 
             <div className="overflow-x-auto max-h-[300px] overflow-y-auto">
               <table className="w-full text-left border-collapse text-xs font-mono">
                 <thead>
-                  <tr className="bg-[#050e0c]/50 text-gray-400 border-b border-[#16362F]">
+                  <tr className="bg-brand-bg/50 text-brand-text-muted border-b border-brand-border">
                     <th className="p-3">Subscriber</th>
                     <th className="p-3">Plan Details</th>
                     <th className="p-3">Status</th>
@@ -246,25 +246,25 @@ export function AdminSubscriptions({
                 <tbody className="divide-y divide-[#16362F]/30 text-[11px]">
                   {subscriptions.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="p-8 text-center text-gray-500 italic">No subscriptions currently logged.</td>
+                      <td colSpan={4} className="p-8 text-center text-brand-text-dim italic">No subscriptions currently logged.</td>
                     </tr>
                   ) : (
                     subscriptions.map((sub) => (
-                      <tr key={sub.id} className="hover:bg-[#050e0c]/25">
+                      <tr key={sub.id} className="hover:bg-brand-bg/25">
                         <td className="p-3">
-                          <span className="text-white font-bold block">{sub.email}</span>
-                          <span className="text-[9px] text-gray-500 block truncate max-w-[120px]">{sub.id}</span>
+                          <span className="text-brand-text font-bold block">{sub.email}</span>
+                          <span className="text-[9px] text-brand-text-dim block truncate max-w-[120px]">{sub.id}</span>
                         </td>
                         <td className="p-3">
-                          <span className="text-gray-300 block font-semibold">{sub.plan_name}</span>
-                          <span className="text-[9px] text-gray-500 block">₦{sub.amount?.toLocaleString()} ({sub.billing_cycle})</span>
+                          <span className="text-brand-text-muted block font-semibold">{sub.plan_name}</span>
+                          <span className="text-[9px] text-brand-text-dim block">₦{sub.amount?.toLocaleString()} ({sub.billing_cycle})</span>
                         </td>
                         <td className="p-3">
                           <select
                             value={sub.status}
                             onChange={(e) => onUpdateSubStatus(sub.id, e.target.value as any)}
-                            className={`bg-brand-bg border border-[#16362F]/80 rounded text-[9px] font-bold p-1 cursor-pointer focus:outline-none
-                              ${sub.status === 'active' ? 'text-[#00C853]' : ''}
+                            className={`bg-brand-bg border border-brand-border/80 rounded text-[9px] font-bold p-1 cursor-pointer focus:outline-none
+                              ${sub.status === 'active' ? 'text-brand-accent' : ''}
                               ${sub.status === 'expired' ? 'text-amber-500' : ''}
                               ${sub.status === 'canceled' ? 'text-red-400' : ''}
                             `}
@@ -290,46 +290,46 @@ export function AdminSubscriptions({
             </div>
           </div>
           
-          <div className="p-4 bg-[#050e0c]/30 border-t border-[#16362F] text-[10px] text-gray-500 italic">
+          <div className="p-4 bg-brand-bg/30 border-t border-brand-border text-[10px] text-brand-text-dim italic">
             * Deleting or changing subscription statuses here directly upgrades or downgrades standard merchants immediately.
           </div>
         </div>
 
         {/* Manual Upgrade Enrollment Form */}
-        <form onSubmit={handleEnrollMerchant} className="lg:col-span-2 bg-[#091714] p-5 rounded-2xl border border-[#16362F] shadow-xl space-y-4">
-          <div className="flex items-center gap-2 border-b border-[#16362F] pb-2">
-            <Plus className="w-4 h-4 text-[#00C853]" />
-            <h3 className="text-xs font-bold text-white uppercase tracking-wider font-mono">Manual Billing Enrollment</h3>
+        <form onSubmit={handleEnrollMerchant} className="lg:col-span-2 bg-brand-card p-5 rounded-2xl border border-brand-border shadow-xl space-y-4">
+          <div className="flex items-center gap-2 border-b border-brand-border pb-2">
+            <Plus className="w-4 h-4 text-brand-accent" />
+            <h3 className="text-xs font-bold text-brand-text uppercase tracking-wider font-mono">Manual Billing Enrollment</h3>
           </div>
 
           <div className="space-y-3 text-xs">
             <div className="space-y-1">
-              <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider font-mono">Merchant/User ID</label>
+              <label className="text-[9px] font-bold text-brand-text-muted uppercase tracking-wider font-mono">Merchant/User ID</label>
               <input
                 type="text"
                 value={manualUserId}
                 onChange={(e) => setManualUserId(e.target.value)}
                 placeholder="User ID string..."
-                className="w-full bg-[#050E0C] border border-[#16362F] rounded-lg px-2.5 py-1.5 text-white font-mono focus:outline-none focus:border-blue-500"
+                className="w-full bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1.5 text-brand-text font-mono focus:outline-none focus:border-blue-500"
                 required
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider font-mono">User Corporate Email</label>
+              <label className="text-[9px] font-bold text-brand-text-muted uppercase tracking-wider font-mono">User Corporate Email</label>
               <input
                 type="email"
                 value={manualEmail}
                 onChange={(e) => setManualEmail(e.target.value)}
                 placeholder="merchant@domain.com"
-                className="w-full bg-[#050E0C] border border-[#16362F] rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1.5 text-brand-text focus:outline-none focus:border-blue-500"
                 required
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider font-mono">Billing Cycle</label>
+                <label className="text-[9px] font-bold text-brand-text-muted uppercase tracking-wider font-mono">Billing Cycle</label>
                 <select
                   value={manualCycle}
                   onChange={(e) => {
@@ -337,7 +337,7 @@ export function AdminSubscriptions({
                     setManualCycle(cycle);
                     setManualPrice(cycle === 'Monthly' ? 30000 : cycle === 'Quarterly' ? 75000 : cycle === 'Annual' ? 250000 : 999000);
                   }}
-                  className="w-full bg-[#050E0C] border border-[#16362F] rounded-lg px-2 py-1.5 text-white focus:outline-none"
+                  className="w-full bg-brand-bg border border-brand-border rounded-lg px-2 py-1.5 text-brand-text focus:outline-none"
                 >
                   <option value="Monthly">Monthly</option>
                   <option value="Quarterly">Quarterly</option>
@@ -347,24 +347,24 @@ export function AdminSubscriptions({
               </div>
 
               <div className="space-y-1">
-                <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider font-mono">Set Price (₦)</label>
+                <label className="text-[9px] font-bold text-brand-text-muted uppercase tracking-wider font-mono">Set Price (₦)</label>
                 <input
                   type="number"
                   value={manualPrice}
                   onChange={(e) => setManualPrice(parseInt(e.target.value) || 0)}
-                  className="w-full bg-[#050E0C] border border-[#16362F] rounded-lg px-2 py-1.5 text-white font-mono focus:outline-none"
+                  className="w-full bg-brand-bg border border-brand-border rounded-lg px-2 py-1.5 text-brand-text font-mono focus:outline-none"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider font-mono">Plan Nomenclature</label>
+              <label className="text-[9px] font-bold text-brand-text-muted uppercase tracking-wider font-mono">Plan Nomenclature</label>
               <input
                 type="text"
                 value={manualPlanName}
                 onChange={(e) => setManualPlanName(e.target.value)}
-                className="w-full bg-[#050E0C] border border-[#16362F] rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-brand-bg border border-brand-border rounded-lg px-2.5 py-1.5 text-brand-text focus:outline-none focus:border-blue-500"
                 required
               />
             </div>
@@ -372,7 +372,7 @@ export function AdminSubscriptions({
 
           <button
             type="submit"
-            className="w-full bg-[#00C853] hover:bg-emerald-400 text-[#050E0C] font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-lg transition-all"
+            className="w-full bg-brand-accent hover:bg-emerald-400 text-[#050E0C] font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-lg transition-all"
           >
             <CreditCard className="w-3.5 h-3.5" /> Enforce License Manual Sub
           </button>

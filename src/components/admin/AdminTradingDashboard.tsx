@@ -322,13 +322,13 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
   return (
     <div className="space-y-6">
       {/* 1. Header & Navigation Panel */}
-      <div className="bg-[#050E0C] border border-[#16362F] p-4 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-brand-bg border border-brand-border p-4 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#00C853]/10 flex items-center justify-center text-[#00C853]">
+          <div className="w-10 h-10 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent">
             <TrendingUp className="w-5 h-5 animate-pulse" />
           </div>
           <div>
-            <h3 className="text-white font-display font-bold text-base flex items-center gap-2">
+            <h3 className="text-brand-text font-display font-bold text-base flex items-center gap-2">
               Sovereign Trading Desk
               <span className="bg-emerald-500/10 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-widest font-mono border border-emerald-500/20">
                 Admin Exclusive
@@ -341,7 +341,7 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
         </div>
 
         {/* Desktop Tab Switcher */}
-        <div className="flex items-center gap-1 bg-[#091714] border border-[#16362F] p-1 rounded-xl w-full md:w-auto overflow-x-auto scrollbar-none">
+        <div className="flex items-center gap-1 bg-brand-card border border-brand-border p-1 rounded-xl w-full md:w-auto overflow-x-auto scrollbar-none">
           {[
             { id: 'terminal', label: 'Terminal', icon: Layers },
             { id: 'calculators', label: 'Calculators', icon: Calculator },
@@ -354,8 +354,8 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold font-mono transition-all cursor-pointer whitespace-nowrap
                 ${activeTab === tab.id 
-                  ? 'bg-[#00C853] text-[#050E0C] font-bold shadow-md' 
-                  : 'text-gray-400 hover:text-white hover:bg-[#16362F]/40'}`}
+                  ? 'bg-brand-accent text-[#050E0C] font-bold shadow-md' 
+                  : 'text-brand-text-muted hover:text-brand-text hover:bg-brand-surface/40'}`}
             >
               <tab.icon className="w-3.5 h-3.5" />
               {tab.label}
@@ -371,12 +371,12 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
           <div className="lg:col-span-1 space-y-6">
             
             {/* Watchlist & Live Tickers */}
-            <div className="bg-[#091714] border border-[#16362F] p-4 rounded-2xl space-y-4">
-              <div className="flex items-center justify-between border-b border-[#16362F]/50 pb-2">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5 text-[#00C853]" /> Real-Time Rates
+            <div className="bg-brand-card border border-brand-border p-4 rounded-2xl space-y-4">
+              <div className="flex items-center justify-between border-b border-brand-border/50 pb-2">
+                <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-brand-accent" /> Real-Time Rates
                 </h4>
-                <span className="text-[9px] font-mono text-[#00C853] bg-[#00C853]/10 px-1.5 py-0.5 rounded">
+                <span className="text-[9px] font-mono text-brand-accent bg-brand-accent/10 px-1.5 py-0.5 rounded">
                   Simulation Feed
                 </span>
               </div>
@@ -394,24 +394,24 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                       onClick={() => setSelectedPair(`FX:${displaySymbol}`)}
                       className={`group flex items-center justify-between p-2 rounded-xl border transition-all cursor-pointer
                         ${selectedPair === `FX:${displaySymbol}` 
-                          ? 'bg-[#00C853]/10 border-[#00C853]/30' 
-                          : 'bg-[#050E0C] border-[#16362F]/40 hover:border-[#16362F]'}`}
+                          ? 'bg-brand-accent/10 border-brand-accent/30' 
+                          : 'bg-brand-bg border-brand-border/40 hover:border-brand-border'}`}
                     >
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-bold text-white font-mono">{displaySymbol}</span>
-                          <span className={`text-[9px] font-mono font-semibold ${isPositive ? 'text-[#00C853]' : 'text-red-400'}`}>
+                          <span className="text-xs font-bold text-brand-text font-mono">{displaySymbol}</span>
+                          <span className={`text-[9px] font-mono font-semibold ${isPositive ? 'text-brand-accent' : 'text-red-400'}`}>
                             {isPositive ? '+' : ''}{rate.change}%
                           </span>
                         </div>
-                        <span className="text-[9px] text-gray-500 font-sans">TradingView Rate</span>
+                        <span className="text-[9px] text-brand-text-dim font-sans">TradingView Rate</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="text-right font-mono">
-                          <span className="text-xs font-semibold text-white block">
+                          <span className="text-xs font-semibold text-brand-text block">
                             {rate.bid.toLocaleString(undefined, { minimumFractionDigits: symbol.includes('USD') && symbol.includes('BTC') ? 2 : 4 })}
                           </span>
-                          <span className="text-[9px] text-gray-400">Ask: {rate.ask.toLocaleString(undefined, { minimumFractionDigits: symbol.includes('USD') && symbol.includes('BTC') ? 2 : 4 })}</span>
+                          <span className="text-[9px] text-brand-text-muted">Ask: {rate.ask.toLocaleString(undefined, { minimumFractionDigits: symbol.includes('USD') && symbol.includes('BTC') ? 2 : 4 })}</span>
                         </div>
                         
                         <button 
@@ -431,17 +431,17 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
               </div>
 
               {/* Add Symbol to Watchlist Form */}
-              <form onSubmit={addToWatchlist} className="flex gap-2 pt-2 border-t border-[#16362F]/50">
+              <form onSubmit={addToWatchlist} className="flex gap-2 pt-2 border-t border-brand-border/50">
                 <input 
                   type="text" 
                   placeholder="ADD PAIR (e.g., EURUSD)"
                   value={newWatchlistSymbol}
                   onChange={(e) => setNewWatchlistSymbol(e.target.value)}
-                  className="flex-1 bg-[#050E0C] border border-[#16362F] text-white rounded-lg px-2 py-1.5 text-xs font-mono focus:outline-none focus:border-[#00C853]"
+                  className="flex-1 bg-brand-bg border border-brand-border text-brand-text rounded-lg px-2 py-1.5 text-xs font-mono focus:outline-none focus:border-brand-accent"
                 />
                 <button 
                   type="submit" 
-                  className="bg-[#00C853]/25 hover:bg-[#00C853] text-[#00C853] hover:text-[#050E0C] p-2 rounded-lg transition-all text-xs font-bold cursor-pointer"
+                  className="bg-brand-accent/25 hover:bg-brand-accent text-brand-accent hover:text-[#050E0C] p-2 rounded-lg transition-all text-xs font-bold cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -449,26 +449,26 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
             </div>
 
             {/* Trading Sessions Monitor */}
-            <div className="bg-[#091714] border border-[#16362F] p-4 rounded-2xl space-y-3">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-1.5 border-b border-[#16362F]/50 pb-2">
-                <Clock className="w-3.5 h-3.5 text-[#00C853]" /> Trading Sessions
+            <div className="bg-brand-card border border-brand-border p-4 rounded-2xl space-y-3">
+              <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider font-mono flex items-center gap-1.5 border-b border-brand-border/50 pb-2">
+                <Clock className="w-3.5 h-3.5 text-brand-accent" /> Trading Sessions
               </h4>
               <div className="space-y-2">
                 {sessions.map(s => (
                   <div key={s.name} className="flex items-center justify-between text-xs font-mono">
                     <div>
-                      <span className="text-white block font-semibold">{s.name}</span>
-                      <span className="text-[10px] text-gray-500">{s.hours}</span>
+                      <span className="text-brand-text block font-semibold">{s.name}</span>
+                      <span className="text-[10px] text-brand-text-dim">{s.hours}</span>
                     </div>
                     <div className="text-right">
                       <span className={`inline-block px-1.5 py-0.5 text-[9px] rounded uppercase font-bold
                         ${s.active 
-                          ? 'bg-[#00C853]/15 text-[#00C853]' 
-                          : 'bg-gray-500/10 text-gray-500'}`}
+                          ? 'bg-brand-accent/15 text-brand-accent' 
+                          : 'bg-gray-500/10 text-brand-text-dim'}`}
                       >
                         {s.active ? 'Active' : 'Closed'}
                       </span>
-                      <span className="block text-[9px] text-gray-500 mt-0.5">Vol: {s.volatility}</span>
+                      <span className="block text-[9px] text-brand-text-dim mt-0.5">Vol: {s.volatility}</span>
                     </div>
                   </div>
                 ))}
@@ -476,8 +476,8 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
             </div>
 
             {/* Future-Ready Currency Strength Indicator */}
-            <div className="bg-[#091714] border border-[#16362F] p-4 rounded-2xl space-y-3">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-1.5 border-b border-[#16362F]/50 pb-2">
+            <div className="bg-brand-card border border-brand-border p-4 rounded-2xl space-y-3">
+              <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider font-mono flex items-center gap-1.5 border-b border-brand-border/50 pb-2">
                 <Zap className="w-3.5 h-3.5 text-amber-400" /> Strength Index (15M)
               </h4>
               <div className="space-y-2">
@@ -486,15 +486,15 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                   return (
                     <div key={currency} className="space-y-1">
                       <div className="flex justify-between items-center text-[10px] font-mono">
-                        <span className="text-white font-bold">{currency}</span>
-                        <span className={scoreNum > 7 ? 'text-[#00C853]' : scoreNum < 4 ? 'text-red-400' : 'text-amber-500'}>
+                        <span className="text-brand-text font-bold">{currency}</span>
+                        <span className={scoreNum > 7 ? 'text-brand-accent' : scoreNum < 4 ? 'text-red-400' : 'text-amber-500'}>
                           {scoreNum} / 10
                         </span>
                       </div>
-                      <div className="w-full bg-[#050E0C] h-1.5 rounded-full overflow-hidden">
+                      <div className="w-full bg-brand-bg h-1.5 rounded-full overflow-hidden">
                         <div 
                           className={`h-full rounded-full transition-all duration-1000
-                            ${scoreNum > 7 ? 'bg-[#00C853]' : scoreNum < 4 ? 'bg-red-400' : 'bg-amber-500'}`}
+                            ${scoreNum > 7 ? 'bg-brand-accent' : scoreNum < 4 ? 'bg-red-400' : 'bg-amber-500'}`}
                           style={{ width: `${scoreNum * 10}%` }}
                         />
                       </div>
@@ -510,17 +510,17 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
           <div className="lg:col-span-3 space-y-6 flex flex-col">
             
             {/* Embedded Live Workspace Area */}
-            <div className="bg-[#091714] border border-[#16362F] rounded-2xl flex-1 flex flex-col min-h-[580px] overflow-hidden">
-              <div className="p-4 border-b border-[#16362F] bg-[#050E0C] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="bg-brand-card border border-brand-border rounded-2xl flex-1 flex flex-col min-h-[580px] overflow-hidden">
+              <div className="p-4 border-b border-brand-border bg-brand-bg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <BarChart2 className="w-4 h-4 text-[#00C853]" />
-                  <span className="text-xs font-bold font-mono text-white uppercase tracking-wider">
+                  <BarChart2 className="w-4 h-4 text-brand-accent" />
+                  <span className="text-xs font-bold font-mono text-brand-text uppercase tracking-wider">
                     Interactive Workspace Desk
                   </span>
                 </div>
                 
                 {/* Micro Workspace Sub-menu */}
-                <div className="flex items-center gap-1 bg-[#091714] border border-[#16362F]/50 p-1 rounded-lg">
+                <div className="flex items-center gap-1 bg-brand-card border border-brand-border/50 p-1 rounded-lg">
                   {[
                     { id: 'charts', label: 'Live Chart', icon: BarChart2 },
                     { id: 'calendar', label: 'Economic Calendar', icon: Calendar },
@@ -533,8 +533,8 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                       onClick={() => setActiveWidget(item.id as any)}
                       className={`px-2.5 py-1 rounded text-[10px] font-bold font-mono transition-all cursor-pointer whitespace-nowrap
                         ${activeWidget === item.id 
-                          ? 'bg-[#00C853]/15 text-[#00C853]' 
-                          : 'text-gray-400 hover:text-white'}`}
+                          ? 'bg-brand-accent/15 text-brand-accent' 
+                          : 'text-brand-text-muted hover:text-brand-text'}`}
                     >
                       {item.label}
                     </button>
@@ -543,7 +543,7 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
               </div>
 
               {/* Dynamically Loaded Dashboard View widget */}
-              <div className="flex-1 relative w-full h-full min-h-[500px] bg-[#050E0C]">
+              <div className="flex-1 relative w-full h-full min-h-[500px] bg-brand-bg">
                 {activeWidget === 'charts' && (
                   <TradingViewWidget 
                     containerId="admin_charts"
@@ -594,7 +594,7 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                 {activeWidget === 'sentiment' && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 h-full overflow-y-auto">
                     <div className="space-y-4">
-                      <h4 className="text-xs font-bold text-white uppercase font-mono border-b border-[#16362F]/40 pb-2">
+                      <h4 className="text-xs font-bold text-brand-text uppercase font-mono border-b border-brand-border/40 pb-2">
                         Active Technical Sentiment Analysis
                       </h4>
                       <div className="h-[300px] relative">
@@ -617,11 +617,11 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                     </div>
 
                     {/* Future Ready Sentiment Description & Spec */}
-                    <div className="bg-[#091714] border border-[#16362F]/60 p-5 rounded-2xl space-y-4">
-                      <h4 className="text-xs font-bold text-white uppercase font-mono border-b border-[#16362F]/40 pb-2 flex items-center gap-1">
-                        <Shield className="w-3.5 h-3.5 text-[#00C853]" /> Sovereign Orderbook Insights
+                    <div className="bg-brand-card border border-brand-border/60 p-5 rounded-2xl space-y-4">
+                      <h4 className="text-xs font-bold text-brand-text uppercase font-mono border-b border-brand-border/40 pb-2 flex items-center gap-1">
+                        <Shield className="w-3.5 h-3.5 text-brand-accent" /> Sovereign Orderbook Insights
                       </h4>
-                      <p className="text-xs text-gray-400 leading-relaxed font-sans">
+                      <p className="text-xs text-brand-text-muted leading-relaxed font-sans">
                         Sovereign risk indexes and retail sentiment indexes parse external API feeds.
                         In compliance with strict sandbox guidelines, this is a personal terminal display showing zero live broker margin positions.
                       </p>
@@ -629,15 +629,15 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                       {/* Interactive Spec Parameters */}
                       <div className="space-y-2.5 pt-2">
                         <div className="flex justify-between text-xs font-mono">
-                          <span className="text-gray-500">Retail Long Margin:</span>
+                          <span className="text-brand-text-dim">Retail Long Margin:</span>
                           <span className="text-emerald-400">62.4%</span>
                         </div>
-                        <div className="w-full bg-[#050E0C] h-2 rounded-full overflow-hidden flex">
-                          <div className="bg-[#00C853] h-full" style={{ width: '62%' }} />
+                        <div className="w-full bg-brand-bg h-2 rounded-full overflow-hidden flex">
+                          <div className="bg-brand-accent h-full" style={{ width: '62%' }} />
                           <div className="bg-red-500 h-full" style={{ width: '38%' }} />
                         </div>
                         <div className="flex justify-between text-xs font-mono">
-                          <span className="text-gray-500">Retail Short Margin:</span>
+                          <span className="text-brand-text-dim">Retail Short Margin:</span>
                           <span className="text-red-400">37.6%</span>
                         </div>
                       </div>
@@ -671,100 +671,100 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
           {/* Position Size Calculator */}
-          <div className="bg-[#091714] border border-[#16362F] p-6 rounded-2xl space-y-6">
-            <div className="flex items-center gap-2 border-b border-[#16362F]/50 pb-3">
-              <Calculator className="w-5 h-5 text-[#00C853]" />
+          <div className="bg-brand-card border border-brand-border p-6 rounded-2xl space-y-6">
+            <div className="flex items-center gap-2 border-b border-brand-border/50 pb-3">
+              <Calculator className="w-5 h-5 text-brand-accent" />
               <div>
-                <h4 className="text-sm font-bold text-white uppercase font-mono">Position Size Calculator</h4>
-                <p className="text-xs text-gray-500">Accurately determine lot sizing aligned with standard margin limitations.</p>
+                <h4 className="text-sm font-bold text-brand-text uppercase font-mono">Position Size Calculator</h4>
+                <p className="text-xs text-brand-text-dim">Accurately determine lot sizing aligned with standard margin limitations.</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-mono uppercase">Account Balance (USD)</label>
+                <label className="text-[10px] text-brand-text-dim font-mono uppercase">Account Balance (USD)</label>
                 <input 
                   type="number" 
                   value={accountBalance}
                   onChange={(e) => setAccountBalance(Number(e.target.value))}
-                  className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-[#00C853]"
+                  className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-brand-accent"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-mono uppercase">Risk Percentage (%)</label>
+                <label className="text-[10px] text-brand-text-dim font-mono uppercase">Risk Percentage (%)</label>
                 <input 
                   type="number" 
                   step="0.1"
                   value={riskPercentage}
                   onChange={(e) => setRiskPercentage(Number(e.target.value))}
-                  className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-[#00C853]"
+                  className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-brand-accent"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-mono uppercase">Stop Loss (Pips)</label>
+                <label className="text-[10px] text-brand-text-dim font-mono uppercase">Stop Loss (Pips)</label>
                 <input 
                   type="number" 
                   value={stopLossPips}
                   onChange={(e) => setStopLossPips(Number(e.target.value))}
-                  className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-[#00C853]"
+                  className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-brand-accent"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-mono uppercase">Lot Pip Value ($10/lot default)</label>
+                <label className="text-[10px] text-brand-text-dim font-mono uppercase">Lot Pip Value ($10/lot default)</label>
                 <input 
                   type="number" 
                   value={pipValue}
                   onChange={(e) => setPipValue(Number(e.target.value))}
-                  className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-[#00C853]"
+                  className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-brand-accent"
                 />
               </div>
             </div>
 
             {/* Position Size Results Panel */}
-            <div className="bg-[#050E0C] border border-[#16362F]/80 p-5 rounded-2xl space-y-3 font-mono">
-              <h5 className="text-[10px] text-gray-500 uppercase">Computed Lot Sizing Results</h5>
+            <div className="bg-brand-bg border border-brand-border/80 p-5 rounded-2xl space-y-3 font-mono">
+              <h5 className="text-[10px] text-brand-text-dim uppercase">Computed Lot Sizing Results</h5>
               <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="bg-[#091714] p-3 rounded-xl border border-[#16362F]/30">
-                  <span className="text-[10px] text-gray-500 block">TOTAL RISK</span>
+                <div className="bg-brand-card p-3 rounded-xl border border-brand-border/30">
+                  <span className="text-[10px] text-brand-text-dim block">TOTAL RISK</span>
                   <span className="text-xs font-bold text-red-400">${posRiskAmount.toLocaleString()}</span>
                 </div>
-                <div className="bg-[#091714] p-3 rounded-xl border border-[#16362F]/30 col-span-2">
-                  <span className="text-[10px] text-gray-500 block">SIMULATED POSITION LOTS</span>
-                  <span className="text-base font-extrabold text-[#00C853] block">{posSizeLots} Standard Lots</span>
-                  <span className="text-[9px] text-gray-400">({posUnits.toLocaleString()} units)</span>
+                <div className="bg-brand-card p-3 rounded-xl border border-brand-border/30 col-span-2">
+                  <span className="text-[10px] text-brand-text-dim block">SIMULATED POSITION LOTS</span>
+                  <span className="text-base font-extrabold text-brand-accent block">{posSizeLots} Standard Lots</span>
+                  <span className="text-[9px] text-brand-text-muted">({posUnits.toLocaleString()} units)</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Risk Calculator */}
-          <div className="bg-[#091714] border border-[#16362F] p-6 rounded-2xl space-y-6">
-            <div className="flex items-center gap-2 border-b border-[#16362F]/50 pb-3">
+          <div className="bg-brand-card border border-brand-border p-6 rounded-2xl space-y-6">
+            <div className="flex items-center gap-2 border-b border-brand-border/50 pb-3">
               <Sliders className="w-5 h-5 text-amber-500" />
               <div>
-                <h4 className="text-sm font-bold text-white uppercase font-mono">Risk / Reward Calculator</h4>
-                <p className="text-xs text-gray-500">Calculate precision parameters and dynamic risk profit ratios.</p>
+                <h4 className="text-sm font-bold text-brand-text uppercase font-mono">Risk / Reward Calculator</h4>
+                <p className="text-xs text-brand-text-dim">Calculate precision parameters and dynamic risk profit ratios.</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-mono uppercase">Position Direction</label>
-                <div className="grid grid-cols-2 gap-2 bg-[#050E0C] p-1 border border-[#16362F] rounded-xl">
+                <label className="text-[10px] text-brand-text-dim font-mono uppercase">Position Direction</label>
+                <div className="grid grid-cols-2 gap-2 bg-brand-bg p-1 border border-brand-border rounded-xl">
                   <button 
                     type="button"
                     onClick={() => setRcDirection('BUY')}
-                    className={`py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${rcDirection === 'BUY' ? 'bg-[#00C853] text-[#050E0C]' : 'text-gray-400'}`}
+                    className={`py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${rcDirection === 'BUY' ? 'bg-brand-accent text-[#050E0C]' : 'text-brand-text-muted'}`}
                   >
                     BUY
                   </button>
                   <button 
                     type="button"
                     onClick={() => setRcDirection('SELL')}
-                    className={`py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${rcDirection === 'SELL' ? 'bg-red-500 text-white' : 'text-gray-400'}`}
+                    className={`py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${rcDirection === 'SELL' ? 'bg-red-500 text-brand-text' : 'text-brand-text-muted'}`}
                   >
                     SELL
                   </button>
@@ -772,65 +772,65 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-mono uppercase">Lots Amount</label>
+                <label className="text-[10px] text-brand-text-dim font-mono uppercase">Lots Amount</label>
                 <input 
                   type="number" 
                   step="0.01"
                   value={rcLots}
                   onChange={(e) => setRcLots(Number(e.target.value))}
-                  className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-[#00C853]"
+                  className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-brand-accent"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-mono uppercase">Entry Price</label>
+                <label className="text-[10px] text-brand-text-dim font-mono uppercase">Entry Price</label>
                 <input 
                   type="text" 
                   value={rcEntry}
                   onChange={(e) => setRcEntry(e.target.value)}
-                  className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-[#00C853]"
+                  className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-brand-accent"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-mono uppercase">Stop Loss Price</label>
+                <label className="text-[10px] text-brand-text-dim font-mono uppercase">Stop Loss Price</label>
                 <input 
                   type="text" 
                   value={rcStop}
                   onChange={(e) => setRcStop(e.target.value)}
-                  className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-[#00C853]"
+                  className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-brand-accent"
                 />
               </div>
 
               <div className="space-y-2 col-span-2">
-                <label className="text-[10px] text-gray-500 font-mono uppercase">Take Profit Price</label>
+                <label className="text-[10px] text-brand-text-dim font-mono uppercase">Take Profit Price</label>
                 <input 
                   type="text" 
                   value={rcTakeProfit}
                   onChange={(e) => setRcTakeProfit(e.target.value)}
-                  className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-[#00C853]"
+                  className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-xl p-2.5 text-xs font-mono focus:outline-none focus:border-brand-accent"
                 />
               </div>
             </div>
 
             {/* Risk calculator outcomes */}
-            <div className="bg-[#050E0C] border border-[#16362F]/80 p-5 rounded-2xl space-y-3 font-mono">
-              <h5 className="text-[10px] text-gray-500 uppercase">Risk Outcomes & Ratio Analysis</h5>
+            <div className="bg-brand-bg border border-brand-border/80 p-5 rounded-2xl space-y-3 font-mono">
+              <h5 className="text-[10px] text-brand-text-dim uppercase">Risk Outcomes & Ratio Analysis</h5>
               <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="bg-[#091714] p-3 rounded-xl border border-[#16362F]/30">
-                  <span className="text-[9px] text-gray-500 block">TOTAL EXP RISK</span>
+                <div className="bg-brand-card p-3 rounded-xl border border-brand-border/30">
+                  <span className="text-[9px] text-brand-text-dim block">TOTAL EXP RISK</span>
                   <span className="text-xs font-bold text-red-400">${rcTotalRiskUSD.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
-                  <span className="text-[8px] text-gray-500 block">({rcPipsDiff.toFixed(1)} pips)</span>
+                  <span className="text-[8px] text-brand-text-dim block">({rcPipsDiff.toFixed(1)} pips)</span>
                 </div>
-                <div className="bg-[#091714] p-3 rounded-xl border border-[#16362F]/30">
-                  <span className="text-[9px] text-gray-500 block">POTENTIAL GAIN</span>
+                <div className="bg-brand-card p-3 rounded-xl border border-brand-border/30">
+                  <span className="text-[9px] text-brand-text-dim block">POTENTIAL GAIN</span>
                   <span className="text-xs font-bold text-emerald-400">${rcTotalRewardUSD.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
-                  <span className="text-[8px] text-gray-500 block">({rcProfitPips.toFixed(1)} pips)</span>
+                  <span className="text-[8px] text-brand-text-dim block">({rcProfitPips.toFixed(1)} pips)</span>
                 </div>
-                <div className="bg-[#091714] p-3 rounded-xl border border-[#16362F]/30">
-                  <span className="text-[9px] text-gray-500 block">RISK REWARD RATIO</span>
+                <div className="bg-brand-card p-3 rounded-xl border border-brand-border/30">
+                  <span className="text-[9px] text-brand-text-dim block">RISK REWARD RATIO</span>
                   <span className="text-xs font-bold text-amber-500 block">1 : {rcRatio}</span>
-                  <span className="text-[8px] text-gray-400">Ratio Metric</span>
+                  <span className="text-[8px] text-brand-text-muted">Ratio Metric</span>
                 </div>
               </div>
             </div>
@@ -844,20 +844,20 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
           
           {/* Quick Notes & Future Spec Config */}
           <div className="lg:col-span-1 space-y-6">
-            <div className="bg-[#091714] border border-[#16362F] p-5 rounded-2xl space-y-4">
-              <div className="flex items-center gap-2 border-b border-[#16362F]/50 pb-3">
-                <Edit3 className="w-5 h-5 text-[#00C853]" />
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono">Personal Notes Terminal</h4>
+            <div className="bg-brand-card border border-brand-border p-5 rounded-2xl space-y-4">
+              <div className="flex items-center gap-2 border-b border-brand-border/50 pb-3">
+                <Edit3 className="w-5 h-5 text-brand-accent" />
+                <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider font-mono">Personal Notes Terminal</h4>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] text-gray-500 font-mono uppercase block">Sovereign Focus Checklist</label>
+                <label className="text-[10px] text-brand-text-dim font-mono uppercase block">Sovereign Focus Checklist</label>
                 <textarea 
                   rows={8}
                   value={quickNotes}
                   onChange={(e) => setQuickNotes(e.target.value)}
                   placeholder="Insert notes, hot indicators, risk boundaries or watchlist reviews here..."
-                  className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-[#00C853] resize-none leading-relaxed"
+                  className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-xl p-3 text-xs font-mono focus:outline-none focus:border-brand-accent resize-none leading-relaxed"
                 />
               </div>
 
@@ -873,18 +873,18 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
           <div className="lg:col-span-2 space-y-6">
             
             {/* Form to Log Trade */}
-            <div className="bg-[#091714] border border-[#16362F] p-5 rounded-2xl space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase font-mono border-b border-[#16362F]/50 pb-2">
+            <div className="bg-brand-card border border-brand-border p-5 rounded-2xl space-y-4">
+              <h4 className="text-xs font-bold text-brand-text uppercase font-mono border-b border-brand-border/50 pb-2">
                 Log Private Simulated Transaction
               </h4>
               
               <form onSubmit={addJournalEntry} className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase block">Pair</label>
+                  <label className="text-[10px] text-brand-text-dim font-mono uppercase block">Pair</label>
                   <select 
                     value={jePair}
                     onChange={(e) => setJePair(e.target.value)}
-                    className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-lg p-2 text-xs font-mono"
+                    className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-lg p-2 text-xs font-mono"
                   >
                     <option value="EURUSD">EURUSD</option>
                     <option value="GBPUSD">GBPUSD</option>
@@ -895,11 +895,11 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase block">Direction</label>
+                  <label className="text-[10px] text-brand-text-dim font-mono uppercase block">Direction</label>
                   <select 
                     value={jeDirection}
                     onChange={(e) => setJeDirection(e.target.value as any)}
-                    className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-lg p-2 text-xs font-mono"
+                    className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-lg p-2 text-xs font-mono"
                   >
                     <option value="BUY">BUY</option>
                     <option value="SELL">SELL</option>
@@ -907,44 +907,44 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase block">Entry Price</label>
+                  <label className="text-[10px] text-brand-text-dim font-mono uppercase block">Entry Price</label>
                   <input 
                     type="text" 
                     placeholder="1.0820"
                     value={jeEntry}
                     onChange={(e) => setJeEntry(e.target.value)}
-                    className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-lg p-2 text-xs font-mono"
+                    className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-lg p-2 text-xs font-mono"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase block">Exit Price</label>
+                  <label className="text-[10px] text-brand-text-dim font-mono uppercase block">Exit Price</label>
                   <input 
                     type="text" 
                     placeholder="1.0860"
                     value={jeExit}
                     onChange={(e) => setJeExit(e.target.value)}
-                    className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-lg p-2 text-xs font-mono"
+                    className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-lg p-2 text-xs font-mono"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase block">Pips (Opt.)</label>
+                  <label className="text-[10px] text-brand-text-dim font-mono uppercase block">Pips (Opt.)</label>
                   <input 
                     type="text" 
                     placeholder="Auto"
                     value={jePips}
                     onChange={(e) => setJePips(e.target.value)}
-                    className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-lg p-2 text-xs font-mono"
+                    className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-lg p-2 text-xs font-mono"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase block">Trade Status</label>
+                  <label className="text-[10px] text-brand-text-dim font-mono uppercase block">Trade Status</label>
                   <select 
                     value={jeStatus}
                     onChange={(e) => setJeStatus(e.target.value as any)}
-                    className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-lg p-2 text-xs font-mono"
+                    className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-lg p-2 text-xs font-mono"
                   >
                     <option value="WIN">WIN</option>
                     <option value="LOSS">LOSS</option>
@@ -953,20 +953,20 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                 </div>
 
                 <div className="space-y-1 md:col-span-2">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase block">Brief Notes / Analysis Strategy</label>
+                  <label className="text-[10px] text-brand-text-dim font-mono uppercase block">Brief Notes / Analysis Strategy</label>
                   <input 
                     type="text" 
                     placeholder="Brief notes..."
                     value={jeNotes}
                     onChange={(e) => setJeNotes(e.target.value)}
-                    className="w-full bg-[#050E0C] border border-[#16362F] text-white rounded-lg p-2 text-xs font-mono"
+                    className="w-full bg-brand-bg border border-brand-border text-brand-text rounded-lg p-2 text-xs font-mono"
                   />
                 </div>
 
                 <div className="md:col-span-4 flex justify-end">
                   <button 
                     type="submit" 
-                    className="bg-[#00C853] hover:bg-emerald-400 text-[#050E0C] px-5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer"
+                    className="bg-brand-accent hover:bg-emerald-400 text-[#050E0C] px-5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer"
                   >
                     Record Entry
                   </button>
@@ -975,47 +975,47 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
             </div>
 
             {/* List of journal entries */}
-            <div className="bg-[#091714] border border-[#16362F] p-5 rounded-2xl space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase font-mono border-b border-[#16362F]/50 pb-2">
+            <div className="bg-brand-card border border-brand-border p-5 rounded-2xl space-y-4">
+              <h4 className="text-xs font-bold text-brand-text uppercase font-mono border-b border-brand-border/50 pb-2">
                 Logged Trading Ledger
               </h4>
 
               {journal.length === 0 ? (
-                <div className="text-center py-6 text-gray-500 text-xs font-sans">
+                <div className="text-center py-6 text-brand-text-dim text-xs font-sans">
                   No logged transactions. Fill out the form above to initialize the ledger.
                 </div>
               ) : (
                 <div className="space-y-3 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
                   {journal.map((item) => (
-                    <div key={item.id} className="bg-[#050E0C] border border-[#16362F]/40 p-4 rounded-xl flex items-start justify-between gap-4">
+                    <div key={item.id} className="bg-brand-bg border border-brand-border/40 p-4 rounded-xl flex items-start justify-between gap-4">
                       <div className="space-y-1.5 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-xs font-bold text-white font-mono">{item.pair}</span>
+                          <span className="text-xs font-bold text-brand-text font-mono">{item.pair}</span>
                           <span className={`text-[10px] font-bold font-mono px-1.5 py-0.5 rounded
-                            ${item.direction === 'BUY' ? 'bg-[#00C853]/15 text-[#00C853]' : 'bg-red-500/10 text-red-400'}`}>
+                            ${item.direction === 'BUY' ? 'bg-brand-accent/15 text-brand-accent' : 'bg-red-500/10 text-red-400'}`}>
                             {item.direction}
                           </span>
                           <span className={`text-[10px] font-bold font-mono px-1.5 py-0.5 rounded
                             ${item.status === 'WIN' 
-                              ? 'bg-emerald-500/10 text-[#00C853]' 
+                              ? 'bg-emerald-500/10 text-brand-accent' 
                               : item.status === 'LOSS' 
                                 ? 'bg-red-500/10 text-red-400' 
                                 : 'bg-amber-500/10 text-amber-500'}`}>
                             {item.status}: {item.pips > 0 ? '+' : ''}{item.pips} Pips
                           </span>
-                          <span className="text-[10px] text-gray-500 font-mono">{item.date}</span>
+                          <span className="text-[10px] text-brand-text-dim font-mono">{item.date}</span>
                         </div>
                         
-                        <p className="text-xs text-gray-400 leading-relaxed font-sans">{item.notes}</p>
+                        <p className="text-xs text-brand-text-muted leading-relaxed font-sans">{item.notes}</p>
                         
-                        <div className="text-[10px] text-gray-500 font-mono">
-                          Entry: <span className="text-white">{item.entryPrice}</span> | Exit: <span className="text-white">{item.exitPrice}</span>
+                        <div className="text-[10px] text-brand-text-dim font-mono">
+                          Entry: <span className="text-brand-text">{item.entryPrice}</span> | Exit: <span className="text-brand-text">{item.exitPrice}</span>
                         </div>
                       </div>
 
                       <button 
                         onClick={() => deleteJournalEntry(item.id)}
-                        className="text-gray-500 hover:text-red-400 p-1.5 rounded transition-all cursor-pointer"
+                        className="text-brand-text-dim hover:text-red-400 p-1.5 rounded transition-all cursor-pointer"
                         title="Delete journal entry"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -1034,45 +1034,45 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
       {activeTab === 'analytics' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-[#091714] border border-[#16362F] p-4 rounded-2xl font-mono">
-              <span className="text-gray-500 text-[10px] block">TOTAL TRANSACTION EVENTS</span>
-              <span className="text-2xl font-bold text-white block mt-1">{totalTrades}</span>
-              <span className="text-[9px] text-gray-400">Manual journal entries</span>
+            <div className="bg-brand-card border border-brand-border p-4 rounded-2xl font-mono">
+              <span className="text-brand-text-dim text-[10px] block">TOTAL TRANSACTION EVENTS</span>
+              <span className="text-2xl font-bold text-brand-text block mt-1">{totalTrades}</span>
+              <span className="text-[9px] text-brand-text-muted">Manual journal entries</span>
             </div>
-            <div className="bg-[#091714] border border-[#16362F] p-4 rounded-2xl font-mono">
-              <span className="text-gray-500 text-[10px] block">PLATFORM WIN RATE</span>
-              <span className="text-2xl font-bold text-[#00C853] block mt-1">{winRatePercent}%</span>
-              <span className="text-[9px] text-gray-400">Wins: {winTrades} | Losses: {lossTrades}</span>
+            <div className="bg-brand-card border border-brand-border p-4 rounded-2xl font-mono">
+              <span className="text-brand-text-dim text-[10px] block">PLATFORM WIN RATE</span>
+              <span className="text-2xl font-bold text-brand-accent block mt-1">{winRatePercent}%</span>
+              <span className="text-[9px] text-brand-text-muted">Wins: {winTrades} | Losses: {lossTrades}</span>
             </div>
-            <div className="bg-[#091714] border border-[#16362F] p-4 rounded-2xl font-mono">
-              <span className="text-gray-500 text-[10px] block">NET PIP ACCUMULATION</span>
-              <span className={`text-2xl font-bold block mt-1 ${netPips >= 0 ? 'text-[#00C853]' : 'text-red-400'}`}>
+            <div className="bg-brand-card border border-brand-border p-4 rounded-2xl font-mono">
+              <span className="text-brand-text-dim text-[10px] block">NET PIP ACCUMULATION</span>
+              <span className={`text-2xl font-bold block mt-1 ${netPips >= 0 ? 'text-brand-accent' : 'text-red-400'}`}>
                 {netPips >= 0 ? '+' : ''}{netPips} Pips
               </span>
-              <span className="text-[9px] text-gray-400">Simulated net balance</span>
+              <span className="text-[9px] text-brand-text-muted">Simulated net balance</span>
             </div>
-            <div className="bg-[#091714] border border-[#16362F] p-4 rounded-2xl font-mono">
-              <span className="text-gray-500 text-[10px] block">AVERAGE RISK REWARD</span>
+            <div className="bg-brand-card border border-brand-border p-4 rounded-2xl font-mono">
+              <span className="text-brand-text-dim text-[10px] block">AVERAGE RISK REWARD</span>
               <span className="text-2xl font-bold text-amber-400 block mt-1">1 : 2.10</span>
-              <span className="text-[9px] text-gray-400">Target metrics rating</span>
+              <span className="text-[9px] text-brand-text-muted">Target metrics rating</span>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Visual Custom Chart (SVG elements for extreme robustness) */}
-            <div className="lg:col-span-2 bg-[#091714] border border-[#16362F] p-5 rounded-2xl space-y-4">
-              <div className="flex items-center justify-between border-b border-[#16362F]/50 pb-2">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-1.5">
-                  <Award className="w-3.5 h-3.5 text-[#00C853]" /> simulated equity curve (net pips)
+            <div className="lg:col-span-2 bg-brand-card border border-brand-border p-5 rounded-2xl space-y-4">
+              <div className="flex items-center justify-between border-b border-brand-border/50 pb-2">
+                <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <Award className="w-3.5 h-3.5 text-brand-accent" /> simulated equity curve (net pips)
                 </h4>
-                <span className="text-[9px] font-mono text-gray-500">
+                <span className="text-[9px] font-mono text-brand-text-dim">
                   Last 10 trades performance
                 </span>
               </div>
 
               {/* Robust vector SVG curve representing simulated performance */}
-              <div className="bg-[#050E0C] border border-[#16362F]/40 p-4 rounded-xl h-[280px] flex flex-col justify-between">
+              <div className="bg-brand-bg border border-brand-border/40 p-4 rounded-xl h-[280px] flex flex-col justify-between">
                 <div className="flex-1 relative">
                   <svg className="w-full h-full absolute inset-0" viewBox="0 0 100 30" preserveAspectRatio="none">
                     {/* Grid Lines */}
@@ -1103,7 +1103,7 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                     </defs>
                   </svg>
 
-                  <div className="absolute top-2 left-2 text-[9px] font-mono text-[#00C853] bg-[#00C853]/5 px-1 rounded">
+                  <div className="absolute top-2 left-2 text-[9px] font-mono text-brand-accent bg-brand-accent/5 px-1 rounded">
                     +150 Pips Target Point
                   </div>
                   <div className="absolute bottom-2 left-2 text-[9px] font-mono text-red-400 bg-red-400/5 px-1 rounded">
@@ -1111,38 +1111,38 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                   </div>
                 </div>
 
-                <div className="flex justify-between text-[9px] font-mono text-gray-500 pt-2 border-t border-[#16362F]/50">
+                <div className="flex justify-between text-[9px] font-mono text-brand-text-dim pt-2 border-t border-brand-border/50">
                   <span>Start Range</span>
                   <span>Mid Interval</span>
                   <span>Terminal convergence</span>
                 </div>
               </div>
 
-              <div className="text-[10px] text-gray-500 font-sans leading-relaxed">
+              <div className="text-[10px] text-brand-text-dim font-sans leading-relaxed">
                 The simulated equity map leverages stored journal metrics to construct an offline-ready vector overview. It computes target win weights to map standard risk boundaries.
               </div>
             </div>
 
             {/* Simulated Live Analytics Controls */}
-            <div className="bg-[#091714] border border-[#16362F] p-5 rounded-2xl space-y-4">
-              <div className="flex items-center gap-2 border-b border-[#16362F]/50 pb-3">
-                <Settings className="w-5 h-5 text-[#00C853]" />
-                <h4 className="text-xs font-bold text-white uppercase font-mono">Future Broker Integration Nodes</h4>
+            <div className="bg-brand-card border border-brand-border p-5 rounded-2xl space-y-4">
+              <div className="flex items-center gap-2 border-b border-brand-border/50 pb-3">
+                <Settings className="w-5 h-5 text-brand-accent" />
+                <h4 className="text-xs font-bold text-brand-text uppercase font-mono">Future Broker Integration Nodes</h4>
               </div>
 
-              <p className="text-xs text-gray-400 leading-relaxed font-sans">
+              <p className="text-xs text-brand-text-muted leading-relaxed font-sans">
                 This dashboard functions under local client terminal configuration. To integrate live REST order-execution streams with active MT5 brokers at a future point, configure the secure environment variables.
               </p>
 
               <div className="space-y-3 pt-2">
-                <div className="bg-[#050E0C] p-3 rounded-xl border border-[#16362F]/40 space-y-1">
-                  <span className="text-[10px] text-gray-500 font-mono block">MT5 SERVICE ENDPOINTS</span>
+                <div className="bg-brand-bg p-3 rounded-xl border border-brand-border/40 space-y-1">
+                  <span className="text-[10px] text-brand-text-dim font-mono block">MT5 SERVICE ENDPOINTS</span>
                   <span className="text-[10px] font-bold text-red-400 font-mono uppercase">DEACTIVATED (DESIGN REMOVED)</span>
                 </div>
 
-                <div className="bg-[#050E0C] p-3 rounded-xl border border-[#16362F]/40 space-y-1">
-                  <span className="text-[10px] text-gray-500 font-mono block">BROKER ACCESS CONFIG</span>
-                  <span className="text-gray-400 text-xs font-mono">UNLINKED (LOCAL MODE)</span>
+                <div className="bg-brand-bg p-3 rounded-xl border border-brand-border/40 space-y-1">
+                  <span className="text-[10px] text-brand-text-dim font-mono block">BROKER ACCESS CONFIG</span>
+                  <span className="text-brand-text-muted text-xs font-mono">UNLINKED (LOCAL MODE)</span>
                 </div>
               </div>
             </div>
@@ -1155,53 +1155,53 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
       {activeTab === 'assistant' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* AI Instructions Brief */}
-          <div className="lg:col-span-1 bg-[#091714] border border-[#16362F] p-5 rounded-2xl space-y-4 flex flex-col justify-between">
+          <div className="lg:col-span-1 bg-brand-card border border-brand-border p-5 rounded-2xl space-y-4 flex flex-col justify-between">
             <div className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-[#16362F]/50 pb-3">
-                <Cpu className="w-5 h-5 text-[#00C853]" />
-                <h4 className="text-xs font-bold text-white uppercase font-mono">AI Quantitative Assistant</h4>
+              <div className="flex items-center gap-2 border-b border-brand-border/50 pb-3">
+                <Cpu className="w-5 h-5 text-brand-accent" />
+                <h4 className="text-xs font-bold text-brand-text uppercase font-mono">AI Quantitative Assistant</h4>
               </div>
 
-              <p className="text-xs text-gray-400 leading-relaxed font-sans">
+              <p className="text-xs text-brand-text-muted leading-relaxed font-sans">
                 Leverage local quantitative models to analyze contract dimensions, stop levels, or parse active trading sessions.
               </p>
 
               <div className="space-y-2">
-                <h5 className="text-[10px] text-gray-500 uppercase font-mono">Example Prompts:</h5>
+                <h5 className="text-[10px] text-brand-text-dim uppercase font-mono">Example Prompts:</h5>
                 <button 
                   onClick={() => setNewMessage("Provide technical analysis brief for EURUSD")}
-                  className="w-full text-left bg-[#050E0C] border border-[#16362F]/40 hover:border-[#00C853]/40 p-2.5 rounded-xl text-xs font-mono text-gray-300 transition-all block cursor-pointer"
+                  className="w-full text-left bg-brand-bg border border-brand-border/40 hover:border-brand-accent/40 p-2.5 rounded-xl text-xs font-mono text-brand-text-muted transition-all block cursor-pointer"
                 >
                   "Provide technical analysis brief for EURUSD"
                 </button>
                 <button 
                   onClick={() => setNewMessage("Calculate margin risk limits")}
-                  className="w-full text-left bg-[#050E0C] border border-[#16362F]/40 hover:border-[#00C853]/40 p-2.5 rounded-xl text-xs font-mono text-gray-300 transition-all block cursor-pointer"
+                  className="w-full text-left bg-brand-bg border border-brand-border/40 hover:border-brand-accent/40 p-2.5 rounded-xl text-xs font-mono text-brand-text-muted transition-all block cursor-pointer"
                 >
                   "Calculate margin risk limits"
                 </button>
                 <button 
                   onClick={() => setNewMessage("Check performance wins winrate")}
-                  className="w-full text-left bg-[#050E0C] border border-[#16362F]/40 hover:border-[#00C853]/40 p-2.5 rounded-xl text-xs font-mono text-gray-300 transition-all block cursor-pointer"
+                  className="w-full text-left bg-brand-bg border border-brand-border/40 hover:border-brand-accent/40 p-2.5 rounded-xl text-xs font-mono text-brand-text-muted transition-all block cursor-pointer"
                 >
                   "Check performance wins winrate"
                 </button>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-[#16362F]/40">
-              <span className="text-[9px] text-gray-500 font-mono block">MODEL STATE: SOVEREIGN_LOCAL</span>
-              <span className="text-[9px] text-[#00C853] font-mono block">COGNITIVE COMPLIANCE: MATCHED</span>
+            <div className="pt-4 border-t border-brand-border/40">
+              <span className="text-[9px] text-brand-text-dim font-mono block">MODEL STATE: SOVEREIGN_LOCAL</span>
+              <span className="text-[9px] text-brand-accent font-mono block">COGNITIVE COMPLIANCE: MATCHED</span>
             </div>
           </div>
 
           {/* Interactive Chat Console */}
-          <div className="lg:col-span-2 bg-[#091714] border border-[#16362F] rounded-2xl min-h-[480px] flex flex-col overflow-hidden">
-            <div className="p-4 bg-[#050E0C] border-b border-[#16362F] flex items-center justify-between">
-              <span className="text-xs font-bold font-mono text-white uppercase tracking-wider">
+          <div className="lg:col-span-2 bg-brand-card border border-brand-border rounded-2xl min-h-[480px] flex flex-col overflow-hidden">
+            <div className="p-4 bg-brand-bg border-b border-brand-border flex items-center justify-between">
+              <span className="text-xs font-bold font-mono text-brand-text uppercase tracking-wider">
                 Simulated Market Assistant console
               </span>
-              <span className="w-2 h-2 bg-[#00C853] rounded-full animate-pulse" />
+              <span className="w-2 h-2 bg-brand-accent rounded-full animate-pulse" />
             </div>
 
             {/* Messages Area */}
@@ -1214,34 +1214,34 @@ export function AdminTradingDashboard({ systemHealth }: AdminTradingDashboardPro
                   <div 
                     className={`p-3 rounded-2xl text-xs leading-relaxed
                       ${msg.sender === 'user' 
-                        ? 'bg-[#00C853] text-[#050E0C] font-semibold rounded-tr-none' 
-                        : 'bg-[#050E0C] text-gray-300 border border-[#16362F]/50 rounded-tl-none'}`}
+                        ? 'bg-brand-accent text-[#050E0C] font-semibold rounded-tr-none' 
+                        : 'bg-brand-bg text-brand-text-muted border border-brand-border/50 rounded-tl-none'}`}
                   >
                     {msg.text}
                   </div>
-                  <span className="text-[8px] text-gray-500 font-mono mt-1 px-1">{msg.time}</span>
+                  <span className="text-[8px] text-brand-text-dim font-mono mt-1 px-1">{msg.time}</span>
                 </div>
               ))}
 
               {isAssistantTyping && (
-                <div className="flex items-center gap-1 bg-[#050E0C] border border-[#16362F]/40 px-3 py-2 rounded-xl text-[10px] text-[#00C853] font-mono w-max">
-                  <span className="w-1.5 h-1.5 bg-[#00C853] rounded-full animate-ping" /> Analyzing signals...
+                <div className="flex items-center gap-1 bg-brand-bg border border-brand-border/40 px-3 py-2 rounded-xl text-[10px] text-brand-accent font-mono w-max">
+                  <span className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-ping" /> Analyzing signals...
                 </div>
               )}
             </div>
 
             {/* Chat Input form */}
-            <form onSubmit={handleSendMessage} className="p-4 bg-[#050E0C] border-t border-[#16362F] flex gap-2">
+            <form onSubmit={handleSendMessage} className="p-4 bg-brand-bg border-t border-brand-border flex gap-2">
               <input 
                 type="text"
                 placeholder="Type query to assess simulation parameters..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                className="flex-1 bg-[#091714] border border-[#16362F] text-white rounded-xl px-4 py-2.5 text-xs font-mono focus:outline-none focus:border-[#00C853]"
+                className="flex-1 bg-brand-card border border-brand-border text-brand-text rounded-xl px-4 py-2.5 text-xs font-mono focus:outline-none focus:border-brand-accent"
               />
               <button 
                 type="submit"
-                className="bg-[#00C853] hover:bg-emerald-400 text-[#050E0C] px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                className="bg-brand-accent hover:bg-emerald-400 text-[#050E0C] px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <Send className="w-4 h-4" /> Send
               </button>

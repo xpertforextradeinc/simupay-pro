@@ -44,8 +44,8 @@ const itemVariants = {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-[#050E0C] border border-[#16362F] p-3 rounded-lg shadow-xl">
-        <p className="text-white text-xs font-bold mb-1">{label}</p>
+      <div className="bg-brand-bg border border-brand-border p-3 rounded-lg shadow-xl">
+        <p className="text-brand-text text-xs font-bold mb-1">{label}</p>
         {payload.map((entry: any, index: number) => (
           <p key={index} className="text-xs" style={{ color: entry.color }}>
             {entry.name}: {entry.name === 'Amount' || entry.name.includes('Balance') ? '$' : ''}{Number(entry.value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
@@ -139,8 +139,8 @@ export function WalletInsights({ profile, transactions }: WalletInsightsProps) {
       animate="visible"
     >
       <div className="text-center space-y-2 mb-8">
-        <h3 className="text-lg font-display font-bold text-white flex items-center justify-center gap-2">
-          <Activity className="w-5 h-5 text-[#00C853]" />
+        <h3 className="text-lg font-display font-bold text-brand-text flex items-center justify-center gap-2">
+          <Activity className="w-5 h-5 text-brand-accent" />
           Smart Analytics & Insights
         </h3>
         <p className="text-sm text-[#9CB1AC]">
@@ -151,22 +151,22 @@ export function WalletInsights({ profile, transactions }: WalletInsightsProps) {
       {/* KPI Cards Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Net Worth', value: totalBalance, icon: DollarSign, color: 'text-white' },
-          { label: 'Available Balance', value: availableBalance, icon: ArrowUpRight, color: 'text-[#00C853]' },
+          { label: 'Net Worth', value: totalBalance, icon: DollarSign, color: 'text-brand-text' },
+          { label: 'Available Balance', value: availableBalance, icon: ArrowUpRight, color: 'text-brand-accent' },
           { label: 'Locked Reserve', value: lockedBalance, icon: ArrowDownLeft, color: 'text-amber-500' },
-          { label: 'Daily Change', value: dailyChange, icon: isPositive ? TrendingUp : TrendingDown, color: isPositive ? 'text-[#00C853]' : 'text-red-500', isChange: true }
+          { label: 'Daily Change', value: dailyChange, icon: isPositive ? TrendingUp : TrendingDown, color: isPositive ? 'text-brand-accent' : 'text-red-500', isChange: true }
         ].map((stat, idx) => (
-          <motion.div key={idx} variants={itemVariants} className="bg-[#091714] p-5 rounded-2xl border border-[#16362F] shadow-lg flex flex-col justify-between group hover:border-[#16362F]/80 transition-all">
+          <motion.div key={idx} variants={itemVariants} className="bg-brand-card p-5 rounded-2xl border border-brand-border shadow-lg flex flex-col justify-between group hover:border-brand-border/80 transition-all">
             <div className="flex items-center gap-2 text-xs text-[#9CB1AC] font-semibold">
               <stat.icon className={`w-4 h-4 ${stat.color}`} />
               <span>{stat.label}</span>
             </div>
             <div className="mt-3 flex items-end gap-2">
-              <h3 className="text-2xl font-display font-bold text-white">
+              <h3 className="text-2xl font-display font-bold text-brand-text">
                 {stat.isChange && stat.value > 0 ? '+' : ''}${Math.abs(stat.value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </h3>
               {stat.isChange && (
-                <span className={`text-xs font-mono mb-1 ${isPositive ? 'text-[#00C853]' : 'text-red-500'}`}>
+                <span className={`text-xs font-mono mb-1 ${isPositive ? 'text-brand-accent' : 'text-red-500'}`}>
                   {isPositive ? '+' : ''}{dailyChangePercent.toFixed(2)}%
                 </span>
               )}
@@ -177,10 +177,10 @@ export function WalletInsights({ profile, transactions }: WalletInsightsProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Weekly Performance Line Chart */}
-        <motion.div variants={itemVariants} className="lg:col-span-2 bg-[#091714] p-6 rounded-2xl border border-[#16362F] shadow-xl">
+        <motion.div variants={itemVariants} className="lg:col-span-2 bg-brand-card p-6 rounded-2xl border border-brand-border shadow-xl">
           <div className="flex items-center gap-2 mb-6">
             <TrendingUp className="w-5 h-5 text-blue-400" />
-            <h4 className="text-sm font-display font-bold text-white">7-Day Ledger Performance</h4>
+            <h4 className="text-sm font-display font-bold text-brand-text">7-Day Ledger Performance</h4>
           </div>
           <div className="h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -210,10 +210,10 @@ export function WalletInsights({ profile, transactions }: WalletInsightsProps) {
         </motion.div>
 
         {/* Asset Allocation Pie Chart */}
-        <motion.div variants={itemVariants} className="bg-[#091714] p-6 rounded-2xl border border-[#16362F] shadow-xl">
+        <motion.div variants={itemVariants} className="bg-brand-card p-6 rounded-2xl border border-brand-border shadow-xl">
           <div className="flex items-center gap-2 mb-2">
             <PieChartIcon className="w-5 h-5 text-purple-400" />
-            <h4 className="text-sm font-display font-bold text-white">Asset Allocation</h4>
+            <h4 className="text-sm font-display font-bold text-brand-text">Asset Allocation</h4>
           </div>
           <div className="h-[220px] w-full flex items-center justify-center">
             {totalBalance > 0 ? (
@@ -250,7 +250,7 @@ export function WalletInsights({ profile, transactions }: WalletInsightsProps) {
                   <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: asset.color }} />
                   <span className="text-[#9CB1AC]">{asset.name}</span>
                 </div>
-                <span className="text-white font-mono font-bold">
+                <span className="text-brand-text font-mono font-bold">
                   {totalBalance > 0 ? ((asset.value / availableBalance) * 100).toFixed(0) : 0}%
                 </span>
               </div>
@@ -261,10 +261,10 @@ export function WalletInsights({ profile, transactions }: WalletInsightsProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly Volume Bar Chart */}
-        <motion.div variants={itemVariants} className="bg-[#091714] p-6 rounded-2xl border border-[#16362F] shadow-xl">
+        <motion.div variants={itemVariants} className="bg-brand-card p-6 rounded-2xl border border-brand-border shadow-xl">
           <div className="flex items-center gap-2 mb-6">
             <BarChart2 className="w-5 h-5 text-pink-400" />
-            <h4 className="text-sm font-display font-bold text-white">Network Inflow Volume</h4>
+            <h4 className="text-sm font-display font-bold text-brand-text">Network Inflow Volume</h4>
           </div>
           <div className="h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -284,31 +284,31 @@ export function WalletInsights({ profile, transactions }: WalletInsightsProps) {
         </motion.div>
 
         {/* Recent Activity List */}
-        <motion.div variants={itemVariants} className="bg-[#091714] p-6 rounded-2xl border border-[#16362F] shadow-xl flex flex-col">
+        <motion.div variants={itemVariants} className="bg-brand-card p-6 rounded-2xl border border-brand-border shadow-xl flex flex-col">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <Activity className="w-5 h-5 text-amber-400" />
-              <h4 className="text-sm font-display font-bold text-white">Recent Movements</h4>
+              <h4 className="text-sm font-display font-bold text-brand-text">Recent Movements</h4>
             </div>
           </div>
           
           <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
             {transactions.length > 0 ? (
               transactions.slice(0, 6).map((tx) => (
-                <div key={tx.id} className="bg-[#050E0C] p-3 rounded-xl border border-[#16362F] flex items-center justify-between group hover:border-[#16362F]/80 transition-colors">
+                <div key={tx.id} className="bg-brand-bg p-3 rounded-xl border border-brand-border flex items-center justify-between group hover:border-brand-border/80 transition-colors">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#00C853]/10 flex items-center justify-center text-[#00C853]">
+                    <div className="w-8 h-8 rounded-full bg-brand-accent/10 flex items-center justify-center text-brand-accent">
                       <ArrowDownLeft className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-white">{tx.network}</p>
+                      <p className="text-xs font-bold text-brand-text">{tx.network}</p>
                       <p className="text-[10px] text-[#9CB1AC] font-mono">
                         {new Date(tx.created_at).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs font-bold text-[#00C853]">
+                    <p className="text-xs font-bold text-brand-accent">
                       +${tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </p>
                     <p className="text-[10px] text-[#9CB1AC] capitalize">

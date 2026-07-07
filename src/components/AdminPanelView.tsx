@@ -246,18 +246,18 @@ export function AdminPanelView({ currentUserId, profile, onNavigate }: AdminPane
   if (profile && profile.role !== 'admin') {
     return (
       <div className="flex flex-col items-center justify-center py-20 px-4">
-        <div className="bg-[#091714] border border-red-500/30 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl relative overflow-hidden">
+        <div className="bg-brand-card border border-red-500/30 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-red-500/50" />
           <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-red-500">
              <ShieldAlert className="w-10 h-10" />
           </div>
-          <h2 className="text-2xl font-display font-bold text-white mb-2">Access Denied</h2>
+          <h2 className="text-2xl font-display font-bold text-brand-text mb-2">Access Denied</h2>
           <p className="text-[#9CB1AC] text-sm mb-8">
             This workspace is restricted to administrators. Your current role does not have the required permissions.
           </p>
           <button
             onClick={() => onNavigate && onNavigate('dashboard')}
-            className="bg-[#16362F] text-white hover:bg-[#1f4a41] px-6 py-3 rounded-xl font-bold w-full transition-colors flex items-center justify-center gap-2"
+            className="bg-brand-surface text-brand-text hover:bg-[#1f4a41] px-6 py-3 rounded-xl font-bold w-full transition-colors flex items-center justify-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Return to Dashboard
@@ -270,8 +270,8 @@ export function AdminPanelView({ currentUserId, profile, onNavigate }: AdminPane
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-96 space-y-4">
-        <RefreshCw className="w-8 h-8 text-[#00C853] animate-spin" />
-        <p className="text-xs text-gray-500 font-mono">Syncing sovereign keys & administrative nodes...</p>
+        <RefreshCw className="w-8 h-8 text-brand-accent animate-spin" />
+        <p className="text-xs text-brand-text-dim font-mono">Syncing sovereign keys & administrative nodes...</p>
       </div>
     );
   }
@@ -283,29 +283,29 @@ export function AdminPanelView({ currentUserId, profile, onNavigate }: AdminPane
   return (
     <div className="space-y-6 pb-12">
       {/* Dynamic Header */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-[#16362F] pb-4 gap-4">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-brand-border pb-4 gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Shield className="w-6 h-6 text-[#00C853]" />
-            <h2 className="text-xl md:text-2xl font-display font-bold text-white tracking-tight">
+            <Shield className="w-6 h-6 text-brand-accent" />
+            <h2 className="text-xl md:text-2xl font-display font-bold text-brand-text tracking-tight">
               Sovereign Administrator Panel
             </h2>
           </div>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-brand-text-dim">
             Platform control node over merchant registers, payment adapters, support tickets, and business parameters.
           </p>
         </div>
 
         <button 
           onClick={fetchAdminData}
-          className="bg-[#091714] border border-[#16362F] hover:border-[#00C853] text-white px-3.5 py-2 rounded-xl text-xs flex items-center gap-1.5 font-mono cursor-pointer transition-all self-stretch md:self-auto justify-center"
+          className="bg-brand-card border border-brand-border hover:border-brand-accent text-brand-text px-3.5 py-2 rounded-xl text-xs flex items-center gap-1.5 font-mono cursor-pointer transition-all self-stretch md:self-auto justify-center"
         >
-          <RefreshCw className="w-3.5 h-3.5 text-[#00C853]" /> Synchronize Metrics
+          <RefreshCw className="w-3.5 h-3.5 text-brand-accent" /> Synchronize Metrics
         </button>
       </div>
 
       {/* HORIZONTAL TAB CONTROL */}
-      <div className="flex items-center overflow-x-auto pb-1 gap-1 border-b border-[#16362F]/40 scrollbar-none">
+      <div className="flex items-center overflow-x-auto pb-1 gap-1 border-b border-brand-border/40 scrollbar-none">
         {[
           { id: 'dashboard', label: 'Dashboard', icon: Layout },
           { id: 'trading', label: 'Trading Desk', icon: TrendingUp },
@@ -325,8 +325,8 @@ export function AdminPanelView({ currentUserId, profile, onNavigate }: AdminPane
               onClick={() => setActiveSubTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer font-mono
                 ${isActive 
-                  ? 'bg-[#00C853]/10 text-[#00C853] border-b-2 border-[#00C853]' 
-                  : 'text-gray-400 hover:text-white hover:bg-[#050E0C]'
+                  ? 'bg-brand-accent/10 text-brand-accent border-b-2 border-brand-accent' 
+                  : 'text-brand-text-muted hover:text-brand-text hover:bg-brand-bg'
                 }`}
             >
               <TabIcon className="w-4 h-4" />

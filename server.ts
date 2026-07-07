@@ -661,34 +661,49 @@ async function startServer() {
 
         // 5. Initiate Flutterwave Session using Order ID as tx_ref
         logAudit(`Initiating Flutterwave checkout session for order ${orderId}`);
-        const response = await flw.Payment.initiate({
-          tx_ref: orderId,
-          amount: amountNum,
-          currency: currency || 'NGN',
-          redirect_url: `${process.env.APP_URL || 'https://ais-dev-edkn4xpdqgodb7wl6juv5h-571192572309.europe-west1.run.app'}/api/payment/verify`,
-          customer: { email },
-          meta: {
-            ...meta,
-            orderId,
-            userId: orderUserId
-          }
+        const flwResponse = await fetch('https://api.flutterwave.com/v3/payments', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            tx_ref: orderId,
+            amount: amountNum,
+            currency: currency || 'NGN',
+            redirect_url: `${process.env.APP_URL || 'https://ais-dev-edkn4xpdqgodb7wl6juv5h-571192572309.europe-west1.run.app'}/api/payment/verify`,
+            customer: { email },
+            meta: {
+              ...meta,
+              orderId,
+              userId: orderUserId
+            }
+          })
         });
-
-        return res.json(response);
+        const responseData = await flwResponse.json();
+        return res.json(responseData);
       }
 
       // Default non-VTU payment flow (licenses etc.)
       const defaultTxRef = req.body.tx_ref || `tx-${Date.now()}`;
       logAudit(`Initiating standard/license payment session with ref ${defaultTxRef}`);
-      const response = await flw.Payment.initiate({
-        tx_ref: defaultTxRef,
-        amount: amountNum,
-        currency: currency || 'USD',
-        redirect_url: `${process.env.APP_URL || 'https://ais-dev-edkn4xpdqgodb7wl6juv5h-571192572309.europe-west1.run.app'}/api/payment/verify`,
-        customer: { email },
-        meta: meta || {},
+      const flwResponse = await fetch('https://api.flutterwave.com/v3/payments', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          tx_ref: defaultTxRef,
+          amount: amountNum,
+          currency: currency || 'USD',
+          redirect_url: `${process.env.APP_URL || 'https://ais-dev-edkn4xpdqgodb7wl6juv5h-571192572309.europe-west1.run.app'}/api/payment/verify`,
+          customer: { email },
+          meta: meta || {},
+        })
       });
-      res.json(response);
+      const responseData = await flwResponse.json();
+      res.json(responseData);
     } catch (error: any) {
       logAudit(`Failed to initiate payment: ${error.message || error}`);
       res.status(500).json({ error: 'Failed to initiate payment session.' });

@@ -38,13 +38,13 @@ export function AnalyticsView({ profile, onNavigate }: AnalyticsViewProps) {
 
   if (!licenseActive) {
     return (
-      <div className="bg-[#091714] p-8 rounded-2xl border border-[#16362F] shadow-2xl space-y-6 flex flex-col items-center text-center max-w-xl mx-auto my-6">
-        <div className="w-16 h-16 rounded-full bg-[#00C853]/15 border-2 border-[#00C853]/35 flex items-center justify-center text-[#00C853]">
+      <div className="bg-brand-card p-8 rounded-2xl border border-brand-border shadow-2xl space-y-6 flex flex-col items-center text-center max-w-xl mx-auto my-6">
+        <div className="w-16 h-16 rounded-full bg-brand-accent/15 border-2 border-brand-accent/35 flex items-center justify-center text-brand-accent">
           <Lock className="w-8 h-8" />
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-lg font-display font-bold text-white">Enterprise License Tunnel Required</h3>
+          <h3 className="text-lg font-display font-bold text-brand-text">Enterprise License Tunnel Required</h3>
           <p className="text-xs text-[#9CB1AC] leading-relaxed">
             Analytics is a premium, enterprise-tier feature. Access is currently locked. To activate high-speed cross-chain simulations and analytics, choose your path below:
           </p>
@@ -53,13 +53,13 @@ export function AnalyticsView({ profile, onNavigate }: AnalyticsViewProps) {
         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center pt-2">
           <button
             onClick={() => onNavigate('subscription')}
-            className="px-5 py-3 bg-[#00C853] hover:bg-emerald-400 text-[#050E0C] rounded-xl font-bold text-xs font-display tracking-wide transition-all shadow-lg cursor-pointer flex items-center justify-center gap-1.5 flex-1"
+            className="px-5 py-3 bg-brand-accent hover:bg-emerald-400 text-[#050E0C] rounded-xl font-bold text-xs font-display tracking-wide transition-all shadow-lg cursor-pointer flex items-center justify-center gap-1.5 flex-1"
           >
             <Zap className="w-4 h-4 fill-current" /> Subscribe & Upgrade
           </button>
           <button
             onClick={() => onNavigate('activation')}
-            className="px-5 py-3 bg-transparent hover:bg-[#16362F]/50 text-[#00C853] border border-[#00C853] rounded-xl font-bold text-xs font-display tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5 flex-1"
+            className="px-5 py-3 bg-transparent hover:bg-brand-surface/50 text-brand-accent border border-brand-accent rounded-xl font-bold text-xs font-display tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5 flex-1"
           >
             <Lock className="w-4 h-4" /> Use Activation Key
           </button>
@@ -120,8 +120,8 @@ export function AnalyticsView({ profile, onNavigate }: AnalyticsViewProps) {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-[#091714] border border-[#16362F] p-3 rounded-xl shadow-2xl text-xs space-y-1">
-          <p className="font-semibold text-white">{label}</p>
+        <div className="bg-brand-card border border-brand-border p-3 rounded-xl shadow-2xl text-xs space-y-1">
+          <p className="font-semibold text-brand-text">{label}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} style={{ color: entry.color || '#fff' }} className="font-mono">
               {entry.name}: ${entry.value.toLocaleString()}
@@ -136,56 +136,56 @@ export function AnalyticsView({ profile, onNavigate }: AnalyticsViewProps) {
   return (
     <div className="space-y-6 max-w-5xl">
       {/* Page Header */}
-      <div className="border-b border-[#16362F]/60 pb-5">
-        <h2 className="text-2xl font-display font-bold text-white tracking-tight">System & Analytics Node</h2>
+      <div className="border-b border-brand-border/60 pb-5">
+        <h2 className="text-2xl font-display font-bold text-brand-text tracking-tight">System & Analytics Node</h2>
         <p className="text-xs text-[#9CB1AC]">Real-time transactional metrics, asset allocation breakdowns, and decentralized sales velocity audit.</p>
       </div>
 
       {/* Top statistics banners */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-[#091714] p-5 rounded-xl border border-[#16362F] shadow-lg flex items-center justify-between">
+        <div className="bg-brand-card p-5 rounded-xl border border-brand-border shadow-lg flex items-center justify-between">
           <div className="space-y-1">
             <span className="text-[10px] text-[#9CB1AC] uppercase font-bold tracking-wider">Total Volume processed</span>
-            <h3 className="text-lg font-bold text-white font-mono">$1,565,000.00</h3>
-            <span className="text-[10px] text-[#00C853] flex items-center gap-0.5 font-mono">
+            <h3 className="text-lg font-bold text-brand-text font-mono">$1,565,000.00</h3>
+            <span className="text-[10px] text-brand-accent flex items-center gap-0.5 font-mono">
               <TrendingUp className="w-3 h-3" /> +14.2% MoM
             </span>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-[#00C853]/10 border border-[#00C853]/30 flex items-center justify-center text-[#00C853]">
+          <div className="w-10 h-10 rounded-lg bg-brand-accent/10 border border-brand-accent/30 flex items-center justify-center text-brand-accent">
             <Activity className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-[#091714] p-5 rounded-xl border border-[#16362F] shadow-lg flex items-center justify-between">
+        <div className="bg-brand-card p-5 rounded-xl border border-brand-border shadow-lg flex items-center justify-between">
           <div className="space-y-1">
             <span className="text-[10px] text-[#9CB1AC] uppercase font-bold tracking-wider">Flash transfer speed</span>
-            <h3 className="text-lg font-bold text-white font-mono">2.4 Seconds</h3>
-            <span className="text-[10px] text-[#00C853] flex items-center gap-0.5 font-mono">
+            <h3 className="text-lg font-bold text-brand-text font-mono">2.4 Seconds</h3>
+            <span className="text-[10px] text-brand-accent flex items-center gap-0.5 font-mono">
               ⚡ Ultra low latency
             </span>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-[#00C853]/10 border border-[#00C853]/30 flex items-center justify-center text-[#00C853]">
+          <div className="w-10 h-10 rounded-lg bg-brand-accent/10 border border-brand-accent/30 flex items-center justify-center text-brand-accent">
             <Zap className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-[#091714] p-5 rounded-xl border border-[#16362F] shadow-lg flex items-center justify-between">
+        <div className="bg-brand-card p-5 rounded-xl border border-brand-border shadow-lg flex items-center justify-between">
           <div className="space-y-1">
             <span className="text-[10px] text-[#9CB1AC] uppercase font-bold tracking-wider">Node Active Rate</span>
-            <h3 className="text-lg font-bold text-white font-mono">99.998%</h3>
-            <span className="text-[10px] text-[#00C853] flex items-center gap-0.5 font-mono">
+            <h3 className="text-lg font-bold text-brand-text font-mono">99.998%</h3>
+            <span className="text-[10px] text-brand-accent flex items-center gap-0.5 font-mono">
               ● All clusters synchronized
             </span>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-[#00C853]/10 border border-[#00C853]/30 flex items-center justify-center text-[#00C853]">
+          <div className="w-10 h-10 rounded-lg bg-brand-accent/10 border border-brand-accent/30 flex items-center justify-center text-brand-accent">
             <Globe className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-[#091714] p-5 rounded-xl border border-[#16362F] shadow-lg flex items-center justify-between">
+        <div className="bg-brand-card p-5 rounded-xl border border-brand-border shadow-lg flex items-center justify-between">
           <div className="space-y-1">
             <span className="text-[10px] text-[#9CB1AC] uppercase font-bold tracking-wider">Active PRO Nodes</span>
-            <h3 className="text-lg font-bold text-white font-mono">5,824 Keys</h3>
+            <h3 className="text-lg font-bold text-brand-text font-mono">5,824 Keys</h3>
             <span className="text-[10px] text-blue-400 flex items-center gap-0.5 font-mono">
               +185 this week
             </span>
@@ -199,12 +199,12 @@ export function AnalyticsView({ profile, onNavigate }: AnalyticsViewProps) {
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Daily Transactions Area Chart */}
-        <div className="bg-[#091714] p-5 rounded-2xl border border-[#16362F] space-y-4">
+        <div className="bg-brand-card p-5 rounded-2xl border border-brand-border space-y-4">
           <div className="flex justify-between items-center">
-            <h4 className="text-sm font-semibold text-white flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" /> Daily Dispatched Volumes (USD)
+            <h4 className="text-sm font-semibold text-brand-text flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-brand-accent animate-pulse" /> Daily Dispatched Volumes (USD)
             </h4>
-            <span className="text-[10px] text-gray-500 font-mono">7 Days</span>
+            <span className="text-[10px] text-brand-text-dim font-mono">7 Days</span>
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -226,12 +226,12 @@ export function AnalyticsView({ profile, onNavigate }: AnalyticsViewProps) {
         </div>
 
         {/* Balance History Line Chart */}
-        <div className="bg-[#091714] p-5 rounded-2xl border border-[#16362F] space-y-4">
+        <div className="bg-brand-card p-5 rounded-2xl border border-brand-border space-y-4">
           <div className="flex justify-between items-center">
-            <h4 className="text-sm font-semibold text-white flex items-center gap-2">
+            <h4 className="text-sm font-semibold text-brand-text flex items-center gap-2">
               <Layers className="w-4 h-4 text-blue-500" /> Balance History Growth
             </h4>
-            <span className="text-[10px] text-gray-500 font-mono">6 Months</span>
+            <span className="text-[10px] text-brand-text-dim font-mono">6 Months</span>
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -247,12 +247,12 @@ export function AnalyticsView({ profile, onNavigate }: AnalyticsViewProps) {
         </div>
 
         {/* Monthly Transactions Processed Bar Chart */}
-        <div className="bg-[#091714] p-5 rounded-2xl border border-[#16362F] space-y-4">
+        <div className="bg-brand-card p-5 rounded-2xl border border-brand-border space-y-4">
           <div className="flex justify-between items-center">
-            <h4 className="text-sm font-semibold text-white flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#00C853]" /> Monthly Ledger Settlement (USD)
+            <h4 className="text-sm font-semibold text-brand-text flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-brand-accent" /> Monthly Ledger Settlement (USD)
             </h4>
-            <span className="text-[10px] text-gray-500 font-mono">Consolidated</span>
+            <span className="text-[10px] text-brand-text-dim font-mono">Consolidated</span>
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -270,12 +270,12 @@ export function AnalyticsView({ profile, onNavigate }: AnalyticsViewProps) {
         </div>
 
         {/* License Sales Quarterly Composed Chart */}
-        <div className="bg-[#091714] p-5 rounded-2xl border border-[#16362F] space-y-4">
+        <div className="bg-brand-card p-5 rounded-2xl border border-brand-border space-y-4">
           <div className="flex justify-between items-center">
-            <h4 className="text-sm font-semibold text-white flex items-center gap-2">
+            <h4 className="text-sm font-semibold text-brand-text flex items-center gap-2">
               <Award className="w-4 h-4 text-amber-500" /> License Key Sales Volume
             </h4>
-            <span className="text-[10px] text-gray-500 font-mono">Quarterly</span>
+            <span className="text-[10px] text-brand-text-dim font-mono">Quarterly</span>
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -293,8 +293,8 @@ export function AnalyticsView({ profile, onNavigate }: AnalyticsViewProps) {
         </div>
 
         {/* Wallet Allocations (USDT-TRC20, USDT-ERC20, BTC etc) - Pie Chart */}
-        <div className="bg-[#091714] p-5 rounded-2xl border border-[#16362F] space-y-4 lg:col-span-2">
-          <h4 className="text-sm font-semibold text-white">Cryptographic Protocol Distribution</h4>
+        <div className="bg-brand-card p-5 rounded-2xl border border-brand-border space-y-4 lg:col-span-2">
+          <h4 className="text-sm font-semibold text-brand-text">Cryptographic Protocol Distribution</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
             <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
@@ -318,13 +318,13 @@ export function AnalyticsView({ profile, onNavigate }: AnalyticsViewProps) {
             </div>
             
             <div className="space-y-3.5 px-2">
-              <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">Wallet Load-Factor Allocations</span>
+              <span className="text-[11px] font-bold text-brand-text-muted uppercase tracking-wider block">Wallet Load-Factor Allocations</span>
               <div className="grid grid-cols-2 gap-4">
                 {walletUsageData.map((w, idx) => (
-                  <div key={idx} className="flex items-center gap-2.5 bg-[#050E0C] p-2 rounded-xl border border-[#16362F]/50">
+                  <div key={idx} className="flex items-center gap-2.5 bg-brand-bg p-2 rounded-xl border border-brand-border/50">
                     <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: w.color }} />
                     <div className="min-w-0">
-                      <p className="text-[10px] font-semibold text-white truncate">{w.name}</p>
+                      <p className="text-[10px] font-semibold text-brand-text truncate">{w.name}</p>
                       <span className="text-[10px] font-mono text-[#9CB1AC]">{w.value}% load</span>
                     </div>
                   </div>

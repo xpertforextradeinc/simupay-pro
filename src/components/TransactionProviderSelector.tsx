@@ -35,7 +35,7 @@ export const TransactionProviderSelector: React.FC<Props> = ({
               setCategory(e.target.value as ProviderCategory);
               setProvider('');
             }}
-            className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#00C853] text-sm"
+            className="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2.5 text-brand-text focus:outline-none focus:border-brand-accent text-sm"
           >
             <option value="crypto">Crypto/Wallet Provider</option>
             <option value="wallet">Digital Payment Service</option>
@@ -47,7 +47,7 @@ export const TransactionProviderSelector: React.FC<Props> = ({
           <select 
             value={provider} 
             onChange={(e) => setProvider(e.target.value)}
-            className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#00C853] text-sm"
+            className="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2.5 text-brand-text focus:outline-none focus:border-brand-accent text-sm"
           >
             <option value="">Select Provider</option>
             {providersList.map(p => <option key={p.id} value={p.name}>{p.name}</option>)}
@@ -56,7 +56,7 @@ export const TransactionProviderSelector: React.FC<Props> = ({
       </div>
 
       {provider && fields.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 p-4 bg-[#050E0C]/40 rounded-xl border border-[#16362F]/40 animate-in fade-in duration-300">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 p-4 bg-brand-bg/40 rounded-xl border border-brand-border/40 animate-in fade-in duration-300">
           {fields.map(field => (
             <div key={field.name} className="space-y-1.5">
               <label className="text-[10px] font-bold text-[#9CB1AC] uppercase tracking-wider">{field.label}</label>
@@ -64,7 +64,7 @@ export const TransactionProviderSelector: React.FC<Props> = ({
                 <select
                   value={formData[field.name] || ''}
                   onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
-                  className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#00C853] text-sm"
+                  className="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2.5 text-brand-text focus:outline-none focus:border-brand-accent text-sm"
                 >
                   <option value="">Select Option</option>
                   {field.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
@@ -75,7 +75,7 @@ export const TransactionProviderSelector: React.FC<Props> = ({
                   value={formData[field.name] || ''}
                   onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
                   placeholder={field.placeholder}
-                  className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl px-3 py-2.5 text-white placeholder-gray-600 focus:outline-none focus:border-[#00C853] text-sm font-mono"
+                  className="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2.5 text-brand-text placeholder-gray-600 focus:outline-none focus:border-brand-accent text-sm font-mono"
                 />
               )}
             </div>

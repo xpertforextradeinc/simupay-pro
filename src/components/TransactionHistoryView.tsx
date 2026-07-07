@@ -56,15 +56,15 @@ export function TransactionHistoryView({ transactions, onSelectTx }: Transaction
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-display font-bold text-white">Secure Ledger Database</h2>
-        <p className="text-xs text-gray-500">Query, verify, and filter official cryptographically authorized ledger history.</p>
+        <h2 className="text-xl font-display font-bold text-brand-text">Secure Ledger Database</h2>
+        <p className="text-xs text-brand-text-dim">Query, verify, and filter official cryptographically authorized ledger history.</p>
       </div>
 
       {/* Query Filter Options Bar */}
-      <div className="bg-brand-card p-4 rounded-xl border border-emerald-950/40 shadow-xl flex flex-col md:flex-row gap-4 justify-between items-center">
+      <div className="bg-brand-card p-4 rounded-xl border border-brand-border/40 shadow-xl flex flex-col md:flex-row gap-4 justify-between items-center">
         {/* Search Input */}
         <div className="relative w-full md:max-w-xs">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-brand-text-dim">
             <Search className="w-4 h-4" />
           </span>
           <input
@@ -75,14 +75,14 @@ export function TransactionHistoryView({ transactions, onSelectTx }: Transaction
               setCurrentPage(1);
             }}
             placeholder="Search Reference, Wallet, Hash..."
-            className="w-full bg-brand-bg/50 border border-emerald-950/50 rounded-xl py-2 pl-9 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-[#00C853] text-xs font-mono"
+            className="w-full bg-brand-bg/50 border border-brand-border/50 rounded-xl py-2 pl-9 pr-4 text-brand-text placeholder-gray-500 focus:outline-none focus:border-brand-accent text-xs font-mono"
           />
         </div>
 
         {/* Dropdowns */}
         <div className="flex flex-wrap gap-2 w-full md:w-auto">
           {/* Network dropdown */}
-          <div className="flex items-center gap-1.5 bg-brand-bg/60 border border-emerald-950 px-3 py-1.5 rounded-xl text-xs text-gray-300">
+          <div className="flex items-center gap-1.5 bg-brand-bg/60 border border-emerald-950 px-3 py-1.5 rounded-xl text-xs text-brand-text-muted">
             <Filter className="w-3.5 h-3.5 text-emerald-600" />
             <select
               value={networkFilter}
@@ -100,7 +100,7 @@ export function TransactionHistoryView({ transactions, onSelectTx }: Transaction
           </div>
 
           {/* Status dropdown */}
-          <div className="flex items-center gap-1.5 bg-brand-bg/60 border border-emerald-950 px-3 py-1.5 rounded-xl text-xs text-gray-300">
+          <div className="flex items-center gap-1.5 bg-brand-bg/60 border border-emerald-950 px-3 py-1.5 rounded-xl text-xs text-brand-text-muted">
             <Filter className="w-3.5 h-3.5 text-emerald-600" />
             <select
               value={statusFilter}
@@ -120,9 +120,9 @@ export function TransactionHistoryView({ transactions, onSelectTx }: Transaction
       </div>
 
       {/* Main Ledger Grid/Table */}
-      <div className="bg-brand-card rounded-xl border border-emerald-950/40 shadow-xl overflow-hidden">
+      <div className="bg-brand-card rounded-xl border border-brand-border/40 shadow-xl overflow-hidden">
         {paginatedTx.length === 0 ? (
-          <div className="py-16 text-center text-gray-500 text-xs flex flex-col items-center gap-2">
+          <div className="py-16 text-center text-brand-text-dim text-xs flex flex-col items-center gap-2">
             <Search className="w-8 h-8 text-emerald-950" />
             <span>No transactions matching selected parameters found in database.</span>
           </div>
@@ -130,7 +130,7 @@ export function TransactionHistoryView({ transactions, onSelectTx }: Transaction
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-emerald-950/50 text-[10px] font-mono text-gray-500 uppercase tracking-wider bg-brand-bg/20">
+                <tr className="border-b border-brand-border/50 text-[10px] font-mono text-brand-text-dim uppercase tracking-wider bg-brand-bg/20">
                   <th className="py-3 px-4">Date</th>
                   <th className="py-3 px-4">Reference ID</th>
                   <th className="py-3 px-4">Crypto Network</th>
@@ -143,29 +143,29 @@ export function TransactionHistoryView({ transactions, onSelectTx }: Transaction
               <tbody className="divide-y divide-emerald-950/30 text-xs font-medium">
                 {paginatedTx.map((tx) => (
                   <tr key={tx.id} className="hover:bg-brand-bg/30 transition-colors">
-                    <td className="py-3.5 px-4 text-gray-400 whitespace-nowrap">
+                    <td className="py-3.5 px-4 text-brand-text-muted whitespace-nowrap">
                       {formatDate(tx.created_at)}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-[#00C853]">
+                    <td className="py-3.5 px-4 font-mono text-brand-accent">
                       {tx.id.substring(0, 10)}...
                     </td>
-                    <td className="py-3.5 px-4 text-gray-300">
+                    <td className="py-3.5 px-4 text-brand-text-muted">
                       {tx.network}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-gray-400 select-all max-w-[140px] truncate">
+                    <td className="py-3.5 px-4 font-mono text-brand-text-muted select-all max-w-[140px] truncate">
                       {tx.wallet}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-gray-500 select-all">
+                    <td className="py-3.5 px-4 font-mono text-brand-text-dim select-all">
                       {formatHash(tx.tx_hash)}
                     </td>
                     <td className={`py-3.5 px-4 font-mono font-bold whitespace-nowrap
-                      ${tx.amount > 0 ? 'text-[#00C853]' : 'text-red-400'}
+                      ${tx.amount > 0 ? 'text-brand-accent' : 'text-red-400'}
                     `}>
                       {tx.amount > 0 ? '+' : ''}${tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="py-3.5 px-4 text-center">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase whitespace-nowrap
-                        ${tx.status === 'completed' ? 'bg-[#00C853]/15 text-[#00C853]' : ''}
+                        ${tx.status === 'completed' ? 'bg-brand-accent/15 text-brand-accent' : ''}
                         ${tx.status === 'pending' ? 'bg-amber-500/15 text-amber-500' : ''}
                         ${tx.status === 'failed' ? 'bg-red-500/15 text-red-500' : ''}
                       `}>
@@ -181,8 +181,8 @@ export function TransactionHistoryView({ transactions, onSelectTx }: Transaction
 
         {/* Dynamic Pagination Footer */}
         {totalPages > 1 && (
-          <div className="p-4 border-t border-emerald-950/50 bg-brand-bg/25 flex justify-between items-center text-xs">
-            <span className="text-gray-500 font-mono">
+          <div className="p-4 border-t border-brand-border/50 bg-brand-bg/25 flex justify-between items-center text-xs">
+            <span className="text-brand-text-dim font-mono">
               Showing page {currentPage} of {totalPages}
             </span>
 
@@ -190,14 +190,14 @@ export function TransactionHistoryView({ transactions, onSelectTx }: Transaction
               <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="p-1.5 border border-emerald-950/60 rounded-lg hover:text-[#00C853] text-gray-400 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="p-1.5 border border-emerald-950/60 rounded-lg hover:text-brand-accent text-brand-text-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="p-1.5 border border-emerald-950/60 rounded-lg hover:text-[#00C853] text-gray-400 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="p-1.5 border border-emerald-950/60 rounded-lg hover:text-brand-accent text-brand-text-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

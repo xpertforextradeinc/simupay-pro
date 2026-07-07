@@ -41,35 +41,35 @@ export function UserChat() {
       {!isOpen && (
         <button 
           onClick={() => setIsOpen(true)}
-          className="bg-[#00C853] p-4 rounded-full shadow-lg hover:scale-105 transition-transform"
+          className="bg-brand-accent p-4 rounded-full shadow-lg hover:scale-105 transition-transform"
         >
           <Bot className="w-6 h-6 text-black" />
         </button>
       )}
       {isOpen && (
-        <div className="w-80 h-96 bg-brand-card border border-emerald-950/40 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-          <div className="p-3 border-b border-emerald-950/50 flex justify-between items-center bg-[#050E0C]">
-            <span className="font-bold text-xs text-white">Trading Assistant</span>
-            <button onClick={() => setIsOpen(false)}><X className="w-4 h-4 text-gray-500" /></button>
+        <div className="w-80 h-96 bg-brand-card border border-brand-border/40 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+          <div className="p-3 border-b border-brand-border/50 flex justify-between items-center bg-brand-bg">
+            <span className="font-bold text-xs text-brand-text">Trading Assistant</span>
+            <button onClick={() => setIsOpen(false)}><X className="w-4 h-4 text-brand-text-dim" /></button>
           </div>
           <div className="flex-1 p-3 overflow-y-auto space-y-3">
             {messages.map((m, i) => (
-              <div key={i} className={`p-2 rounded-lg text-xs ${m.role === 'user' ? 'bg-[#00C853]/20 ml-auto max-w-[80%]' : 'bg-brand-bg mr-auto max-w-[80%]'}`}>
+              <div key={i} className={`p-2 rounded-lg text-xs ${m.role === 'user' ? 'bg-brand-accent/20 ml-auto max-w-[80%]' : 'bg-brand-bg mr-auto max-w-[80%]'}`}>
                 {m.content}
               </div>
             ))}
-            {loading && <Loader2 className="w-4 h-4 animate-spin text-[#00C853]" />}
+            {loading && <Loader2 className="w-4 h-4 animate-spin text-brand-accent" />}
             <div ref={chatEndRef} />
           </div>
-          <div className="p-2 border-t border-emerald-950/50 flex gap-2">
+          <div className="p-2 border-t border-brand-border/50 flex gap-2">
             <input 
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-              className="flex-1 bg-brand-bg text-white text-xs p-2 rounded-lg border border-emerald-950/50"
+              className="flex-1 bg-brand-bg text-brand-text text-xs p-2 rounded-lg border border-brand-border/50"
               placeholder="Ask me anything..."
             />
-            <button onClick={handleSend} className="bg-[#00C853] p-2 rounded-lg"><Send className="w-4 h-4 text-black" /></button>
+            <button onClick={handleSend} className="bg-brand-accent p-2 rounded-lg"><Send className="w-4 h-4 text-black" /></button>
           </div>
         </div>
       )}

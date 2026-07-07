@@ -50,7 +50,7 @@ export function AdminCopilot({
       const parts = line.split('**');
       const renderedLine = parts.map((part, j) => {
         if (j % 2 === 1) {
-          return <strong key={j} className="text-white font-bold">{part}</strong>;
+          return <strong key={j} className="text-brand-text font-bold">{part}</strong>;
         }
         return part;
       });
@@ -154,16 +154,16 @@ export function AdminCopilot({
   };
 
   return (
-    <div className="flex flex-col h-[600px] bg-[#091714] border border-[#16362F] rounded-2xl overflow-hidden shadow-xl">
+    <div className="flex flex-col h-[600px] bg-brand-card border border-brand-border rounded-2xl overflow-hidden shadow-xl">
       {/* Header */}
-      <div className="bg-[#050E0C] p-4 border-b border-[#16362F] flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-[#00C853]/10 flex items-center justify-center text-[#00C853]">
+      <div className="bg-brand-bg p-4 border-b border-brand-border flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full bg-brand-accent/10 flex items-center justify-center text-brand-accent">
           <Bot className="w-5 h-5" />
         </div>
         <div>
-          <h2 className="text-white font-display font-bold flex items-center gap-2">
+          <h2 className="text-brand-text font-display font-bold flex items-center gap-2">
             AI Copilot
-            <span className="bg-[#00C853]/20 text-[#00C853] text-[10px] px-2 py-0.5 rounded-full uppercase tracking-widest font-mono animate-pulse">
+            <span className="bg-brand-accent/20 text-brand-accent text-[10px] px-2 py-0.5 rounded-full uppercase tracking-widest font-mono animate-pulse">
               Gemini Enabled
             </span>
           </h2>
@@ -172,7 +172,7 @@ export function AdminCopilot({
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-gradient-to-b from-transparent to-[#050E0C]/30">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-gradient-to-b from-transparent to-brand-bg/30">
         {messages.map((msg) => (
           <motion.div 
             key={msg.id}
@@ -181,15 +181,15 @@ export function AdminCopilot({
             className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
           >
             <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-              msg.role === 'user' ? 'bg-[#16362F] text-white' : 'bg-[#00C853]/10 text-[#00C853]'
+              msg.role === 'user' ? 'bg-brand-surface text-brand-text' : 'bg-brand-accent/10 text-brand-accent'
             }`}>
               {msg.role === 'user' ? <User className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
             </div>
             
             <div className={`max-w-[75%] rounded-2xl p-4 text-sm leading-relaxed ${
               msg.role === 'user' 
-                ? 'bg-[#16362F] text-white rounded-tr-sm' 
-                : 'bg-[#050E0C] border border-[#16362F] text-[#9CB1AC] rounded-tl-sm space-y-1'
+                ? 'bg-brand-surface text-brand-text rounded-tr-sm' 
+                : 'bg-brand-bg border border-brand-border text-[#9CB1AC] rounded-tl-sm space-y-1'
             }`}>
               {msg.role === 'user' ? msg.content : renderMessageContent(msg.content)}
             </div>
@@ -202,13 +202,13 @@ export function AdminCopilot({
             animate={{ opacity: 1 }}
             className="flex gap-4"
           >
-            <div className="w-8 h-8 rounded-full bg-[#00C853]/10 flex items-center justify-center shrink-0 text-[#00C853]">
+            <div className="w-8 h-8 rounded-full bg-brand-accent/10 flex items-center justify-center shrink-0 text-brand-accent">
               <Sparkles className="w-4 h-4" />
             </div>
-            <div className="bg-[#050E0C] border border-[#16362F] rounded-2xl rounded-tl-sm p-4 flex gap-1 items-center">
-              <span className="w-1.5 h-1.5 bg-[#00C853] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-              <span className="w-1.5 h-1.5 bg-[#00C853] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-              <span className="w-1.5 h-1.5 bg-[#00C853] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div className="bg-brand-bg border border-brand-border rounded-2xl rounded-tl-sm p-4 flex gap-1 items-center">
+              <span className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+              <span className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+              <span className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
             </div>
           </motion.div>
         )}
@@ -222,9 +222,9 @@ export function AdminCopilot({
               <button
                 key={idx}
                 onClick={() => handleSuggestedClick(action.label)}
-                className="flex items-center gap-1.5 text-xs bg-[#050E0C] border border-[#16362F] text-[#9CB1AC] px-3 py-1.5 rounded-full hover:bg-[#16362F] hover:text-white transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 text-xs bg-brand-bg border border-brand-border text-[#9CB1AC] px-3 py-1.5 rounded-full hover:bg-brand-surface hover:text-brand-text transition-colors cursor-pointer"
               >
-                <action.icon className="w-3 h-3 text-[#00C853]" />
+                <action.icon className="w-3 h-3 text-brand-accent" />
                 {action.label}
               </button>
             ))}
@@ -233,19 +233,19 @@ export function AdminCopilot({
       )}
 
       {/* Input Area */}
-      <div className="p-4 bg-[#050E0C] border-t border-[#16362F]">
+      <div className="p-4 bg-brand-bg border-t border-brand-border">
         <form onSubmit={(e) => handleSend(e)} className="relative flex items-center">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask Copilot to summarize metrics, audit users, or check licenses..."
-            className="w-full bg-[#091714] border border-[#16362F] text-white px-4 py-3 pr-12 rounded-xl focus:outline-none focus:border-[#00C853] placeholder:text-[#9CB1AC]/50 text-sm"
+            className="w-full bg-brand-card border border-brand-border text-brand-text px-4 py-3 pr-12 rounded-xl focus:outline-none focus:border-brand-accent placeholder:text-[#9CB1AC]/50 text-sm"
           />
           <button
             type="submit"
             disabled={!input.trim() || isTyping}
-            className="absolute right-2 p-2 bg-[#00C853] text-[#050E0C] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#00E676] transition-colors cursor-pointer"
+            className="absolute right-2 p-2 bg-brand-accent text-[#050E0C] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#00E676] transition-colors cursor-pointer"
           >
             <Send className="w-4 h-4" />
           </button>

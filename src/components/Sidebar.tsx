@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard,
   User,
@@ -23,7 +23,9 @@ import {
   Shield,
   ShieldCheck,
   Globe,
-  ArrowUpRight
+  ArrowUpRight,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -62,6 +64,23 @@ export function Sidebar({
     readonly icon: React.ComponentType<any>;
     readonly premium?: boolean;
   }
+
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    return (localStorage.getItem('spp_theme') as 'dark' | 'light') || 'dark';
+  });
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+    localStorage.setItem('spp_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   const baseMenuItems: MenuItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -110,20 +129,20 @@ export function Sidebar({
   return (
     <>
       {/* Mobile Top Header */}
-      <div className="lg:hidden h-16 bg-brand-card border-b border-emerald-950/40 px-4 flex items-center justify-between sticky top-0 z-40">
+      <div className="lg:hidden h-16 bg-brand-card border-b border-brand-border/40 px-4 flex items-center justify-between sticky top-0 z-40">
         <div className="flex items-center gap-2">
-          <span className="font-display font-bold text-lg text-white">
-            SimuPay <span className="text-[#00C853]">Pro</span>
+          <span className="font-display font-bold text-lg text-brand-text">
+            SimuPay <span className="text-brand-accent">Pro</span>
           </span>
           {licenseActive && (
-            <span className="text-[10px] bg-[#00C853]/20 text-[#00C853] px-2 py-0.5 rounded font-mono font-bold tracking-wider">
+            <span className="text-[10px] bg-brand-accent/20 text-brand-accent px-2 py-0.5 rounded font-mono font-bold tracking-wider">
               PRO
             </span>
           )}
         </div>
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 text-gray-400 hover:text-[#00C853] transition-colors"
+          className="p-2 text-brand-text-muted hover:text-brand-accent transition-colors"
         >
           {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -131,33 +150,33 @@ export function Sidebar({
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 bg-brand-card/95 backdrop-blur-xl border-r border-emerald-950/40 flex flex-col transition-all duration-300 ease-in-out lg:sticky lg:top-0 lg:h-screen lg:z-30
+        className={`fixed inset-y-0 left-0 z-50 bg-brand-card/95 backdrop-blur-xl border-r border-brand-border/40 flex flex-col transition-all duration-300 ease-in-out lg:sticky lg:top-0 lg:h-screen lg:z-30
           ${collapsed ? 'lg:w-20' : 'lg:w-64'}
           ${mobileOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'}
         `}
       >
         {/* Brand Header */}
-        <div className="hidden lg:flex items-center justify-between h-20 px-6 border-b border-emerald-950/40">
+        <div className="hidden lg:flex items-center justify-between h-20 px-6 border-b border-brand-border/40">
           {!collapsed ? (
             <div className="flex items-center gap-2 overflow-hidden">
-              <span className="font-display font-bold text-xl text-white tracking-tight whitespace-nowrap">
-                SimuPay <span className="text-[#00C853]">Pro</span>
+              <span className="font-display font-bold text-xl text-brand-text tracking-tight whitespace-nowrap">
+                SimuPay <span className="text-brand-accent">Pro</span>
               </span>
               {licenseActive && (
-                <span className="text-[10px] bg-[#00C853]/20 text-[#00C853] px-2 py-0.5 rounded font-mono font-bold tracking-wider">
+                <span className="text-[10px] bg-brand-accent/20 text-brand-accent px-2 py-0.5 rounded font-mono font-bold tracking-wider">
                   PRO
                 </span>
               )}
             </div>
           ) : (
-            <div className="mx-auto w-8 h-8 rounded-lg bg-emerald-950/40 border border-[#00C853]/30 flex items-center justify-center font-bold text-xs text-[#00C853]">
+            <div className="mx-auto w-8 h-8 rounded-lg bg-emerald-950/40 border border-brand-accent/30 flex items-center justify-center font-bold text-xs text-brand-accent">
               SP
             </div>
           )}
 
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-1.5 rounded-lg bg-brand-bg hover:text-[#00C853] text-gray-400 border border-emerald-950/50 transition-colors"
+            className="p-1.5 rounded-lg bg-brand-bg hover:text-brand-accent text-brand-text-muted border border-brand-border/50 transition-colors"
           >
             {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
           </button>
@@ -166,12 +185,12 @@ export function Sidebar({
         {/* User Mini-Profile */}
         {!collapsed && (
           <div className="p-4 mx-4 my-3 bg-brand-bg/50 border border-emerald-950/30 rounded-xl flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#00C853]/10 border border-[#00C853]/30 flex items-center justify-center font-bold text-[#00C853]">
+            <div className="w-10 h-10 rounded-full bg-brand-accent/10 border border-brand-accent/30 flex items-center justify-center font-bold text-brand-accent">
               {fullName ? fullName.split(' ').map(n => n[0]).join('').toUpperCase() : 'U'}
             </div>
             <div className="min-w-0 flex-1">
-              <h4 className="text-xs font-semibold text-white truncate">{fullName || 'User Profile'}</h4>
-              <p className="text-[10px] text-gray-500 font-mono truncate">${walletBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <h4 className="text-xs font-semibold text-brand-text truncate">{fullName || 'User Profile'}</h4>
+              <p className="text-[10px] text-brand-text-dim font-mono truncate">${walletBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             </div>
           </div>
         )}
@@ -188,12 +207,12 @@ export function Sidebar({
                 onClick={() => handleTabClick(item.id as ActiveTab)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all group relative cursor-pointer
                   ${isActive
-                    ? 'bg-[#00C853]/10 text-[#00C853] border-l-2 border-[#00C853]'
-                    : 'text-gray-400 hover:bg-brand-bg/80 hover:text-white'
+                    ? 'bg-brand-accent/10 text-brand-accent border-l-2 border-brand-accent'
+                    : 'text-brand-text-muted hover:bg-brand-bg/80 hover:text-brand-text'
                   }
                 `}
               >
-                <IconComponent className={`w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-105 ${isActive ? 'text-[#00C853]' : 'text-gray-400 group-hover:text-[#00C853]'}`} />
+                <IconComponent className={`w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-105 ${isActive ? 'text-brand-accent' : 'text-brand-text-muted group-hover:text-brand-accent'}`} />
 
                 {(!collapsed || mobileOpen) && (
                   <span className="truncate flex-1 text-left">{item.label}</span>
@@ -207,7 +226,7 @@ export function Sidebar({
 
                 {/* Desktop Collapsed Tooltip */}
                 {collapsed && !mobileOpen && (
-                  <div className="absolute left-full ml-2 px-3 py-1.5 bg-brand-bg border border-emerald-950 text-white text-xs font-medium rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 shadow-xl whitespace-nowrap z-50">
+                  <div className="absolute left-full ml-2 px-3 py-1.5 bg-brand-bg border border-emerald-950 text-brand-text text-xs font-medium rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 shadow-xl whitespace-nowrap z-50">
                     {item.label}
                     {item.premium && " (PRO)"}
                   </div>
@@ -238,38 +257,38 @@ export function Sidebar({
 
         {/* Sidebar Partner Shortcut */}
         {!shortcutDismissed && (!collapsed || mobileOpen) && (
-          <div className="mx-4 my-2 p-3 bg-gradient-to-br from-[#091714] to-[#040e0c] border border-emerald-950/60 rounded-xl relative group/card">
+          <div className="mx-4 my-2 p-3 bg-gradient-to-br from-brand-card to-[#040e0c] border border-emerald-950/60 rounded-xl relative group/card">
             <button
               onClick={handleDismissShortcut}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-300 transition-colors p-0.5 rounded cursor-pointer"
+              className="absolute top-2 right-2 text-brand-text-dim hover:text-brand-text-muted transition-colors p-0.5 rounded cursor-pointer"
               title="Dismiss"
             >
               <X className="w-3 h-3" />
             </button>
             
             <div className="space-y-2">
-              <span className="text-[9px] uppercase font-bold text-gray-500 font-mono tracking-wider block">
+              <span className="text-[9px] uppercase font-bold text-brand-text-dim font-mono tracking-wider block">
                 Partner Recommendation
               </span>
               <div>
-                <h5 className="text-xs font-bold text-white flex items-center gap-1 font-display">
+                <h5 className="text-xs font-bold text-brand-text flex items-center gap-1 font-display">
                   Gate
-                  <span className="text-[8px] bg-[#00C853]/10 text-[#00C853] border border-[#00C853]/20 px-1 rounded uppercase">PRO Choice</span>
+                  <span className="text-[8px] bg-brand-accent/10 text-brand-accent border border-brand-accent/20 px-1 rounded uppercase">PRO Choice</span>
                 </h5>
-                <p className="text-[10px] text-gray-400">Create a free account</p>
+                <p className="text-[10px] text-brand-text-muted">Create a free account</p>
               </div>
               
               <a
-                href="https://www.gate.com/share/simupaypro"
+                href="https://www.gate.com/share/APPLYGAT"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full bg-[#00C853] hover:bg-[#00E676] text-black font-bold text-[10px] py-1.5 px-3 rounded-lg flex items-center justify-center gap-1 transition-all cursor-pointer"
+                className="w-full bg-brand-accent hover:bg-[#00E676] text-black font-bold text-[10px] py-1.5 px-3 rounded-lg flex items-center justify-center gap-1 transition-all cursor-pointer"
               >
                 Join Now
                 <ArrowUpRight className="w-3 h-3" />
               </a>
               
-              <p className="text-[8px] text-gray-500 font-mono leading-tight scale-90 origin-left mt-1">
+              <p className="text-[8px] text-brand-text-dim font-mono leading-tight scale-90 origin-left mt-1">
                 Partner link: We may earn a commission.
               </p>
             </div>
@@ -278,17 +297,24 @@ export function Sidebar({
 
         {/* Branding Footer */}
         {(!collapsed || mobileOpen) && (
-          <div className="px-4 py-3 text-center opacity-60 hover:opacity-100 transition-opacity">
-            <p className="text-[10px] text-gray-500 font-mono leading-tight">
+          <div className="px-4 py-3 text-center opacity-60 hover:opacity-100 transition-opacity flex justify-between items-center">
+            <p className="text-[10px] text-brand-text-dim font-mono leading-tight text-left">
               © 2026 SimuPay Pro
               <br />
               Powered by Luckman Dev World
             </p>
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg bg-brand-surface/50 text-brand-text-muted hover:text-brand-accent transition-colors"
+              title="Toggle Theme"
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
           </div>
         )}
 
         {/* Logout Section */}
-        <div className="p-3 border-t border-emerald-950/40">
+        <div className="p-3 border-t border-brand-border/40">
           <button
             onClick={onLogout}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-950/10 hover:text-red-300 transition-colors cursor-pointer group relative`}
@@ -306,38 +332,38 @@ export function Sidebar({
       </aside>
 
       {/* Mobile Bottom Bar for high-priority items */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-brand-card border-t border-emerald-950/40 flex items-center justify-around px-2 pb-safe z-40">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-brand-card border-t border-brand-border/40 flex items-center justify-around px-2 pb-safe z-40">
         <button
           onClick={() => handleTabClick('dashboard')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'dashboard' ? 'text-[#00C853]' : 'text-gray-400'}`}
+          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'dashboard' ? 'text-brand-accent' : 'text-brand-text-muted'}`}
         >
           <LayoutDashboard className="w-5 h-5" />
           <span>Dashboard</span>
         </button>
         <button
           onClick={() => handleTabClick('airtime')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'airtime' ? 'text-[#00C853]' : 'text-gray-400'}`}
+          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'airtime' ? 'text-brand-accent' : 'text-brand-text-muted'}`}
         >
           <Smartphone className="w-5 h-5" />
           <span>Airtime</span>
         </button>
         <button
           onClick={() => handleTabClick('data-bundles')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'data-bundles' ? 'text-[#00C853]' : 'text-gray-400'}`}
+          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'data-bundles' ? 'text-brand-accent' : 'text-brand-text-muted'}`}
         >
           <Database className="w-5 h-5" />
           <span>Data</span>
         </button>
         <button
           onClick={() => handleTabClick('forex-tools')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'forex-tools' ? 'text-[#00C853]' : 'text-gray-400'}`}
+          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'forex-tools' ? 'text-brand-accent' : 'text-brand-text-muted'}`}
         >
           <Globe className="w-5 h-5" />
           <span>Forex</span>
         </button>
         <button
           onClick={() => handleTabClick('notifications')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'notifications' ? 'text-[#00C853]' : 'text-gray-400'}`}
+          className={`flex flex-col items-center gap-1 text-[10px] font-medium transition-colors ${activeTab === 'notifications' ? 'text-brand-accent' : 'text-brand-text-muted'}`}
         >
           <Bell className="w-5 h-5" />
           <span>Alerts</span>

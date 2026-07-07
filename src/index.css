@@ -1,23 +1,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  /* Custom brand colors for SimuPay Pro */
-  --color-brand-bg: #050E0C;
-  --color-brand-card: #091714;
+  --color-brand-bg: var(--color-bg);
+  --color-brand-card: var(--color-card);
+  --color-brand-surface: var(--color-surface);
   --color-brand-accent: #00C853;
   --color-brand-blue: #2563EB;
   --color-brand-gold: #FFD700;
+  --color-brand-border: var(--border-color);
+  --color-brand-text: var(--text-primary);
+  --color-brand-text-muted: var(--text-secondary);
+  --color-brand-text-dim: var(--text-dim);
 }
 
 @layer base {
+  :root {
+    --color-bg: #ffffff;
+    --color-card: #f8fafc;
+    --color-surface: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-dim: #94a3b8;
+    --border-color: #cbd5e1;
+    --scrollbar-track: #f1f5f9;
+    --scrollbar-thumb: #cbd5e1;
+  }
+  
+  :root.dark {
+    --color-bg: #050E0C;
+    --color-card: #091714;
+    --color-surface: #16362F;
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-dim: #6b7280;
+    --border-color: rgba(6, 78, 59, 0.4);
+    --scrollbar-track: #050E0C;
+    --scrollbar-thumb: #0e2924;
+  }
+
   body {
-    background-color: #050E0C;
-    color: #f3f4f6;
+    background-color: var(--color-bg);
+    color: var(--text-primary);
     font-family: var(--font-sans);
   }
 
@@ -27,10 +57,10 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #050E0C;
+    background: var(--scrollbar-track);
   }
   ::-webkit-scrollbar-thumb {
-    background: #0e2924;
+    background: var(--scrollbar-thumb);
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {

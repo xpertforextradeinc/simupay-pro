@@ -39,73 +39,73 @@ export function AdminSecurity({ systemHealth, onRefreshHealth }: AdminSecurityPr
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         {/* Supabase & Network State */}
-        <div className="bg-[#091714] p-5 rounded-2xl border border-[#16362F] shadow-xl space-y-3">
-          <div className="flex items-center gap-2 border-b border-[#16362F]/60 pb-2">
-            <HardDrive className="w-4 h-4 text-[#00C853]" />
-            <span className="text-xs font-bold text-white uppercase font-mono">DB Core Connectivity</span>
+        <div className="bg-brand-card p-5 rounded-2xl border border-brand-border shadow-xl space-y-3">
+          <div className="flex items-center gap-2 border-b border-brand-border/60 pb-2">
+            <HardDrive className="w-4 h-4 text-brand-accent" />
+            <span className="text-xs font-bold text-brand-text uppercase font-mono">DB Core Connectivity</span>
           </div>
           
           <div className="space-y-2 text-xs font-mono">
             <div className="flex justify-between p-2 rounded bg-black/25">
-              <span className="text-gray-500">Connection status:</span>
-              <span className={`font-bold flex items-center gap-1 ${systemHealth.dbConnected ? 'text-[#00C853]' : 'text-amber-500'}`}>
-                <span className={`w-1.5 h-1.5 rounded-full ${systemHealth.dbConnected ? 'bg-[#00C853]' : 'bg-amber-500'} animate-pulse`} />
+              <span className="text-brand-text-dim">Connection status:</span>
+              <span className={`font-bold flex items-center gap-1 ${systemHealth.dbConnected ? 'text-brand-accent' : 'text-amber-500'}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${systemHealth.dbConnected ? 'bg-brand-accent' : 'bg-amber-500'} animate-pulse`} />
                 {systemHealth.dbConnected ? 'SUPABASE ONLINE' : 'HYBRID STORAGE'}
               </span>
             </div>
             
             <div className="flex justify-between p-2 rounded bg-black/25">
-              <span className="text-gray-500">Latency:</span>
-              <span className="text-white font-bold">14ms (Primary Node)</span>
+              <span className="text-brand-text-dim">Latency:</span>
+              <span className="text-brand-text font-bold">14ms (Primary Node)</span>
             </div>
 
             <div className="flex justify-between p-2 rounded bg-black/25">
-              <span className="text-gray-500">Active Pool:</span>
-              <span className="text-white">12 / 20 Sockets</span>
+              <span className="text-brand-text-dim">Active Pool:</span>
+              <span className="text-brand-text">12 / 20 Sockets</span>
             </div>
           </div>
         </div>
 
         {/* System Health Indicators */}
-        <div className="bg-[#091714] p-5 rounded-2xl border border-[#16362F] shadow-xl space-y-3">
-          <div className="flex items-center gap-2 border-b border-[#16362F]/60 pb-2">
+        <div className="bg-brand-card p-5 rounded-2xl border border-brand-border shadow-xl space-y-3">
+          <div className="flex items-center gap-2 border-b border-brand-border/60 pb-2">
             <Activity className="w-4 h-4 text-blue-400" />
-            <span className="text-xs font-bold text-white uppercase font-mono">Process Node Telemetry</span>
+            <span className="text-xs font-bold text-brand-text uppercase font-mono">Process Node Telemetry</span>
           </div>
           
           <div className="space-y-2 text-xs font-mono">
             <div className="flex justify-between p-2 rounded bg-black/25">
-              <span className="text-gray-500">Process Health:</span>
-              <span className="text-[#00C853] font-bold">100% SUCCESS RATE</span>
+              <span className="text-brand-text-dim">Process Health:</span>
+              <span className="text-brand-accent font-bold">100% SUCCESS RATE</span>
             </div>
             
             <div className="flex justify-between p-2 rounded bg-black/25">
-              <span className="text-gray-500">Local fallbacks:</span>
-              <span className="text-white font-bold">{systemHealth.localBackupActive ? 'ACTIVE' : 'STANDBY'}</span>
+              <span className="text-brand-text-dim">Local fallbacks:</span>
+              <span className="text-brand-text font-bold">{systemHealth.localBackupActive ? 'ACTIVE' : 'STANDBY'}</span>
             </div>
 
             <div className="flex justify-between p-2 rounded bg-black/25">
-              <span className="text-gray-500">Uptime:</span>
-              <span className="text-white font-bold">142 Days 18h</span>
+              <span className="text-brand-text-dim">Uptime:</span>
+              <span className="text-brand-text font-bold">142 Days 18h</span>
             </div>
           </div>
         </div>
 
         {/* Active Admins Credentials */}
-        <div className="bg-[#091714] p-5 rounded-2xl border border-[#16362F] shadow-xl space-y-3">
-          <div className="flex items-center gap-2 border-b border-[#16362F]/60 pb-2">
+        <div className="bg-brand-card p-5 rounded-2xl border border-brand-border shadow-xl space-y-3">
+          <div className="flex items-center gap-2 border-b border-brand-border/60 pb-2">
             <Shield className="w-4 h-4 text-amber-500" />
-            <span className="text-xs font-bold text-white uppercase font-mono">Administrator Roster</span>
+            <span className="text-xs font-bold text-brand-text uppercase font-mono">Administrator Roster</span>
           </div>
           
           <div className="space-y-2 text-xs font-mono">
             <div className="p-2 rounded bg-black/25 flex justify-between items-center">
-              <span className="text-[#00C853] font-bold">owner@simupay.pro</span>
-              <span className="text-[9px] bg-[#00C853]/15 text-[#00C853] px-1.5 py-0.5 rounded uppercase font-bold">Sovereign Owner</span>
+              <span className="text-brand-accent font-bold">owner@simupay.pro</span>
+              <span className="text-[9px] bg-brand-accent/15 text-brand-accent px-1.5 py-0.5 rounded uppercase font-bold">Sovereign Owner</span>
             </div>
             
             <div className="p-2 rounded bg-black/25 flex justify-between items-center">
-              <span className="text-gray-300">admin@simupay.pro</span>
+              <span className="text-brand-text-muted">admin@simupay.pro</span>
               <span className="text-[9px] bg-blue-500/10 text-blue-400 px-1.5 py-0.5 rounded uppercase">Admin Agent</span>
             </div>
           </div>
@@ -117,17 +117,17 @@ export function AdminSecurity({ systemHealth, onRefreshHealth }: AdminSecurityPr
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 font-mono text-xs">
         
         {/* Core Audit logs */}
-        <div className="lg:col-span-3 bg-[#091714] border border-[#16362F] rounded-2xl overflow-hidden shadow-xl">
-          <div className="px-6 py-4 bg-[#050E0C] border-b border-[#16362F] flex justify-between items-center">
+        <div className="lg:col-span-3 bg-brand-card border border-brand-border rounded-2xl overflow-hidden shadow-xl">
+          <div className="px-6 py-4 bg-brand-bg border-b border-brand-border flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-[#00C853]" />
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Sovereign Audit Trail</h3>
+              <Terminal className="w-4 h-4 text-brand-accent" />
+              <h3 className="text-xs font-bold text-brand-text uppercase tracking-wider">Sovereign Audit Trail</h3>
             </div>
             
             <button
               onClick={handleManualSync}
               disabled={isRefreshing}
-              className="p-1 text-gray-400 hover:text-white rounded transition-colors disabled:opacity-50"
+              className="p-1 text-brand-text-muted hover:text-brand-text rounded transition-colors disabled:opacity-50"
             >
               <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
             </button>
@@ -135,33 +135,33 @@ export function AdminSecurity({ systemHealth, onRefreshHealth }: AdminSecurityPr
 
           <div className="divide-y divide-[#16362F]/30 overflow-y-auto max-h-[350px]">
             {auditLogs.map((log) => (
-              <div key={log.id} className="p-4 hover:bg-[#050e0c]/15 space-y-1.5">
-                <div className="flex justify-between text-[9px] text-gray-500">
+              <div key={log.id} className="p-4 hover:bg-brand-bg/15 space-y-1.5">
+                <div className="flex justify-between text-[9px] text-brand-text-dim">
                   <span className="text-blue-400 font-bold uppercase">{log.action}</span>
                   <span>{new Date(log.timestamp).toLocaleString()}</span>
                 </div>
-                <p className="text-gray-300 text-[11px] leading-relaxed">{log.detail}</p>
+                <p className="text-brand-text-muted text-[11px] leading-relaxed">{log.detail}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Failed Authentication attempts */}
-        <div className="lg:col-span-2 bg-[#091714] border border-[#16362F] rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between">
+        <div className="lg:col-span-2 bg-brand-card border border-brand-border rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between">
           <div>
-            <div className="px-6 py-4 bg-[#050E0C] border-b border-[#16362F] flex items-center gap-2">
+            <div className="px-6 py-4 bg-brand-bg border-b border-brand-border flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-500 animate-pulse" />
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Failed Access attempts (MFA / Auth)</h3>
+              <h3 className="text-xs font-bold text-brand-text uppercase tracking-wider">Failed Access attempts (MFA / Auth)</h3>
             </div>
 
             <div className="divide-y divide-[#16362F]/30 overflow-y-auto max-h-[300px]">
               {failedLogins.map((fail) => (
                 <div key={fail.id} className="p-4 bg-red-950/5 hover:bg-red-950/10 space-y-1">
-                  <div className="flex justify-between text-[9px] text-gray-500">
+                  <div className="flex justify-between text-[9px] text-brand-text-dim">
                     <span className="text-red-400 font-bold">{fail.ip}</span>
                     <span>{new Date(fail.timestamp).toLocaleTimeString()}</span>
                   </div>
-                  <span className="text-gray-300 font-semibold block text-[11px]">{fail.email}</span>
+                  <span className="text-brand-text-muted font-semibold block text-[11px]">{fail.email}</span>
                   <p className="text-red-500/80 text-[10px] italic">{fail.reason}</p>
                 </div>
               ))}

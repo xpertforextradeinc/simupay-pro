@@ -205,15 +205,15 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
     <div className="space-y-6">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-display font-bold text-white flex items-center gap-2">
-            <ReceiptIcon className="w-6 h-6 text-[#00C853]" /> Receipt Studio ⭐
+          <h2 className="text-2xl font-display font-bold text-brand-text flex items-center gap-2">
+            <ReceiptIcon className="w-6 h-6 text-brand-accent" /> Receipt Studio ⭐
           </h2>
-          <p className="text-gray-400 text-sm">Professional enterprise-grade receipt generation & management.</p>
+          <p className="text-brand-text-muted text-sm">Professional enterprise-grade receipt generation & management.</p>
         </div>
         {showFinalReceipt && (
           <button 
             onClick={() => setShowFinalReceipt(false)}
-            className="px-4 py-2 bg-emerald-950/40 border border-emerald-900/50 rounded-xl text-xs font-bold text-white hover:bg-emerald-900/40 transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-emerald-950/40 border border-emerald-900/50 rounded-xl text-xs font-bold text-brand-text hover:bg-emerald-900/40 transition-colors flex items-center gap-2"
           >
             <Plus className="w-4 h-4" /> New Record
           </button>
@@ -223,16 +223,16 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Form Column */}
         <div className="lg:col-span-7 space-y-6">
-          <section className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl space-y-6">
+          <section className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl space-y-6">
             {!showFinalReceipt ? (
               <>
                 {/* Searchable Provider Selector */}
                 <div className="relative">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-2">Select Provider</label>
+                  <label className="text-xs font-bold text-brand-text-muted uppercase tracking-widest block mb-2">Select Provider</label>
                   <div className="relative">
                     <div 
                       onClick={() => !isGenerating && setIsDropdownOpen(!isDropdownOpen)}
-                      className={`w-full bg-brand-bg/50 border ${isDropdownOpen ? 'border-[#00C853]' : 'border-emerald-950/50'} rounded-xl px-4 py-3 text-white flex items-center justify-between cursor-pointer transition-all ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      className={`w-full bg-brand-bg/50 border ${isDropdownOpen ? 'border-brand-accent' : 'border-brand-border/50'} rounded-xl px-4 py-3 text-brand-text flex items-center justify-between cursor-pointer transition-all ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       <div className="flex items-center gap-3">
                         {selectedProvider ? (
@@ -241,10 +241,10 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                             <span className="font-bold">{selectedProvider.name}</span>
                           </>
                         ) : (
-                          <span className="text-gray-500">Choose a payment provider...</span>
+                          <span className="text-brand-text-dim">Choose a payment provider...</span>
                         )}
                       </div>
-                      <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-4 h-4 text-brand-text-dim transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                     </div>
 
                     <AnimatePresence>
@@ -255,36 +255,36 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                           exit={{ opacity: 0, y: -10 }}
                           className="absolute z-50 top-full left-0 right-0 mt-2 bg-brand-card border border-emerald-950 shadow-2xl rounded-xl overflow-hidden"
                         >
-                          <div className="p-2 border-b border-emerald-950/50 flex items-center gap-2">
-                            <Search className="w-4 h-4 text-gray-500 ml-2" />
+                          <div className="p-2 border-b border-brand-border/50 flex items-center gap-2">
+                            <Search className="w-4 h-4 text-brand-text-dim ml-2" />
                             <input 
                               autoFocus
                               type="text" 
                               placeholder="Search providers..." 
-                              className="bg-transparent border-none focus:ring-0 text-sm text-white w-full py-1"
+                              className="bg-transparent border-none focus:ring-0 text-sm text-brand-text w-full py-1"
                               value={searchQuery}
                               onChange={(e) => setSearchQuery(e.target.value)}
                             />
                           </div>
                           <div className="max-h-60 overflow-y-auto">
                             {loadingProviders ? (
-                              <div className="p-4 text-center text-xs text-gray-500">Loading providers...</div>
+                              <div className="p-4 text-center text-xs text-brand-text-dim">Loading providers...</div>
                             ) : filteredProviders.length > 0 ? (
                               filteredProviders.map(p => (
                                 <div 
                                   key={p.id}
                                   onClick={() => handleProviderSelect(p)}
-                                  className="px-4 py-3 hover:bg-[#00C853]/10 cursor-pointer flex items-center justify-between group transition-colors"
+                                  className="px-4 py-3 hover:bg-brand-accent/10 cursor-pointer flex items-center justify-between group transition-colors"
                                 >
                                   <div className="flex items-center gap-3">
                                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color_hex || '#00C853' }} />
-                                    <span className="text-sm font-medium text-white group-hover:text-[#00C853] transition-colors">{p.name}</span>
+                                    <span className="text-sm font-medium text-brand-text group-hover:text-brand-accent transition-colors">{p.name}</span>
                                   </div>
-                                  <span className="text-[10px] text-gray-500 uppercase font-mono">{p.category}</span>
+                                  <span className="text-[10px] text-brand-text-dim uppercase font-mono">{p.category}</span>
                                 </div>
                               ))
                             ) : (
-                              <div className="p-4 text-center text-xs text-gray-500">No providers found matching "{searchQuery}"</div>
+                              <div className="p-4 text-center text-xs text-brand-text-dim">No providers found matching "{searchQuery}"</div>
                             )}
                           </div>
                         </motion.div>
@@ -301,7 +301,7 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                   >
                     {/* Dynamic Fields */}
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                      <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest flex items-center gap-1">
                         <DollarSign className="w-3 h-3" /> Amount
                       </label>
                       <input 
@@ -310,18 +310,18 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                         disabled={isGenerating}
                         value={formData.amount}
                         onChange={handleInputChange}
-                        className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853] transition-colors disabled:opacity-50"
+                        className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text font-mono focus:outline-none focus:border-brand-accent transition-colors disabled:opacity-50"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</label>
+                      <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest">Status</label>
                       <select 
                         name="status"
                         disabled={isGenerating}
                         value={formData.status}
                         onChange={handleInputChange}
-                        className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                        className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text focus:outline-none focus:border-brand-accent disabled:opacity-50"
                       >
                         <option value="completed">Completed</option>
                         <option value="pending">Pending</option>
@@ -330,7 +330,7 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                      <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest flex items-center gap-1">
                         <Calendar className="w-3 h-3" /> Date
                       </label>
                       <input 
@@ -339,12 +339,12 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                         disabled={isGenerating}
                         value={formData.transaction_date}
                         onChange={handleInputChange}
-                        className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                        className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text font-mono focus:outline-none focus:border-brand-accent disabled:opacity-50"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                      <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest flex items-center gap-1">
                         <Clock className="w-3 h-3" /> Time
                       </label>
                       <input 
@@ -353,13 +353,13 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                         disabled={isGenerating}
                         value={formData.transaction_time}
                         onChange={handleInputChange}
-                        className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                        className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text font-mono focus:outline-none focus:border-brand-accent disabled:opacity-50"
                       />
                     </div>
 
                     {isFieldRequired('reference_no') && (
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                        <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest flex items-center gap-1">
                           <Hash className="w-3 h-3" /> Reference / Hash
                         </label>
                         <input 
@@ -368,14 +368,14 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                           disabled={isGenerating}
                           value={formData.reference_no || ''}
                           onChange={handleInputChange}
-                          className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                          className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text font-mono focus:outline-none focus:border-brand-accent disabled:opacity-50"
                         />
                       </div>
                     )}
 
                     {isFieldRequired('sender_name') && (
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                        <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest flex items-center gap-1">
                           <User className="w-3 h-3" /> Sender Name
                         </label>
                         <input 
@@ -384,14 +384,14 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                           disabled={isGenerating}
                           value={formData.sender_name || ''}
                           onChange={handleInputChange}
-                          className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                          className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text focus:outline-none focus:border-brand-accent disabled:opacity-50"
                         />
                       </div>
                     )}
 
                     {isFieldRequired('sender_tag') && (
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                        <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest flex items-center gap-1">
                           <Tag className="w-3 h-3" /> Sender Tag
                         </label>
                         <input 
@@ -401,14 +401,14 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                           value={formData.sender_tag || ''}
                           onChange={handleInputChange}
                           placeholder="$cashtag / @username"
-                          className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                          className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text font-mono focus:outline-none focus:border-brand-accent disabled:opacity-50"
                         />
                       </div>
                     )}
 
                     {isFieldRequired('recipient_name') && (
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                        <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest flex items-center gap-1">
                           <User className="w-3 h-3" /> Recipient Name
                         </label>
                         <input 
@@ -417,14 +417,14 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                           disabled={isGenerating}
                           value={formData.recipient_name || ''}
                           onChange={handleInputChange}
-                          className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                          className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text focus:outline-none focus:border-brand-accent disabled:opacity-50"
                         />
                       </div>
                     )}
 
                     {isFieldRequired('recipient_tag') && (
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                        <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest flex items-center gap-1">
                           <Tag className="w-3 h-3" /> Recipient Tag
                         </label>
                         <input 
@@ -434,14 +434,14 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                           value={formData.recipient_tag || ''}
                           onChange={handleInputChange}
                           placeholder="$cashtag / @username"
-                          className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                          className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text font-mono focus:outline-none focus:border-brand-accent disabled:opacity-50"
                         />
                       </div>
                     )}
 
                     {isFieldRequired('recipient_address') && (
                       <div className="space-y-1.5 md:col-span-2">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                        <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest flex items-center gap-1">
                           <Hash className="w-3 h-3" /> Wallet Address
                         </label>
                         <input 
@@ -451,63 +451,63 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                           value={formData.recipient_address || ''}
                           onChange={handleInputChange}
                           placeholder="0x... / T..."
-                          className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                          className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text font-mono focus:outline-none focus:border-brand-accent disabled:opacity-50"
                         />
                       </div>
                     )}
 
                     {isFieldRequired('asset') && (
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Asset (e.g. BTC, USDT)</label>
+                        <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest">Asset (e.g. BTC, USDT)</label>
                         <input 
                           type="text" 
                           name="asset"
                           disabled={isGenerating}
                           value={formData.asset || ''}
                           onChange={handleInputChange}
-                          className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                          className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text font-mono focus:outline-none focus:border-brand-accent disabled:opacity-50"
                         />
                       </div>
                     )}
 
                     {isFieldRequired('network') && (
                       <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Network (e.g. TRC-20)</label>
+                        <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest">Network (e.g. TRC-20)</label>
                         <input 
                           type="text" 
                           name="network"
                           disabled={isGenerating}
                           value={formData.network || ''}
                           onChange={handleInputChange}
-                          className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                          className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text font-mono focus:outline-none focus:border-brand-accent disabled:opacity-50"
                         />
                       </div>
                     )}
 
                     {isFieldRequired('bank_name') && (
                       <div className="space-y-1.5 md:col-span-2">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Bank Name</label>
+                        <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest">Bank Name</label>
                         <input 
                           type="text" 
                           name="bank_name"
                           disabled={isGenerating}
                           value={formData.bank_name || ''}
                           onChange={handleInputChange}
-                          className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#00C853] disabled:opacity-50"
+                          className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text focus:outline-none focus:border-brand-accent disabled:opacity-50"
                         />
                       </div>
                     )}
 
                     {isFieldRequired('memo') && (
                       <div className="space-y-1.5 md:col-span-2">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Payment Note / Memo</label>
+                        <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-widest">Payment Note / Memo</label>
                         <textarea 
                           name="memo"
                           disabled={isGenerating}
                           value={formData.memo}
                           onChange={handleInputChange}
                           rows={2}
-                          className="w-full bg-brand-bg/40 border border-emerald-950/50 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-[#00C853] resize-none disabled:opacity-50"
+                          className="w-full bg-brand-bg/40 border border-brand-border/50 rounded-xl px-4 py-2.5 text-brand-text focus:outline-none focus:border-brand-accent resize-none disabled:opacity-50"
                         />
                       </div>
                     )}
@@ -515,15 +515,15 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                     <div className="md:col-span-2 pt-4">
                       {isGenerating ? (
                         <div className="space-y-4">
-                          <div className="w-full bg-emerald-950/30 h-1 rounded-full overflow-hidden">
+                          <div className="w-full bg-brand-surface/30 h-1 rounded-full overflow-hidden">
                             <motion.div 
                               initial={{ width: 0 }}
                               animate={{ width: `${(generationStep + 1) * 20}%` }}
-                              className="h-full bg-[#00C853]"
+                              className="h-full bg-brand-accent"
                             />
                           </div>
-                          <div className="flex items-center gap-3 text-xs text-white font-mono animate-pulse">
-                            <span className="w-4 h-4 border-2 border-[#00C853] border-t-transparent rounded-full animate-spin" />
+                          <div className="flex items-center gap-3 text-xs text-brand-text font-mono animate-pulse">
+                            <span className="w-4 h-4 border-2 border-brand-accent border-t-transparent rounded-full animate-spin" />
                             <span>{GENERATION_STEPS[generationStep]}</span>
                           </div>
                         </div>
@@ -531,7 +531,7 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                         <button
                           onClick={handleGenerate}
                           disabled={isSaving}
-                          className="w-full bg-[#00C853] hover:bg-emerald-400 text-[#050E0C] font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-[#00C853]/20 disabled:opacity-50"
+                          className="w-full bg-brand-accent hover:bg-emerald-400 text-[#050E0C] font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-[#00C853]/20 disabled:opacity-50"
                         >
                           <Zap className="w-5 h-5" /> Generate Receipt
                         </button>
@@ -540,12 +540,12 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                   </motion.div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-12 text-center space-y-4">
-                    <div className="w-16 h-16 rounded-full bg-emerald-950/20 flex items-center justify-center text-[#00C853]">
+                    <div className="w-16 h-16 rounded-full bg-emerald-950/20 flex items-center justify-center text-brand-accent">
                       <ArrowRight className="w-8 h-8" />
                     </div>
                     <div className="max-w-xs">
-                      <p className="text-white font-bold">Select a Provider</p>
-                      <p className="text-gray-500 text-sm">Choose a template above to start creating your professional transaction record.</p>
+                      <p className="text-brand-text font-bold">Select a Provider</p>
+                      <p className="text-brand-text-dim text-sm">Choose a template above to start creating your professional transaction record.</p>
                     </div>
                   </div>
                 )}
@@ -556,12 +556,12 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 className="space-y-6 py-8 text-center"
               >
-                <div className="w-20 h-20 bg-[#00C853]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#00C853]/20">
-                  <CheckCircle className="w-10 h-10 text-[#00C853]" />
+                <div className="w-20 h-20 bg-brand-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-brand-accent/20">
+                  <CheckCircle className="w-10 h-10 text-brand-accent" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-white">Receipt Generated Successfully</h3>
-                  <p className="text-sm text-gray-400 max-w-sm mx-auto">Your professional receipt has been generated and added to your history.</p>
+                  <h3 className="text-xl font-bold text-brand-text">Receipt Generated Successfully</h3>
+                  <p className="text-sm text-brand-text-muted max-w-sm mx-auto">Your professional receipt has been generated and added to your history.</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
                   <button 
@@ -572,7 +572,7 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                   </button>
                   <button 
                     onClick={() => setShowFinalReceipt(false)}
-                    className="px-6 py-2.5 bg-emerald-950/40 border border-emerald-900/50 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-900/40 transition-colors"
+                    className="px-6 py-2.5 bg-emerald-950/40 border border-emerald-900/50 text-brand-text font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-900/40 transition-colors"
                   >
                     <Plus className="w-4 h-4" /> Create Another
                   </button>
@@ -582,10 +582,10 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
           </section>
 
           {/* Receipt History Section */}
-          <section className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl space-y-4">
+          <section className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl space-y-4">
             <div className="flex justify-between items-center border-b border-emerald-950/30 pb-3">
-              <h3 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#00C853]" /> Recent Receipt History
+              <h3 className="text-xs font-bold text-brand-text uppercase tracking-widest flex items-center gap-2">
+                <Clock className="w-4 h-4 text-brand-accent" /> Recent Receipt History
               </h3>
             </div>
             
@@ -598,7 +598,7 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                 value={receiptSearch}
                 onChange={(e) => setReceiptSearch(e.target.value)}
                 placeholder="Search receipts..."
-                className="w-full bg-[#050E0C] border border-[#16362F] rounded-xl py-2.5 pl-9 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-[#00C853] text-xs font-mono"
+                className="w-full bg-brand-bg border border-brand-border rounded-xl py-2.5 pl-9 pr-4 text-brand-text placeholder-gray-500 focus:outline-none focus:border-brand-accent text-xs font-mono"
               />
             </div>
 
@@ -606,26 +606,26 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
               {filteredReceipts.length > 0 ? (
                 <div className="max-h-64 overflow-y-auto space-y-2 pr-2 scrollbar-thin scrollbar-thumb-[#16362F] scrollbar-track-transparent">
                   {filteredReceipts.map((receipt) => (
-                    <div key={receipt.id} className="flex justify-between items-center p-3 bg-brand-bg/40 rounded-xl border border-emerald-950/30 hover:border-[#00C853]/30 transition-all cursor-pointer group">
+                    <div key={receipt.id} className="flex justify-between items-center p-3 bg-brand-bg/40 rounded-xl border border-emerald-950/30 hover:border-brand-accent/30 transition-all cursor-pointer group">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-emerald-950 flex items-center justify-center font-bold text-white text-xs border border-emerald-900">
+                        <div className="w-8 h-8 rounded-full bg-emerald-950 flex items-center justify-center font-bold text-brand-text text-xs border border-emerald-900">
                           {receipt.provider_name.charAt(0)}
                         </div>
                         <div>
-                          <p className="text-white text-xs font-bold font-display">{receipt.provider_name}</p>
-                          <p className="text-[10px] text-gray-500 font-mono mt-0.5">{new Date(receipt.created_at).toLocaleDateString()}</p>
+                          <p className="text-brand-text text-xs font-bold font-display">{receipt.provider_name}</p>
+                          <p className="text-[10px] text-brand-text-dim font-mono mt-0.5">{new Date(receipt.created_at).toLocaleDateString()}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-right">
-                          <p className="text-[#00C853] text-sm font-bold font-mono">
+                          <p className="text-brand-accent text-sm font-bold font-mono">
                             {receipt.currency === 'USD' ? '$' : ''}{receipt.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                           </p>
                           <p className="text-[10px] text-gray-600 font-mono mt-0.5">{receipt.id}</p>
                         </div>
                         <button 
                           onClick={(e) => handleDeleteReceipt(e, receipt.id)}
-                          className="p-1.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                          className="p-1.5 text-brand-text-dim hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -635,7 +635,7 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                 </div>
               ) : (
                 <div className="text-center py-6">
-                  <p className="text-xs text-gray-500 font-mono">
+                  <p className="text-xs text-brand-text-dim font-mono">
                     {receipts.length > 0 ? "NO_MATCHING_RECORDS" : "NO_LOCAL_RECORDS_FOUND"}
                   </p>
                   <p className="text-[10px] text-gray-600 mt-1">
@@ -650,8 +650,8 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
         {/* Live Preview Section */}
         <div className="lg:col-span-5">
           <div className="sticky top-6 space-y-6">
-            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
-              <Eye className="w-4 h-4 text-[#00C853]" /> Professional Result
+            <h3 className="text-xs font-bold text-brand-text-muted uppercase tracking-widest flex items-center gap-2">
+              <Eye className="w-4 h-4 text-brand-accent" /> Professional Result
             </h3>
 
             <div className="bg-[#020706] rounded-3xl p-6 border border-emerald-950/30 shadow-2xl relative overflow-hidden group">
@@ -668,20 +668,20 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                 <div className="space-y-8 animate-in fade-in zoom-in-95 duration-300">
                   <div className="text-center space-y-4">
                     <div 
-                      className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-white text-3xl font-black shadow-2xl relative overflow-hidden"
+                      className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-brand-text text-3xl font-black shadow-2xl relative overflow-hidden"
                       style={{ backgroundColor: selectedProvider.color_hex || '#00C853' }}
                     >
                       {selectedProvider.name.charAt(0)}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none" />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="text-white text-lg font-bold">{selectedProvider.name}</h4>
-                      <p className="text-[10px] text-gray-500 font-mono uppercase tracking-widest">Transaction Statement</p>
+                      <h4 className="text-brand-text text-lg font-bold">{selectedProvider.name}</h4>
+                      <p className="text-[10px] text-brand-text-dim font-mono uppercase tracking-widest">Transaction Statement</p>
                     </div>
                   </div>
 
                   <div className="text-center space-y-2">
-                    <div className="text-4xl font-display font-black text-white tracking-tight">
+                    <div className="text-4xl font-display font-black text-brand-text tracking-tight">
                       {['USD', 'EUR', 'GBP', 'NGN', 'CAD', 'AUD', 'JPY', 'INR'].includes(formData.currency || '') ? (
                         Number(formData.amount || 0).toLocaleString('en-US', { style: 'currency', currency: formData.currency || 'USD' })
                       ) : (
@@ -689,7 +689,7 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                       )}
                     </div>
                     <div className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
-                      ${formData.status === 'completed' ? 'bg-[#00C853]/10 text-[#00C853]' : 
+                      ${formData.status === 'completed' ? 'bg-brand-accent/10 text-brand-accent' : 
                         formData.status === 'pending' ? 'bg-amber-500/10 text-amber-500' : 'bg-red-500/10 text-red-500'}
                     `}>
                       {formData.status}
@@ -699,50 +699,50 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                   <div className="space-y-4 bg-emerald-950/5 p-5 rounded-2xl border border-emerald-950/20">
                     {formData.recipient_name && (
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-gray-500 font-bold uppercase">To</span>
-                        <span className="text-sm text-white font-medium">{formData.recipient_name}</span>
+                        <span className="text-[10px] text-brand-text-dim font-bold uppercase">To</span>
+                        <span className="text-sm text-brand-text font-medium">{formData.recipient_name}</span>
                       </div>
                     )}
                     {formData.recipient_tag && (
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-gray-500 font-bold uppercase">Tag</span>
-                        <span className="text-[11px] text-[#00C853] font-mono">{formData.recipient_tag}</span>
+                        <span className="text-[10px] text-brand-text-dim font-bold uppercase">Tag</span>
+                        <span className="text-[11px] text-brand-accent font-mono">{formData.recipient_tag}</span>
                       </div>
                     )}
                     {formData.sender_tag && (
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-gray-500 font-bold uppercase">From</span>
-                        <span className="text-[11px] text-gray-400 font-mono">{formData.sender_tag}</span>
+                        <span className="text-[10px] text-brand-text-dim font-bold uppercase">From</span>
+                        <span className="text-[11px] text-brand-text-muted font-mono">{formData.sender_tag}</span>
                       </div>
                     )}
                     {formData.recipient_address && (
                       <div className="flex flex-col gap-1 border-t border-emerald-950/20 pt-3">
-                        <span className="text-[10px] text-gray-500 font-bold uppercase">Destination Address</span>
-                        <span className="text-[9px] text-gray-400 font-mono break-all leading-tight">{formData.recipient_address}</span>
+                        <span className="text-[10px] text-brand-text-dim font-bold uppercase">Destination Address</span>
+                        <span className="text-[9px] text-brand-text-muted font-mono break-all leading-tight">{formData.recipient_address}</span>
                       </div>
                     )}
                     {formData.asset && (
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-gray-500 font-bold uppercase">Network</span>
-                        <span className="text-[10px] text-white font-mono">{formData.asset} on {formData.network || 'Mainnet'}</span>
+                        <span className="text-[10px] text-brand-text-dim font-bold uppercase">Network</span>
+                        <span className="text-[10px] text-brand-text font-mono">{formData.asset} on {formData.network || 'Mainnet'}</span>
                       </div>
                     )}
                     <div className="flex justify-between items-center border-t border-emerald-950/20 pt-3">
-                      <span className="text-[10px] text-gray-500 font-bold uppercase">Date</span>
-                      <span className="text-xs text-white">{formData.transaction_date} • {formData.transaction_time}</span>
+                      <span className="text-[10px] text-brand-text-dim font-bold uppercase">Date</span>
+                      <span className="text-xs text-brand-text">{formData.transaction_date} • {formData.transaction_time}</span>
                     </div>
                     {formData.reference_no && (
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-gray-500 font-bold uppercase">Ref / Hash</span>
-                        <span className="text-[11px] text-gray-400 font-mono max-w-[150px] truncate">{formData.reference_no}</span>
+                        <span className="text-[10px] text-brand-text-dim font-bold uppercase">Ref / Hash</span>
+                        <span className="text-[11px] text-brand-text-muted font-mono max-w-[150px] truncate">{formData.reference_no}</span>
                       </div>
                     )}
                   </div>
 
                   {formData.memo && (
                     <div className="space-y-2 px-2">
-                      <span className="text-[10px] text-gray-500 font-bold uppercase">Payment Description</span>
-                      <p className="text-xs text-gray-400 italic">"{formData.memo}"</p>
+                      <span className="text-[10px] text-brand-text-dim font-bold uppercase">Payment Description</span>
+                      <p className="text-xs text-brand-text-muted italic">"{formData.memo}"</p>
                     </div>
                   )}
 
@@ -768,7 +768,7 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
 
             <div className="p-4 bg-blue-500/5 border border-blue-500/10 rounded-xl flex items-start gap-3">
               <Smartphone className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-              <p className="text-[11px] text-gray-400 leading-relaxed">
+              <p className="text-[11px] text-brand-text-muted leading-relaxed">
                 Records generated are digital representations of personal bookkeeping data. This prototype facilitates accurate history logging for verified personal accounts.
               </p>
             </div>

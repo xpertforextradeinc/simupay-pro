@@ -311,14 +311,14 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
   return (
     <div className="space-y-6">
       {/* Dynamic Navigation Tabs */}
-      <div className="flex justify-between items-center bg-brand-card p-4 rounded-2xl border border-emerald-950/40 shadow-xl">
+      <div className="flex justify-between items-center bg-brand-card p-4 rounded-2xl border border-brand-border/40 shadow-xl">
         <div className="flex gap-2">
           <button
             onClick={() => setActiveTab('wizard')}
             className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all
               ${activeTab === 'wizard' 
-                ? 'bg-[#00C853]/15 text-[#00C853] border border-[#00C853]/30 shadow-sm' 
-                : 'text-gray-400 hover:text-white hover:bg-brand-bg/50 border border-transparent'
+                ? 'bg-brand-accent/15 text-brand-accent border border-brand-accent/30 shadow-sm' 
+                : 'text-brand-text-muted hover:text-brand-text hover:bg-brand-bg/50 border border-transparent'
               }
             `}
           >
@@ -329,8 +329,8 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
             onClick={() => setActiveTab('storefront')}
             className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all
               ${activeTab === 'storefront' 
-                ? 'bg-[#00C853]/15 text-[#00C853] border border-[#00C853]/30 shadow-sm' 
-                : 'text-gray-400 hover:text-white hover:bg-brand-bg/50 border border-transparent'
+                ? 'bg-brand-accent/15 text-brand-accent border border-brand-accent/30 shadow-sm' 
+                : 'text-brand-text-muted hover:text-brand-text hover:bg-brand-bg/50 border border-transparent'
               }
             `}
           >
@@ -341,8 +341,8 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
             onClick={() => setActiveTab('orders')}
             className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all
               ${activeTab === 'orders' 
-                ? 'bg-[#00C853]/15 text-[#00C853] border border-[#00C853]/30 shadow-sm' 
-                : 'text-gray-400 hover:text-white hover:bg-brand-bg/50 border border-transparent'
+                ? 'bg-brand-accent/15 text-brand-accent border border-brand-accent/30 shadow-sm' 
+                : 'text-brand-text-muted hover:text-brand-text hover:bg-brand-bg/50 border border-transparent'
               }
             `}
           >
@@ -361,18 +361,18 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
       {activeTab === 'wizard' && (
         <div className="space-y-6">
           {/* Main setup intro banner */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl relative overflow-hidden">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
             <div className="space-y-1.5 z-10">
               <div className="flex items-center gap-2.5">
-                <span className="p-2 rounded-xl bg-[#00C853]/10 text-[#00C853] border border-[#00C853]/25">
+                <span className="p-2 rounded-xl bg-brand-accent/10 text-brand-accent border border-brand-accent/25">
                   <ShoppingBag className="w-5.5 h-5.5" />
                 </span>
                 <div>
-                  <h2 className="text-xl font-display font-bold text-white flex items-center gap-2">
+                  <h2 className="text-xl font-display font-bold text-brand-text flex items-center gap-2">
                     SlipMint Digital Storefront Setup
                   </h2>
-                  <p className="text-xs text-gray-400 font-sans mt-0.5">
+                  <p className="text-xs text-brand-text-muted font-sans mt-0.5">
                     Launch and preview high-demand trading memberships, lockout calculators, and weekly signals tailored for West African developers and traders.
                   </p>
                 </div>
@@ -380,19 +380,19 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
             </div>
 
             <div className="flex items-center gap-3 z-10">
-              <div className="px-3.5 py-2 rounded-xl bg-brand-bg/60 border border-emerald-950/50 text-right">
-                <span className="text-[10px] text-gray-500 block uppercase font-bold tracking-wider font-mono">Domestic Target</span>
-                <span className="text-xs font-semibold text-white flex items-center gap-1.5 justify-end mt-0.5">
-                  <span className="w-2 h-2 rounded-full bg-[#00C853]" /> Nigeria (NGN ₦)
+              <div className="px-3.5 py-2 rounded-xl bg-brand-bg/60 border border-brand-border/50 text-right">
+                <span className="text-[10px] text-brand-text-dim block uppercase font-bold tracking-wider font-mono">Domestic Target</span>
+                <span className="text-xs font-semibold text-brand-text flex items-center gap-1.5 justify-end mt-0.5">
+                  <span className="w-2 h-2 rounded-full bg-brand-accent" /> Nigeria (NGN ₦)
                 </span>
               </div>
             </div>
           </div>
 
           {/* Stepper Progress Block */}
-          <div className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl">
-            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider font-mono border-b border-emerald-950/40 pb-3.5 mb-5 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#00C853]" /> Storefront Launch Roadmap
+          <div className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl">
+            <h3 className="text-xs font-bold text-brand-text-muted uppercase tracking-wider font-mono border-b border-brand-border/40 pb-3.5 mb-5 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-brand-accent" /> Storefront Launch Roadmap
             </h3>
             
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
@@ -411,19 +411,19 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                     onClick={() => setCurrentStep(step.n)}
                     className={`p-4 rounded-xl border text-left transition-all flex flex-col justify-between space-y-3 relative cursor-pointer
                       ${isCompleted 
-                        ? 'bg-[#00C853]/5 border-[#00C853]/30 text-white' 
+                        ? 'bg-brand-accent/5 border-brand-accent/30 text-brand-text' 
                         : isActive 
-                          ? 'bg-brand-bg border-[#00C853]/40 shadow-[0_0_15px_rgba(0,200,83,0.05)]' 
-                          : 'bg-brand-bg/40 border-emerald-950/30 opacity-60 text-gray-500 hover:opacity-100 hover:border-emerald-900'
+                          ? 'bg-brand-bg border-brand-accent/40 shadow-[0_0_15px_rgba(0,200,83,0.05)]' 
+                          : 'bg-brand-bg/40 border-emerald-950/30 opacity-60 text-brand-text-dim hover:opacity-100 hover:border-emerald-900'
                       }
                     `}
                   >
                     <div className="flex items-center justify-between">
                       <span className={`text-xs font-mono font-bold w-6 h-6 rounded-lg flex items-center justify-center border
                         ${isCompleted 
-                          ? 'bg-[#00C853]/20 border-[#00C853]/40 text-[#00C853]' 
+                          ? 'bg-brand-accent/20 border-brand-accent/40 text-brand-accent' 
                           : isActive 
-                            ? 'bg-[#00C853]/10 border-[#00C853]/30 text-[#00C853]' 
+                            ? 'bg-brand-accent/10 border-brand-accent/30 text-brand-accent' 
                             : 'bg-emerald-950/20 border-emerald-950/30'
                         }
                       `}>
@@ -431,19 +431,19 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                       </span>
 
                       {isCompleted ? (
-                        <CheckCircle className="w-4.5 h-4.5 text-[#00C853]" />
+                        <CheckCircle className="w-4.5 h-4.5 text-brand-accent" />
                       ) : (
                         <Lock className="w-3.5 h-3.5 text-gray-600" />
                       )}
                     </div>
 
                     <div>
-                      <h4 className={`text-xs font-bold ${isActive ? 'text-[#00C853]' : 'text-white'}`}>{step.label}</h4>
-                      <p className="text-[10px] text-gray-400 mt-0.5 leading-relaxed">{step.desc}</p>
+                      <h4 className={`text-xs font-bold ${isActive ? 'text-brand-accent' : 'text-brand-text'}`}>{step.label}</h4>
+                      <p className="text-[10px] text-brand-text-muted mt-0.5 leading-relaxed">{step.desc}</p>
                     </div>
 
                     {isActive && (
-                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#00C853] rounded-full animate-ping" />
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-brand-accent rounded-full animate-ping" />
                     )}
                   </button>
                 );
@@ -457,78 +457,78 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
               
               {/* Step 1 panel */}
               {currentStep === 1 && (
-                <div className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl space-y-5">
-                  <div className="flex items-center justify-between border-b border-emerald-950/40 pb-3">
+                <div className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl space-y-5">
+                  <div className="flex items-center justify-between border-b border-brand-border/40 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
-                      <h3 className="text-sm font-semibold text-white">STEP 1: Store Settings Confirmation</h3>
+                      <span className="w-2 h-2 rounded-full bg-brand-accent animate-pulse" />
+                      <h3 className="text-sm font-semibold text-brand-text">STEP 1: Store Settings Confirmation</h3>
                     </div>
                   </div>
 
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="p-4 bg-brand-bg/50 border border-emerald-950/40 rounded-xl flex items-center gap-3">
-                        <span className="p-2.5 rounded-lg bg-emerald-950/40 text-[#00C853]">
+                      <div className="p-4 bg-brand-bg/50 border border-brand-border/40 rounded-xl flex items-center gap-3">
+                        <span className="p-2.5 rounded-lg bg-emerald-950/40 text-brand-accent">
                           <Coins className="w-4 h-4" />
                         </span>
                         <div>
-                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider font-mono block">Currency</span>
-                          <span className="text-xs font-semibold text-white">{storeSettings.currency} ({storeSettings.currencySymbol})</span>
+                          <span className="text-[9px] text-brand-text-dim font-bold uppercase tracking-wider font-mono block">Currency</span>
+                          <span className="text-xs font-semibold text-brand-text">{storeSettings.currency} ({storeSettings.currencySymbol})</span>
                         </div>
                       </div>
 
-                      <div className="p-4 bg-brand-bg/50 border border-emerald-950/40 rounded-xl flex items-center gap-3">
-                        <span className="p-2.5 rounded-lg bg-emerald-950/40 text-[#00C853]">
+                      <div className="p-4 bg-brand-bg/50 border border-brand-border/40 rounded-xl flex items-center gap-3">
+                        <span className="p-2.5 rounded-lg bg-emerald-950/40 text-brand-accent">
                           <Globe className="w-4 h-4" />
                         </span>
                         <div>
-                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider font-mono block">Domestic Market</span>
-                          <span className="text-xs font-semibold text-white">{storeSettings.domesticMarket}</span>
+                          <span className="text-[9px] text-brand-text-dim font-bold uppercase tracking-wider font-mono block">Domestic Market</span>
+                          <span className="text-xs font-semibold text-brand-text">{storeSettings.domesticMarket}</span>
                         </div>
                       </div>
 
-                      <div className="p-4 bg-brand-bg/50 border border-emerald-950/40 rounded-xl flex items-center gap-3">
-                        <span className="p-2.5 rounded-lg bg-emerald-950/40 text-[#00C853]">
+                      <div className="p-4 bg-brand-bg/50 border border-brand-border/40 rounded-xl flex items-center gap-3">
+                        <span className="p-2.5 rounded-lg bg-emerald-950/40 text-brand-accent">
                           <Languages className="w-4 h-4" />
                         </span>
                         <div>
-                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider font-mono block">Language</span>
-                          <span className="text-xs font-semibold text-white">{storeSettings.language}</span>
+                          <span className="text-[9px] text-brand-text-dim font-bold uppercase tracking-wider font-mono block">Language</span>
+                          <span className="text-xs font-semibold text-brand-text">{storeSettings.language}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-[#091714]/60 border border-[#16362F]/50 rounded-xl p-4 space-y-2 text-xs text-gray-300">
+                    <div className="bg-brand-card/60 border border-brand-border/50 rounded-xl p-4 space-y-2 text-xs text-brand-text-muted">
                       <div className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-[#00C853] flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-4 h-4 text-brand-accent flex-shrink-0 mt-0.5" />
                         <div>
-                          <strong className="text-white font-semibold">Nigerian Audience Alignment:</strong> Store defaults are pre-engineered to match local payment gateways to stop transaction decline rate spikes.
+                          <strong className="text-brand-text font-semibold">Nigerian Audience Alignment:</strong> Store defaults are pre-engineered to match local payment gateways to stop transaction decline rate spikes.
                         </div>
                       </div>
                       <div className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-[#00C853] flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-4 h-4 text-brand-accent flex-shrink-0 mt-0.5" />
                         <div>
-                          <strong className="text-white font-semibold">Domestic Digital Delivery:</strong> Delivery routing is configured as digital-only (physical shipping logic and weight rules are completely excluded).
+                          <strong className="text-brand-text font-semibold">Domestic Digital Delivery:</strong> Delivery routing is configured as digital-only (physical shipping logic and weight rules are completely excluded).
                         </div>
                       </div>
                     </div>
 
                     <div className="flex justify-between items-center pt-2 border-t border-emerald-950/30">
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-brand-text-muted">
                         Status: {confirmedSteps[1] ? '✅ Completed & Confirmed' : '⚡ Action Required'}
                       </span>
 
                       {!confirmedSteps[1] ? (
                         <button
                           onClick={handleConfirmStep1}
-                          className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg"
+                          className="bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg"
                         >
                           <CheckCircle className="w-3.5 h-3.5" /> Confirm Store Settings
                         </button>
                       ) : (
                         <button
                           onClick={() => setCurrentStep(2)}
-                          className="bg-brand-bg border border-emerald-950 hover:bg-[#00C853]/10 text-white font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all"
+                          className="bg-brand-bg border border-emerald-950 hover:bg-brand-accent/10 text-brand-text font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all"
                         >
                           Continue to Step 2 <ChevronRight className="w-3.5 h-3.5" />
                         </button>
@@ -540,51 +540,51 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
 
               {/* Step 2 panel */}
               {currentStep === 2 && (
-                <div className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl space-y-5">
-                  <div className="flex items-center justify-between border-b border-emerald-950/40 pb-3">
+                <div className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl space-y-5">
+                  <div className="flex items-center justify-between border-b border-brand-border/40 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
-                      <h3 className="text-sm font-semibold text-white">STEP 2: Collections Configuration</h3>
+                      <span className="w-2 h-2 rounded-full bg-brand-accent animate-pulse" />
+                      <h3 className="text-sm font-semibold text-brand-text">STEP 2: Collections Configuration</h3>
                     </div>
                     
-                    <span className="text-xs text-[#00C853] font-mono font-bold bg-[#00C853]/10 px-2.5 py-0.5 rounded-full">
+                    <span className="text-xs text-brand-accent font-mono font-bold bg-brand-accent/10 px-2.5 py-0.5 rounded-full">
                       7 Groups Generated
                     </span>
                   </div>
 
-                  <p className="text-xs text-gray-400 leading-relaxed">
+                  <p className="text-xs text-brand-text-muted leading-relaxed">
                     We have successfully registered the 7 structural collections requested for this premium fintech/trading membership brand.
                   </p>
 
                   <div className="space-y-3 max-h-[350px] overflow-y-auto pr-1">
                     {categories.map((cat) => (
-                      <div key={cat.id} className="p-4 bg-brand-bg/60 border border-emerald-950/40 rounded-xl space-y-2 hover:border-[#00C853]/30 transition-all">
+                      <div key={cat.id} className="p-4 bg-brand-bg/60 border border-brand-border/40 rounded-xl space-y-2 hover:border-brand-accent/30 transition-all">
                         <div className="flex justify-between items-start">
                           <div className="flex items-center gap-2">
-                            <span className="p-1.5 rounded-lg bg-[#00C853]/10 text-[#00C853] border border-[#00C853]/15">
+                            <span className="p-1.5 rounded-lg bg-brand-accent/10 text-brand-accent border border-brand-accent/15">
                               <FolderHeart className="w-4 h-4" />
                             </span>
                             <div>
-                              <h4 className="text-xs font-bold text-white">{cat.title}</h4>
-                              <p className="text-[9px] text-[#00C853] font-mono font-medium">/{cat.handle}</p>
+                              <h4 className="text-xs font-bold text-brand-text">{cat.title}</h4>
+                              <p className="text-[9px] text-brand-accent font-mono font-medium">/{cat.handle}</p>
                             </div>
                           </div>
 
-                          <span className="text-[9px] bg-emerald-950/40 text-gray-400 border border-emerald-950/30 px-2 py-0.5 rounded uppercase font-mono font-semibold">
+                          <span className="text-[9px] bg-emerald-950/40 text-brand-text-muted border border-emerald-950/30 px-2 py-0.5 rounded uppercase font-mono font-semibold">
                             Sort: {cat.sort_order}
                           </span>
                         </div>
 
-                        <p className="text-[11px] text-gray-400 leading-relaxed font-sans">{cat.description}</p>
+                        <p className="text-[11px] text-brand-text-muted leading-relaxed font-sans">{cat.description}</p>
                         
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] font-mono bg-[#091714]/30 p-2 rounded border border-emerald-950/20 text-gray-500">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] font-mono bg-brand-card/30 p-2 rounded border border-emerald-950/20 text-brand-text-dim">
                           <div>
                             <span className="text-gray-600 block">SEO Title</span>
-                            <span className="text-gray-400 truncate block">{cat.seo_title}</span>
+                            <span className="text-brand-text-muted truncate block">{cat.seo_title}</span>
                           </div>
                           <div>
                             <span className="text-gray-600 block">SEO Description</span>
-                            <span className="text-gray-400 truncate block">{cat.seo_description}</span>
+                            <span className="text-brand-text-muted truncate block">{cat.seo_description}</span>
                           </div>
                         </div>
                       </div>
@@ -592,21 +592,21 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                   </div>
 
                   <div className="flex justify-between items-center pt-2 border-t border-emerald-950/30">
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-brand-text-muted">
                       Status: {confirmedSteps[2] ? '✅ Collections Registered' : '⚡ Action Required'}
                     </span>
 
                     {!confirmedSteps[2] ? (
                       <button
                         onClick={handleConfirmStep2}
-                        className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg"
+                        className="bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg"
                       >
                         <CheckCircle className="w-3.5 h-3.5" /> Confirm 7 Collections
                       </button>
                     ) : (
                       <button
                         onClick={() => setCurrentStep(3)}
-                        className="bg-brand-bg border border-emerald-950 hover:bg-[#00C853]/10 text-white font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all"
+                        className="bg-brand-bg border border-emerald-950 hover:bg-brand-accent/10 text-brand-text font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all"
                       >
                         Continue to Step 3 <ChevronRight className="w-3.5 h-3.5" />
                       </button>
@@ -617,11 +617,11 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
 
               {/* Step 3 panel */}
               {currentStep === 3 && (
-                <div className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl space-y-5">
-                  <div className="flex items-center justify-between border-b border-emerald-950/40 pb-3">
+                <div className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl space-y-5">
+                  <div className="flex items-center justify-between border-b border-brand-border/40 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
-                      <h3 className="text-sm font-semibold text-white">STEP 3: Products Configuration</h3>
+                      <span className="w-2 h-2 rounded-full bg-brand-accent animate-pulse" />
+                      <h3 className="text-sm font-semibold text-brand-text">STEP 3: Products Configuration</h3>
                     </div>
 
                     <span className="text-xs text-amber-500 font-mono font-bold bg-amber-500/10 px-2.5 py-0.5 rounded-full">
@@ -629,30 +629,30 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                     </span>
                   </div>
 
-                  <p className="text-xs text-gray-400 leading-relaxed">
+                  <p className="text-xs text-brand-text-muted leading-relaxed">
                     Three high-conversion digital products have been initialized. In accordance with requirements, they are in <strong className="text-amber-500">Draft</strong> status. Physical constraints have been unchecked, disabling shipping costs.
                   </p>
 
                   <div className="space-y-4">
                     {products.map((prod) => (
-                      <div key={prod.id} className="p-4 bg-brand-bg/60 border border-emerald-950/40 rounded-xl space-y-3 hover:border-[#00C853]/30 transition-all">
+                      <div key={prod.id} className="p-4 bg-brand-bg/60 border border-brand-border/40 rounded-xl space-y-3 hover:border-brand-accent/30 transition-all">
                         <div className="flex flex-col sm:flex-row gap-4">
                           <img 
                             src={prod.image_url} 
                             alt={prod.title} 
-                            className="w-full sm:w-24 h-24 object-cover rounded-lg border border-emerald-950/50"
+                            className="w-full sm:w-24 h-24 object-cover rounded-lg border border-brand-border/50"
                             referrerPolicy="no-referrer"
                           />
 
                           <div className="flex-1 space-y-1.5">
                             <div className="flex justify-between items-start gap-2">
                               <div>
-                                <h4 className="text-xs font-bold text-white">{prod.title}</h4>
-                                <span className="text-[9px] font-mono text-[#00C853]">Collection Scoped: {prod.category_id}</span>
+                                <h4 className="text-xs font-bold text-brand-text">{prod.title}</h4>
+                                <span className="text-[9px] font-mono text-brand-accent">Collection Scoped: {prod.category_id}</span>
                               </div>
 
                               <div className="text-right">
-                                <span className="text-xs font-mono font-bold text-[#00C853] block">₦{prod.price.toLocaleString()}</span>
+                                <span className="text-xs font-mono font-bold text-brand-accent block">₦{prod.price.toLocaleString()}</span>
                                 <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full uppercase inline-block mt-1
                                   ${prod.status === 'Draft' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}
                                 `}>
@@ -661,12 +661,12 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                               </div>
                             </div>
 
-                            <p className="text-[11px] text-gray-400 leading-relaxed font-sans">{prod.description}</p>
+                            <p className="text-[11px] text-brand-text-muted leading-relaxed font-sans">{prod.description}</p>
                             
                             <div className="flex flex-wrap gap-1.5 pt-1">
                               {prod.benefits?.map((benefit, idx) => (
-                                <span key={idx} className="text-[9px] text-gray-400 bg-brand-bg/80 border border-emerald-950/30 px-2 py-0.5 rounded-md flex items-center gap-1">
-                                  <Check className="w-2.5 h-2.5 text-[#00C853]" /> {benefit}
+                                <span key={idx} className="text-[9px] text-brand-text-muted bg-brand-bg/80 border border-emerald-950/30 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                  <Check className="w-2.5 h-2.5 text-brand-accent" /> {benefit}
                                 </span>
                               ))}
                             </div>
@@ -678,8 +678,8 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
 
                   <div className="flex flex-col sm:flex-row gap-3 p-4 bg-brand-bg rounded-xl border border-emerald-950/30 justify-between items-center">
                     <div className="space-y-1 text-center sm:text-left">
-                      <span className="text-xs font-semibold text-white block">Product Activation Panel</span>
-                      <p className="text-[10px] text-gray-400 leading-relaxed">
+                      <span className="text-xs font-semibold text-brand-text block">Product Activation Panel</span>
+                      <p className="text-[10px] text-brand-text-muted leading-relaxed">
                         Ready to go live? Toggle the status from Draft to Active to publish them instantly to the Live storefront!
                       </p>
                     </div>
@@ -687,13 +687,13 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleToggleProductsActivation(false)}
-                        className="px-3 py-1.5 rounded-lg text-[10px] font-mono font-bold uppercase bg-brand-bg/40 border border-emerald-950/40 text-gray-400 hover:text-white"
+                        className="px-3 py-1.5 rounded-lg text-[10px] font-mono font-bold uppercase bg-brand-bg/40 border border-brand-border/40 text-brand-text-muted hover:text-brand-text"
                       >
                         Keep in Draft
                       </button>
                       <button
                         onClick={() => handleToggleProductsActivation(true)}
-                        className="px-4 py-1.5 rounded-lg text-[10px] font-mono font-bold uppercase bg-[#00C853]/15 text-[#00C853] border border-[#00C853]/30 hover:bg-[#00C853]/25 transition-all flex items-center gap-1"
+                        className="px-4 py-1.5 rounded-lg text-[10px] font-mono font-bold uppercase bg-brand-accent/15 text-brand-accent border border-brand-accent/30 hover:bg-brand-accent/25 transition-all flex items-center gap-1"
                       >
                         <Zap className="w-3 h-3" /> Go Live & Activate
                       </button>
@@ -701,21 +701,21 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                   </div>
 
                   <div className="flex justify-between items-center pt-2 border-t border-emerald-950/30">
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-brand-text-muted">
                       Status: {confirmedSteps[3] ? '✅ Products Registered' : '⚡ Action Required'}
                     </span>
 
                     {!confirmedSteps[3] ? (
                       <button
                         onClick={handleConfirmStep3}
-                        className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg"
+                        className="bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg"
                       >
                         <CheckCircle className="w-3.5 h-3.5" /> Confirm Product Details
                       </button>
                     ) : (
                       <button
                         onClick={() => setCurrentStep(4)}
-                        className="bg-brand-bg border border-emerald-950 hover:bg-[#00C853]/10 text-white font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all"
+                        className="bg-brand-bg border border-emerald-950 hover:bg-brand-accent/10 text-brand-text font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all"
                       >
                         Continue to Step 4 <ChevronRight className="w-3.5 h-3.5" />
                       </button>
@@ -726,72 +726,72 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
 
               {/* Step 4 panel */}
               {currentStep === 4 && (
-                <div className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl space-y-5">
-                  <div className="flex items-center justify-between border-b border-emerald-950/40 pb-3">
+                <div className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl space-y-5">
+                  <div className="flex items-center justify-between border-b border-brand-border/40 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
-                      <h3 className="text-sm font-semibold text-white">STEP 4: Launch Discount Code</h3>
+                      <span className="w-2 h-2 rounded-full bg-brand-accent animate-pulse" />
+                      <h3 className="text-sm font-semibold text-brand-text">STEP 4: Launch Discount Code</h3>
                     </div>
 
-                    <span className="text-xs text-[#00C853] font-mono font-bold bg-[#00C853]/10 px-2.5 py-0.5 rounded-full">
+                    <span className="text-xs text-brand-accent font-mono font-bold bg-brand-accent/10 px-2.5 py-0.5 rounded-full">
                       Active
                     </span>
                   </div>
 
-                  <p className="text-xs text-gray-400 leading-relaxed">
+                  <p className="text-xs text-brand-text-muted leading-relaxed">
                     We have successfully configured the launch discount code tailored for early platform adopters.
                   </p>
 
-                  <div className="p-5 bg-brand-bg/80 border border-[#00C853]/20 rounded-2xl relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#00C853]/5 rounded-full blur-2xl pointer-events-none" />
+                  <div className="p-5 bg-brand-bg/80 border border-brand-accent/20 rounded-2xl relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-brand-accent/5 rounded-full blur-2xl pointer-events-none" />
                     
                     <div className="space-y-1 text-center sm:text-left z-10">
-                      <span className="text-[10px] font-mono text-gray-500 block">DISCOUNT PERCENTAGE</span>
-                      <strong className="text-3xl font-display font-extrabold text-white block">15% OFF</strong>
-                      <span className="text-[11px] text-gray-400 block mt-1">
-                        Scoped to the <strong className="text-white">Founder Vault Collection</strong>
+                      <span className="text-[10px] font-mono text-brand-text-dim block">DISCOUNT PERCENTAGE</span>
+                      <strong className="text-3xl font-display font-extrabold text-brand-text block">15% OFF</strong>
+                      <span className="text-[11px] text-brand-text-muted block mt-1">
+                        Scoped to the <strong className="text-brand-text">Founder Vault Collection</strong>
                       </span>
                     </div>
 
                     <div className="flex flex-col items-center gap-1.5 z-10">
-                      <span className="text-[9px] font-mono text-gray-500">PROMO CODE</span>
-                      <div className="px-5 py-2.5 rounded-xl bg-[#00C853]/10 border border-[#00C853]/35 font-mono text-base font-extrabold text-[#00C853] tracking-widest uppercase">
+                      <span className="text-[9px] font-mono text-brand-text-dim">PROMO CODE</span>
+                      <div className="px-5 py-2.5 rounded-xl bg-brand-accent/10 border border-brand-accent/35 font-mono text-base font-extrabold text-brand-accent tracking-widest uppercase">
                         LAUNCH15
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-gray-400">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-brand-text-muted">
                     <div className="p-3 bg-brand-bg/40 border border-emerald-950/30 rounded-xl">
-                      <span className="text-gray-500 block text-[9px] font-mono">AVAILABILITY</span>
-                      <span className="text-white font-medium block mt-0.5">All customers</span>
+                      <span className="text-brand-text-dim block text-[9px] font-mono">AVAILABILITY</span>
+                      <span className="text-brand-text font-medium block mt-0.5">All customers</span>
                     </div>
                     <div className="p-3 bg-brand-bg/40 border border-emerald-950/30 rounded-xl">
-                      <span className="text-gray-500 block text-[9px] font-mono">VALIDITY PERIOD</span>
-                      <span className="text-white font-medium block mt-0.5">First 30 Days</span>
+                      <span className="text-brand-text-dim block text-[9px] font-mono">VALIDITY PERIOD</span>
+                      <span className="text-brand-text font-medium block mt-0.5">First 30 Days</span>
                     </div>
                     <div className="p-3 bg-brand-bg/40 border border-emerald-950/30 rounded-xl">
-                      <span className="text-gray-500 block text-[9px] font-mono">USAGE CONSTRAINT</span>
-                      <span className="text-white font-medium block mt-0.5">Digital Membership only</span>
+                      <span className="text-brand-text-dim block text-[9px] font-mono">USAGE CONSTRAINT</span>
+                      <span className="text-brand-text font-medium block mt-0.5">Digital Membership only</span>
                     </div>
                   </div>
 
                   <div className="flex justify-between items-center pt-2 border-t border-emerald-950/30">
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-brand-text-muted">
                       Status: {confirmedSteps[4] ? '✅ Discount Code Registered' : '⚡ Action Required'}
                     </span>
 
                     {!confirmedSteps[4] ? (
                       <button
                         onClick={handleConfirmStep4}
-                        className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg"
+                        className="bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg"
                       >
                         <CheckCircle className="w-3.5 h-3.5" /> Confirm Discount Code
                       </button>
                     ) : (
                       <button
                         onClick={() => setCurrentStep(5)}
-                        className="bg-brand-bg border border-emerald-950 hover:bg-[#00C853]/10 text-white font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all"
+                        className="bg-brand-bg border border-emerald-950 hover:bg-brand-accent/10 text-brand-text font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all"
                       >
                         Continue to Step 5 <ChevronRight className="w-3.5 h-3.5" />
                       </button>
@@ -802,19 +802,19 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
 
               {/* Step 5 panel */}
               {currentStep === 5 && (
-                <div className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl space-y-5">
-                  <div className="flex items-center justify-between border-b border-emerald-950/40 pb-3">
+                <div className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl space-y-5">
+                  <div className="flex items-center justify-between border-b border-brand-border/40 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
-                      <h3 className="text-sm font-semibold text-white">STEP 5: Navigation Structure</h3>
+                      <span className="w-2 h-2 rounded-full bg-brand-accent animate-pulse" />
+                      <h3 className="text-sm font-semibold text-brand-text">STEP 5: Navigation Structure</h3>
                     </div>
 
-                    <span className="text-xs text-[#00C853] font-mono font-bold bg-[#00C853]/10 px-2.5 py-0.5 rounded-full">
+                    <span className="text-xs text-brand-accent font-mono font-bold bg-brand-accent/10 px-2.5 py-0.5 rounded-full">
                       Links Grouped
                     </span>
                   </div>
 
-                  <p className="text-xs text-gray-400 leading-relaxed">
+                  <p className="text-xs text-brand-text-muted leading-relaxed">
                     Set up SlipMint's navigation layouts to categorize collections logically. This organizes standard routes and filters products natively.
                   </p>
 
@@ -825,15 +825,15 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                       { group: 'Education', icon: BookOpen, items: ['Fintech Masterclass', 'Beginner Starter Booklet'] },
                       { group: 'Signals', icon: Activity, items: ['Telegram Channel Entry', 'Automated Trade Feeds'] }
                     ].map((nav, idx) => (
-                      <div key={idx} className="p-4 bg-brand-bg/50 border border-emerald-950/40 rounded-xl space-y-2.5 text-center sm:text-left">
+                      <div key={idx} className="p-4 bg-brand-bg/50 border border-brand-border/40 rounded-xl space-y-2.5 text-center sm:text-left">
                         <div className="flex justify-center sm:justify-start items-center gap-1.5">
-                          <nav.icon className="w-4 h-4 text-[#00C853]" />
-                          <h4 className="text-xs font-bold text-white uppercase font-mono">{nav.group}</h4>
+                          <nav.icon className="w-4 h-4 text-brand-accent" />
+                          <h4 className="text-xs font-bold text-brand-text uppercase font-mono">{nav.group}</h4>
                         </div>
-                        <ul className="space-y-1 text-[10px] text-gray-400 font-sans">
+                        <ul className="space-y-1 text-[10px] text-brand-text-muted font-sans">
                           {nav.items.map((item, itemIdx) => (
                             <li key={itemIdx} className="flex items-center gap-1 justify-center sm:justify-start">
-                              <span className="w-1 h-1 rounded-full bg-[#00C853]" /> {item}
+                              <span className="w-1 h-1 rounded-full bg-brand-accent" /> {item}
                             </li>
                           ))}
                         </ul>
@@ -842,19 +842,19 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                   </div>
 
                   <div className="flex justify-between items-center pt-2 border-t border-emerald-950/30">
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-brand-text-muted">
                       Status: {confirmedSteps[5] ? '✅ Navigation Active' : '⚡ Action Required'}
                     </span>
 
                     {!confirmedSteps[5] ? (
                       <button
                         onClick={handleConfirmStep5}
-                        className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg"
+                        className="bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all cursor-pointer shadow-lg"
                       >
                         <CheckCircle className="w-3.5 h-3.5" /> Confirm Navigation Menu
                       </button>
                     ) : (
-                      <span className="text-xs text-[#00C853] font-semibold flex items-center gap-1.5">
+                      <span className="text-xs text-brand-accent font-semibold flex items-center gap-1.5">
                         <CheckCircle className="w-4 h-4" /> Setup Complete! Proceed to Live Buyer Storefront tab.
                       </span>
                     )}
@@ -868,51 +868,51 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
             <div className="space-y-6">
               
               {/* Wallet/Profile Quick Status widget */}
-              <div className="bg-brand-card p-5 rounded-2xl border border-emerald-950/40 shadow-xl space-y-4">
-                <div className="flex items-center justify-between border-b border-[#16362F]/30 pb-2.5">
-                  <span className="text-xs font-bold text-white flex items-center gap-1.5 font-mono">
-                    <CreditCard className="w-4 h-4 text-[#00C853]" /> WALLET BALANCES
+              <div className="bg-brand-card p-5 rounded-2xl border border-brand-border/40 shadow-xl space-y-4">
+                <div className="flex items-center justify-between border-b border-brand-border/30 pb-2.5">
+                  <span className="text-xs font-bold text-brand-text flex items-center gap-1.5 font-mono">
+                    <CreditCard className="w-4 h-4 text-brand-accent" /> WALLET BALANCES
                   </span>
-                  <span className="text-[9px] text-[#00C853] font-bold uppercase font-mono tracking-wider">
+                  <span className="text-[9px] text-brand-accent font-bold uppercase font-mono tracking-wider">
                     Ready to test
                   </span>
                 </div>
 
                 <div className="space-y-3">
                   <div>
-                    <span className="text-[10px] text-gray-500 block uppercase font-bold font-mono">SimuPay Balance</span>
-                    <strong className="text-xl font-display font-bold text-white block mt-0.5">
+                    <span className="text-[10px] text-brand-text-dim block uppercase font-bold font-mono">SimuPay Balance</span>
+                    <strong className="text-xl font-display font-bold text-brand-text block mt-0.5">
                       ${profile?.wallet_balance?.toLocaleString() ?? '0.00'}
                     </strong>
                   </div>
 
                   <div className="p-3.5 bg-brand-bg/50 border border-emerald-950/30 rounded-xl space-y-1">
-                    <span className="text-[9px] text-gray-500 uppercase font-mono font-bold block">Naira Equivalent</span>
-                    <strong className="text-sm font-semibold text-[#00C853] block">
+                    <span className="text-[9px] text-brand-text-dim uppercase font-mono font-bold block">Naira Equivalent</span>
+                    <strong className="text-sm font-semibold text-brand-accent block">
                       ₦{((profile?.wallet_balance ?? 0) * NGN_TO_USD_RATE).toLocaleString()} NGN
                     </strong>
-                    <span className="text-[8px] text-gray-500 block">Exchange Index: 1 USD = 1,500 NGN</span>
+                    <span className="text-[8px] text-brand-text-dim block">Exchange Index: 1 USD = 1,500 NGN</span>
                   </div>
                 </div>
               </div>
 
               {/* Step info sidebar context */}
-              <div className="bg-brand-card p-5 rounded-2xl border border-emerald-950/40 shadow-xl space-y-3.5">
-                <div className="flex items-center gap-2 border-b border-[#16362F]/30 pb-2">
-                  <Terminal className="w-4 h-4 text-[#00C853]" />
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono">Metadata Schema</h4>
+              <div className="bg-brand-card p-5 rounded-2xl border border-brand-border/40 shadow-xl space-y-3.5">
+                <div className="flex items-center gap-2 border-b border-brand-border/30 pb-2">
+                  <Terminal className="w-4 h-4 text-brand-accent" />
+                  <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider font-mono">Metadata Schema</h4>
                 </div>
 
-                <div className="space-y-2.5 text-[11px] text-gray-400 font-sans leading-relaxed">
+                <div className="space-y-2.5 text-[11px] text-brand-text-muted font-sans leading-relaxed">
                   <p>
                     All items are natively integrated. Unlike separate storefront models, this platform binds collections directly to metadata queries.
                   </p>
                   
-                  <div className="p-3 bg-brand-bg rounded-lg border border-emerald-950/50 font-mono text-[10px] space-y-1 text-gray-500">
-                    <div><span className="text-white">"currency"</span>: "NGN"</div>
-                    <div><span className="text-white">"is_digital"</span>: true</div>
-                    <div><span className="text-white">"coupon"</span>: "LAUNCH15"</div>
-                    <div><span className="text-white">"database"</span>: "Supabase"</div>
+                  <div className="p-3 bg-brand-bg rounded-lg border border-brand-border/50 font-mono text-[10px] space-y-1 text-brand-text-dim">
+                    <div><span className="text-brand-text">"currency"</span>: "NGN"</div>
+                    <div><span className="text-brand-text">"is_digital"</span>: true</div>
+                    <div><span className="text-brand-text">"coupon"</span>: "LAUNCH15"</div>
+                    <div><span className="text-brand-text">"database"</span>: "Supabase"</div>
                   </div>
                 </div>
               </div>
@@ -925,22 +925,22 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
       {activeTab === 'storefront' && (
         <div className="space-y-6">
           {/* Header */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl">
             <div className="space-y-1.5">
-              <h2 className="text-lg font-display font-bold text-white flex items-center gap-2">
-                <StoreIcon className="w-5 h-5 text-[#00C853]" /> Live Buyer Digital Storefront
+              <h2 className="text-lg font-display font-bold text-brand-text flex items-center gap-2">
+                <StoreIcon className="w-5 h-5 text-brand-accent" /> Live Buyer Digital Storefront
               </h2>
-              <p className="text-xs text-gray-400 font-sans">
+              <p className="text-xs text-brand-text-muted font-sans">
                 Browse active digital assets and services. Purchasing immediately debits your simulated wallet, launches subscriptions, generates secure PDF receipts, and records activity.
               </p>
             </div>
 
-            <div className="p-3 bg-brand-bg rounded-xl border border-emerald-950/40 text-center sm:text-right min-w-[200px]">
-              <span className="text-[9px] text-gray-500 block uppercase font-bold font-mono">Your Active Wallet</span>
-              <span className="text-sm font-semibold text-white block mt-0.5">
+            <div className="p-3 bg-brand-bg rounded-xl border border-brand-border/40 text-center sm:text-right min-w-[200px]">
+              <span className="text-[9px] text-brand-text-dim block uppercase font-bold font-mono">Your Active Wallet</span>
+              <span className="text-sm font-semibold text-brand-text block mt-0.5">
                 ${profile?.wallet_balance?.toLocaleString() || '35,000.00'} USD
               </span>
-              <span className="text-[10px] text-[#00C853] font-semibold block">
+              <span className="text-[10px] text-brand-accent font-semibold block">
                 ≈ ₦{((profile?.wallet_balance || 35000) * NGN_TO_USD_RATE).toLocaleString()} NGN
               </span>
             </div>
@@ -954,7 +954,7 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                 <div 
                   key={prod.id} 
                   className={`bg-brand-card border rounded-2xl overflow-hidden flex flex-col justify-between shadow-xl transition-all hover:translate-y-[-2px]
-                    ${isDraft ? 'border-amber-900/40 opacity-80' : 'border-emerald-950/40 hover:border-[#00C853]/40'}
+                    ${isDraft ? 'border-amber-900/40 opacity-80' : 'border-brand-border/40 hover:border-brand-accent/40'}
                   `}
                 >
                   <div className="relative">
@@ -964,7 +964,7 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                       className="w-full h-40 object-cover"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="absolute top-3 right-3 bg-brand-bg/80 backdrop-blur-md border border-emerald-950/50 px-3 py-1 rounded-full text-xs font-mono font-bold text-[#00C853]">
+                    <div className="absolute top-3 right-3 bg-brand-bg/80 backdrop-blur-md border border-brand-border/50 px-3 py-1 rounded-full text-xs font-mono font-bold text-brand-accent">
                       ₦{prod.price.toLocaleString()} NGN
                     </div>
 
@@ -978,11 +978,11 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                   <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                     <div className="space-y-2">
                       <div className="flex justify-between items-start gap-2">
-                        <h3 className="text-sm font-bold text-white leading-snug">{prod.title}</h3>
+                        <h3 className="text-sm font-bold text-brand-text leading-snug">{prod.title}</h3>
                         
                         <button 
                           onClick={() => handleViewReviews(prod.id)}
-                          className="text-[10px] text-gray-500 hover:text-amber-400 transition-colors flex items-center gap-1 shrink-0"
+                          className="text-[10px] text-brand-text-dim hover:text-amber-400 transition-colors flex items-center gap-1 shrink-0"
                           title="View product feedback"
                         >
                           <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
@@ -990,14 +990,14 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                         </button>
                       </div>
 
-                      <p className="text-xs text-gray-400 leading-relaxed font-sans line-clamp-3">
+                      <p className="text-xs text-brand-text-muted leading-relaxed font-sans line-clamp-3">
                         {prod.description}
                       </p>
 
                       <div className="space-y-1 pt-1">
                         {prod.benefits?.map((benefit, idx) => (
-                          <div key={idx} className="flex items-start gap-1.5 text-[11px] text-gray-300">
-                            <Check className="w-3.5 h-3.5 text-[#00C853] shrink-0 mt-0.5" />
+                          <div key={idx} className="flex items-start gap-1.5 text-[11px] text-brand-text-muted">
+                            <Check className="w-3.5 h-3.5 text-brand-accent shrink-0 mt-0.5" />
                             <span>{benefit}</span>
                           </div>
                         ))}
@@ -1012,7 +1012,7 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                       ) : (
                         <button
                           onClick={() => handleBuyProduct(prod)}
-                          className="w-full bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-lg shadow-emerald-950/20"
+                          className="w-full bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-lg shadow-emerald-950/20"
                         >
                           <CreditCard className="w-3.5 h-3.5" /> Purchase Instantly
                         </button>
@@ -1026,18 +1026,18 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
 
           {/* Active reviews section */}
           {selectedProductForReviews && (
-            <div className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl space-y-4 animate-fadeIn">
-              <div className="flex justify-between items-center border-b border-emerald-950/40 pb-3">
+            <div className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl space-y-4 animate-fadeIn">
+              <div className="flex justify-between items-center border-b border-brand-border/40 pb-3">
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                  <h3 className="text-sm font-semibold text-white">
+                  <h3 className="text-sm font-semibold text-brand-text">
                     Buyer Reviews & Feedback ({productReviews.length})
                   </h3>
                 </div>
 
                 <button 
                   onClick={() => setSelectedProductForReviews(null)}
-                  className="text-xs text-gray-400 hover:text-white"
+                  className="text-xs text-brand-text-muted hover:text-brand-text"
                 >
                   Close Reviews Panel
                 </button>
@@ -1045,11 +1045,11 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Review Form */}
-                <form onSubmit={handleAddReview} className="p-4 bg-brand-bg/50 border border-emerald-950/40 rounded-xl space-y-3">
-                  <span className="text-xs font-semibold text-white block">Write native review</span>
+                <form onSubmit={handleAddReview} className="p-4 bg-brand-bg/50 border border-brand-border/40 rounded-xl space-y-3">
+                  <span className="text-xs font-semibold text-brand-text block">Write native review</span>
                   
                   <div className="space-y-1">
-                    <label className="text-[10px] text-gray-500 font-mono font-bold block uppercase">Rating</label>
+                    <label className="text-[10px] text-brand-text-dim font-mono font-bold block uppercase">Rating</label>
                     <div className="flex gap-1.5">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
@@ -1065,19 +1065,19 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[10px] text-gray-500 font-mono font-bold block uppercase">Review Comment</label>
+                    <label className="text-[10px] text-brand-text-dim font-mono font-bold block uppercase">Review Comment</label>
                     <textarea
                       value={newReviewComment}
                       onChange={(e) => setNewReviewComment(e.target.value)}
                       placeholder="Share your experience using this digital product..."
-                      className="w-full h-20 bg-brand-bg border border-emerald-950/60 rounded-xl px-3 py-2 text-white text-xs focus:border-[#00C853] focus:outline-none"
+                      className="w-full h-20 bg-brand-bg border border-emerald-950/60 rounded-xl px-3 py-2 text-brand-text text-xs focus:border-brand-accent focus:outline-none"
                       required
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full bg-emerald-900/20 hover:bg-[#00C853]/15 text-[#00C853] border border-[#00C853]/25 font-bold py-1.5 rounded-lg text-xs transition-colors flex items-center justify-center gap-1"
+                    className="w-full bg-emerald-900/20 hover:bg-brand-accent/15 text-brand-accent border border-brand-accent/25 font-bold py-1.5 rounded-lg text-xs transition-colors flex items-center justify-center gap-1"
                   >
                     <Send className="w-3 h-3" /> Publish Review
                   </button>
@@ -1086,22 +1086,22 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                 {/* Reviews list */}
                 <div className="md:col-span-2 space-y-3 max-h-[250px] overflow-y-auto pr-1">
                   {productReviews.length === 0 ? (
-                    <div className="p-6 text-center text-gray-500 font-mono text-xs">
+                    <div className="p-6 text-center text-brand-text-dim font-mono text-xs">
                       NO_REVIEWS_YET_BE_THE_FIRST
                     </div>
                   ) : (
                     productReviews.map((rev) => (
-                      <div key={rev.id} className="p-3.5 bg-brand-bg/30 border border-emerald-950/40 rounded-xl space-y-1">
+                      <div key={rev.id} className="p-3.5 bg-brand-bg/30 border border-brand-border/40 rounded-xl space-y-1">
                         <div className="flex justify-between items-center">
-                          <span className="text-xs font-bold text-white">{rev.user_name}</span>
-                          <span className="text-[10px] text-gray-500">{new Date(rev.created_at).toLocaleDateString()}</span>
+                          <span className="text-xs font-bold text-brand-text">{rev.user_name}</span>
+                          <span className="text-[10px] text-brand-text-dim">{new Date(rev.created_at).toLocaleDateString()}</span>
                         </div>
                         <div className="flex gap-1">
                           {Array.from({ length: rev.rating }).map((_, i) => (
                             <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
                           ))}
                         </div>
-                        <p className="text-xs text-gray-300 font-sans leading-relaxed pt-1">{rev.comment}</p>
+                        <p className="text-xs text-brand-text-muted font-sans leading-relaxed pt-1">{rev.comment}</p>
                       </div>
                     ))
                   )}
@@ -1114,20 +1114,20 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
           {isCheckoutModalOpen && checkoutProduct && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
               <div className="bg-brand-card border border-emerald-950/60 rounded-2xl max-w-md w-full p-6 shadow-2xl relative space-y-5 animate-scaleIn">
-                <div className="flex justify-between items-center border-b border-[#16362F]/30 pb-3">
-                  <h3 className="text-sm font-bold text-white uppercase font-mono tracking-wider flex items-center gap-1.5">
-                    <StoreIcon className="w-4 h-4 text-[#00C853]" /> Secure Checkout
+                <div className="flex justify-between items-center border-b border-brand-border/30 pb-3">
+                  <h3 className="text-sm font-bold text-brand-text uppercase font-mono tracking-wider flex items-center gap-1.5">
+                    <StoreIcon className="w-4 h-4 text-brand-accent" /> Secure Checkout
                   </h3>
                   <button 
                     onClick={() => setIsCheckoutModalOpen(false)}
-                    className="text-gray-500 hover:text-white font-semibold text-xs"
+                    className="text-brand-text-dim hover:text-brand-text font-semibold text-xs"
                   >
                     Cancel
                   </button>
                 </div>
 
                 {/* Selected digital product */}
-                <div className="flex gap-3.5 bg-brand-bg/50 p-3 rounded-xl border border-emerald-950/40">
+                <div className="flex gap-3.5 bg-brand-bg/50 p-3 rounded-xl border border-brand-border/40">
                   <img 
                     src={checkoutProduct.image_url} 
                     alt={checkoutProduct.title} 
@@ -1135,27 +1135,27 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                     referrerPolicy="no-referrer"
                   />
                   <div className="space-y-1">
-                    <h4 className="text-xs font-bold text-white leading-tight">{checkoutProduct.title}</h4>
-                    <span className="text-[10px] text-gray-500 block">Digital Fulfillment - No Delivery Delay</span>
-                    <span className="text-xs font-mono font-bold text-[#00C853] block mt-1">₦{checkoutProduct.price.toLocaleString()} NGN</span>
+                    <h4 className="text-xs font-bold text-brand-text leading-tight">{checkoutProduct.title}</h4>
+                    <span className="text-[10px] text-brand-text-dim block">Digital Fulfillment - No Delivery Delay</span>
+                    <span className="text-xs font-mono font-bold text-brand-accent block mt-1">₦{checkoutProduct.price.toLocaleString()} NGN</span>
                   </div>
                 </div>
 
                 {/* Coupon widget */}
                 <div className="space-y-1.5">
-                  <label className="text-[10px] text-gray-500 font-mono font-bold block uppercase">Promo / Discount Code</label>
+                  <label className="text-[10px] text-brand-text-dim font-mono font-bold block uppercase">Promo / Discount Code</label>
                   <div className="flex gap-2">
                     <input
                       type="text"
                       placeholder="e.g. LAUNCH15"
                       value={couponCodeInput}
                       onChange={(e) => setCouponCodeInput(e.target.value)}
-                      className="flex-1 bg-brand-bg border border-emerald-950/60 rounded-xl px-3 py-2 text-white text-xs focus:border-[#00C853] focus:outline-none font-mono"
+                      className="flex-1 bg-brand-bg border border-emerald-950/60 rounded-xl px-3 py-2 text-brand-text text-xs focus:border-brand-accent focus:outline-none font-mono"
                     />
                     <button
                       type="button"
                       onClick={handleApplyCoupon}
-                      className="bg-brand-bg hover:bg-[#00C853]/10 text-white border border-emerald-950 hover:border-[#00C853]/30 px-3 rounded-xl text-xs font-semibold transition-colors"
+                      className="bg-brand-bg hover:bg-brand-accent/10 text-brand-text border border-emerald-950 hover:border-brand-accent/30 px-3 rounded-xl text-xs font-semibold transition-colors"
                     >
                       Apply
                     </button>
@@ -1163,31 +1163,31 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                 </div>
 
                 {/* Financial breakdown */}
-                <div className="space-y-2.5 pt-2 border-t border-[#16362F]/30 font-mono text-xs">
-                  <div className="flex justify-between text-gray-500">
+                <div className="space-y-2.5 pt-2 border-t border-brand-border/30 font-mono text-xs">
+                  <div className="flex justify-between text-brand-text-dim">
                     <span>Base Price:</span>
                     <span>₦{checkoutProduct.price.toLocaleString()} NGN</span>
                   </div>
 
                   {appliedCoupon && (
-                    <div className="flex justify-between text-[#00C853]">
+                    <div className="flex justify-between text-brand-accent">
                       <span>Discount Coupon ({appliedCoupon.discount_percent}%):</span>
                       <span>-₦{((checkoutProduct.price * appliedCoupon.discount_percent) / 100).toLocaleString()} NGN</span>
                     </div>
                   )}
 
-                  <div className="flex justify-between text-gray-500">
+                  <div className="flex justify-between text-brand-text-dim">
                     <span>Logistic Shipping Fee:</span>
-                    <span className="text-white font-semibold">₦0 (FREE - Digital)</span>
+                    <span className="text-brand-text font-semibold">₦0 (FREE - Digital)</span>
                   </div>
 
-                  <div className="flex justify-between text-white font-bold text-sm pt-2 border-t border-emerald-950/30">
+                  <div className="flex justify-between text-brand-text font-bold text-sm pt-2 border-t border-emerald-950/30">
                     <span>Final Amount:</span>
                     <div className="text-right">
-                      <span className="text-[#00C853] block">
+                      <span className="text-brand-accent block">
                         ₦{(checkoutProduct.price - (appliedCoupon ? (checkoutProduct.price * appliedCoupon.discount_percent) / 100 : 0)).toLocaleString()} NGN
                       </span>
-                      <span className="text-[10px] text-gray-400 block font-normal mt-0.5">
+                      <span className="text-[10px] text-brand-text-muted block font-normal mt-0.5">
                         Equivalent: ~${parseFloat(((checkoutProduct.price - (appliedCoupon ? (checkoutProduct.price * appliedCoupon.discount_percent) / 100 : 0)) / NGN_TO_USD_RATE).toFixed(2)).toLocaleString()} USD
                       </span>
                     </div>
@@ -1200,7 +1200,7 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                     type="button"
                     onClick={handleExecutePurchase}
                     disabled={paymentProcessing}
-                    className="w-full bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg disabled:opacity-50"
+                    className="w-full bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg disabled:opacity-50"
                   >
                     {paymentProcessing ? (
                       <>
@@ -1232,11 +1232,17 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                             tx_ref,
                           }),
                         });
-                        const data = await response.json();
-                        if (data.status === 'success') {
+                        let data;
+                        const text = await response.text();
+                        try {
+                          data = text ? JSON.parse(text) : {};
+                        } catch (e) {
+                          console.error('Non-JSON response:', text);
+                        }
+                        if (response.ok && data?.status === 'success') {
                           window.open(data.data.link, '_blank');
                         } else {
-                          showToast('Failed to initiate payment', 'error');
+                          showToast(data?.error || data?.message || 'Failed to initiate payment', 'error');
                         }
                       } catch (error) {
                         showToast('Failed to initiate payment', 'error');
@@ -1251,7 +1257,7 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                   </button>
                 </div>
 
-                <p className="text-[9px] text-center text-gray-500 leading-relaxed font-sans">
+                <p className="text-[9px] text-center text-brand-text-dim leading-relaxed font-sans">
                   By completing payment, your digital assets are registered in real time. NGN to USD conversion index is secured natively.
                 </p>
               </div>
@@ -1262,15 +1268,15 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
 
       {activeTab === 'orders' && (
         <div className="space-y-6">
-          <div className="bg-brand-card p-6 rounded-2xl border border-emerald-950/40 shadow-xl space-y-4">
-            <div className="flex justify-between items-center border-b border-emerald-950/40 pb-3">
+          <div className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl space-y-4">
+            <div className="flex justify-between items-center border-b border-brand-border/40 pb-3">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-[#00C853]" />
-                <h3 className="text-sm font-semibold text-white">Your Purchased Digital Assets</h3>
+                <CheckCircle2 className="w-5 h-5 text-brand-accent" />
+                <h3 className="text-sm font-semibold text-brand-text">Your Purchased Digital Assets</h3>
               </div>
             </div>
 
-            <p className="text-xs text-gray-400 leading-relaxed">
+            <p className="text-xs text-brand-text-muted leading-relaxed">
               These digital products are active on your profile. Because physical checkboxes are disabled, resources are immediately available for instant download below.
             </p>
 
@@ -1305,22 +1311,22 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                   image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80'
                 }
               ].map((item, idx) => (
-                <div key={idx} className="p-4 bg-brand-bg/50 border border-emerald-950/40 rounded-xl flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+                <div key={idx} className="p-4 bg-brand-bg/50 border border-brand-border/40 rounded-xl flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
                   <div className="flex gap-3.5 items-start sm:items-center">
                     <img 
                       src={item.image} 
                       alt={item.title} 
-                      className="w-12 h-12 object-cover rounded-lg border border-emerald-950/50"
+                      className="w-12 h-12 object-cover rounded-lg border border-brand-border/50"
                       referrerPolicy="no-referrer"
                     />
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <h4 className="text-xs font-bold text-white">{item.title}</h4>
-                        <span className="text-[9px] font-mono text-[#00C853] bg-[#00C853]/10 px-2 py-0.5 rounded">
+                        <h4 className="text-xs font-bold text-brand-text">{item.title}</h4>
+                        <span className="text-[9px] font-mono text-brand-accent bg-brand-accent/10 px-2 py-0.5 rounded">
                           {item.category}
                         </span>
                       </div>
-                      <p className="text-[11px] text-gray-400 font-sans leading-relaxed">{item.details}</p>
+                      <p className="text-[11px] text-brand-text-muted font-sans leading-relaxed">{item.details}</p>
                     </div>
                   </div>
 
@@ -1336,7 +1342,7 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                     }}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full sm:w-auto bg-[#00C853]/15 hover:bg-[#00C853]/25 text-[#00C853] border border-[#00C853]/35 font-bold px-4 py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all text-center"
+                    className="w-full sm:w-auto bg-brand-accent/15 hover:bg-brand-accent/25 text-brand-accent border border-brand-accent/35 font-bold px-4 py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all text-center"
                   >
                     <Download className="w-3.5 h-3.5" /> {item.linkText}
                   </a>

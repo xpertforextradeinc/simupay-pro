@@ -69,10 +69,10 @@ export function SubscriptionView({ profile, onUpdateProfile, onRefresh }: Subscr
   return (
     <div className="space-y-6">
       <div className="text-center max-w-2xl mx-auto space-y-2 py-4">
-        <span className="text-[10px] bg-[#00C853]/15 text-[#00C853] border border-[#00C853]/30 px-3 py-1 rounded-full font-mono font-bold tracking-wider uppercase">
+        <span className="text-[10px] bg-brand-accent/15 text-brand-accent border border-brand-accent/30 px-3 py-1 rounded-full font-mono font-bold tracking-wider uppercase">
           SimuPay Pro Premium Tunnels
         </span>
-        <h2 className="text-3xl font-display font-bold text-white tracking-tight">Upgrade to Enterprise Unlimited</h2>
+        <h2 className="text-3xl font-display font-bold text-brand-text tracking-tight">Upgrade to Enterprise Unlimited</h2>
         <p className="text-xs text-[#9CB1AC] font-sans">
           Bypass standard processing limits. Deploy high-speed blockchain ledger simulation networks instantly.
         </p>
@@ -83,59 +83,59 @@ export function SubscriptionView({ profile, onUpdateProfile, onRefresh }: Subscr
         {plans.map((plan) => (
           <div
             key={plan.id}
-            className={`bg-[#091714] rounded-2xl border relative overflow-hidden flex flex-col justify-between shadow-2xl transition-transform hover:scale-[1.01] duration-300
-              ${plan.popular ? 'border-[#00C853]/60 ring-1 ring-[#00C853]/30' : 'border-[#16362F]'}
+            className={`bg-brand-card rounded-2xl border relative overflow-hidden flex flex-col justify-between shadow-2xl transition-transform hover:scale-[1.01] duration-300
+              ${plan.popular ? 'border-brand-accent/60 ring-1 ring-[#00C853]/30' : 'border-brand-border'}
             `}
           >
             {plan.popular && (
-              <div className="absolute top-0 right-0 bg-[#00C853] text-[#050E0C] text-[10px] font-bold font-mono px-4 py-1.5 rounded-bl-xl flex items-center gap-1">
+              <div className="absolute top-0 right-0 bg-brand-accent text-[#050E0C] text-[10px] font-bold font-mono px-4 py-1.5 rounded-bl-xl flex items-center gap-1">
                 <Sparkles className="w-3 h-3" /> ENTERPRISE RATED
               </div>
             )}
 
             <div className="p-6 md:p-8 space-y-6">
               <div className="space-y-2">
-                <span className="text-[10px] text-[#00C853] font-bold font-mono tracking-wider uppercase">
+                <span className="text-[10px] text-brand-accent font-bold font-mono tracking-wider uppercase">
                   {plan.billing} Cycle
                 </span>
-                <h3 className="text-xl font-bold text-white font-display">{plan.name}</h3>
+                <h3 className="text-xl font-bold text-brand-text font-display">{plan.name}</h3>
                 <p className="text-xs text-[#9CB1AC] leading-relaxed">{plan.desc}</p>
               </div>
 
               <div className="flex items-baseline gap-1 pt-2">
-                <span className="text-3xl font-bold text-white font-display">{plan.price}</span>
+                <span className="text-3xl font-bold text-brand-text font-display">{plan.price}</span>
                 <span className="text-xs text-[#9CB1AC]"> / {plan.id === 'monthly' ? 'month' : '3 months'}</span>
               </div>
 
-              <div className="border-t border-[#16362F] pt-6 space-y-3.5">
-                <p className="text-[11px] font-bold text-white uppercase tracking-wider font-mono">Features Included:</p>
+              <div className="border-t border-brand-border pt-6 space-y-3.5">
+                <p className="text-[11px] font-bold text-brand-text uppercase tracking-wider font-mono">Features Included:</p>
                 <div className="space-y-2.5">
                   {plan.features.map((feat, idx) => (
                     <div key={idx} className="flex items-start gap-2.5 text-xs">
-                      <div className="p-0.5 rounded bg-[#00C853]/15 text-[#00C853] flex-shrink-0 mt-0.5">
+                      <div className="p-0.5 rounded bg-brand-accent/15 text-brand-accent flex-shrink-0 mt-0.5">
                         <Check className="w-3 h-3" />
                       </div>
-                      <span className="text-gray-300 leading-normal">{feat}</span>
+                      <span className="text-brand-text-muted leading-normal">{feat}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
 
-            <div className="p-6 md:p-8 bg-[#050e0c]/40 border-t border-[#16362F] space-y-3">
+            <div className="p-6 md:p-8 bg-brand-bg/40 border-t border-brand-border space-y-3">
               <button
                 onClick={() => handleSubscribe(plan)}
                 className={`w-full font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-lg transition-all
                   ${plan.popular 
-                    ? 'bg-[#00C853] hover:bg-emerald-400 text-[#050E0C]' 
-                    : 'bg-transparent border border-[#00C853] text-[#00C853] hover:bg-[#00C853]/10'
+                    ? 'bg-brand-accent hover:bg-emerald-400 text-[#050E0C]' 
+                    : 'bg-transparent border border-brand-accent text-brand-accent hover:bg-brand-accent/10'
                   }
                 `}
               >
                 <CreditCard className="w-4 h-4" />
                 Subscribe via Paystack <ExternalLink className="w-3 h-3 ml-1" />
               </button>
-              <p className="text-[10px] text-gray-500 text-center px-4 pt-2">
+              <p className="text-[10px] text-brand-text-dim text-center px-4 pt-2">
                 After payment is complete, your account will be manually provisioned by an administrator. Please retain your email receipt.
               </p>
             </div>
@@ -144,22 +144,22 @@ export function SubscriptionView({ profile, onUpdateProfile, onRefresh }: Subscr
       </div>
 
       {/* CONFIDENCE FOOTER */}
-      <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between p-5 bg-[#091714] border border-[#16362F] rounded-2xl gap-4">
+      <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between p-5 bg-brand-card border border-brand-border rounded-2xl gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-lg bg-[#00C853]/10 border border-[#00C853]/20 text-[#00C853]">
+          <div className="p-2.5 rounded-lg bg-brand-accent/10 border border-brand-accent/20 text-brand-accent">
             <Shield className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-xs font-semibold text-white">100% Secure Checkout Channels</h4>
+            <h4 className="text-xs font-semibold text-brand-text">100% Secure Checkout Channels</h4>
             <p className="text-[10px] text-[#9CB1AC]">Encrypted through premium Paystack gateway integration.</p>
           </div>
         </div>
         <div className="flex items-center gap-4 text-xs font-mono text-[#9CB1AC]">
           <span className="flex items-center gap-1.5">
-            <Lock className="w-3.5 h-3.5 text-[#00C853]" /> PCI DSS Compliant
+            <Lock className="w-3.5 h-3.5 text-brand-accent" /> PCI DSS Compliant
           </span>
           <span className="flex items-center gap-1.5">
-            <Building className="w-3.5 h-3.5 text-[#00C853]" /> Encrypted Gateway
+            <Building className="w-3.5 h-3.5 text-brand-accent" /> Encrypted Gateway
           </span>
         </div>
       </div>

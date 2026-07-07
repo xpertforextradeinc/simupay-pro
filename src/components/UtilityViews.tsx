@@ -26,37 +26,37 @@ export function SmsCenterView() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-display font-bold text-white">SMS Notification Center</h2>
-        <p className="text-xs text-gray-500 font-sans">Configure and test automatic SMS transactional receipts sent directly to your phone.</p>
+        <h2 className="text-xl font-display font-bold text-brand-text">SMS Notification Center</h2>
+        <p className="text-xs text-brand-text-dim font-sans">Configure and test automatic SMS transactional receipts sent directly to your phone.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-        <form onSubmit={handleSendTestSms} className="md:col-span-3 bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl space-y-4">
-          <div className="flex items-center gap-2 border-b border-emerald-950/50 pb-2.5">
-            <Smartphone className="w-4 h-4 text-[#00C853]" />
-            <h3 className="text-sm font-semibold text-white">SMS Gate Configurations</h3>
+        <form onSubmit={handleSendTestSms} className="md:col-span-3 bg-brand-card p-6 rounded-xl border border-brand-border/40 shadow-xl space-y-4">
+          <div className="flex items-center gap-2 border-b border-brand-border/50 pb-2.5">
+            <Smartphone className="w-4 h-4 text-brand-accent" />
+            <h3 className="text-sm font-semibold text-brand-text">SMS Gate Configurations</h3>
           </div>
 
           <div className="space-y-3.5">
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Target Phone Number</label>
+              <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-wider">Target Phone Number</label>
               <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+1 (555) 123-4567"
-                className="w-full bg-brand-bg/50 border border-emerald-950/50 rounded-xl px-3 py-2.5 text-white text-xs font-mono"
+                className="w-full bg-brand-bg/50 border border-brand-border/50 rounded-xl px-3 py-2.5 text-brand-text text-xs font-mono"
                 required
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">SMS Alert Template</label>
+              <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-wider">SMS Alert Template</label>
               <textarea
                 value={template}
                 onChange={(e) => setTemplate(e.target.value)}
                 rows={4}
-                className="w-full bg-brand-bg/50 border border-emerald-950/50 rounded-xl px-3 py-2.5 text-white text-xs leading-relaxed"
+                className="w-full bg-brand-bg/50 border border-brand-border/50 rounded-xl px-3 py-2.5 text-brand-text text-xs leading-relaxed"
                 required
               />
             </div>
@@ -66,7 +66,7 @@ export function SmsCenterView() {
             <button
               type="submit"
               disabled={sending}
-              className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 text-xs cursor-pointer shadow-lg disabled:opacity-50"
+              className="bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 text-xs cursor-pointer shadow-lg disabled:opacity-50"
             >
               <Send className="w-3.5 h-3.5" />
               {sending ? 'Sending Alert...' : 'Dispatch Test SMS'}
@@ -74,18 +74,18 @@ export function SmsCenterView() {
           </div>
         </form>
 
-        <div className="md:col-span-2 bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl space-y-4">
-          <h4 className="text-xs font-bold text-white uppercase tracking-wider border-b border-[#00C853]/20 pb-2">SMS Logs Preview</h4>
-          <div className="bg-brand-bg/60 p-4 rounded-xl border border-emerald-950/40 font-sans space-y-3 relative overflow-hidden">
-            <div className="flex justify-between text-[10px] text-gray-500 border-b border-emerald-950 pb-1.5 font-mono">
+        <div className="md:col-span-2 bg-brand-card p-6 rounded-xl border border-brand-border/40 shadow-xl space-y-4">
+          <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider border-b border-brand-accent/20 pb-2">SMS Logs Preview</h4>
+          <div className="bg-brand-bg/60 p-4 rounded-xl border border-brand-border/40 font-sans space-y-3 relative overflow-hidden">
+            <div className="flex justify-between text-[10px] text-brand-text-dim border-b border-emerald-950 pb-1.5 font-mono">
               <span>SENDER: SimuPay Pro SMS Gateway</span>
               <span>100% SECURE</span>
             </div>
-            <div className="text-xs text-gray-300 leading-relaxed font-mono">
+            <div className="text-xs text-brand-text-muted leading-relaxed font-mono">
               ALERT: SimuPay Pro has dispatched a Flash Transfer of $12,500.00 USDT (TRC20) to wallet TY6XepvMMy6F... Hash: 0xf92a3b01...
             </div>
           </div>
-          <p className="text-[11px] text-gray-400 leading-relaxed">
+          <p className="text-[11px] text-brand-text-muted leading-relaxed">
             Note: Interactive SMS gateway is part of our Unlimited Enterprise Tier. Configure custom webhook listeners inside platform Settings.
           </p>
         </div>
@@ -134,13 +134,13 @@ export function OrdersView({ profile, setActiveTab }: { profile: any; setActiveT
   return (
     <div className="space-y-6">
       {/* Tab Switcher */}
-      <div className="flex gap-2 border-b border-emerald-950/40 pb-4">
+      <div className="flex gap-2 border-b border-brand-border/40 pb-4">
         <button
           onClick={() => setActiveSubTab('licenses')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer
             ${activeSubTab === 'licenses' 
-              ? 'bg-[#00C853] text-brand-bg shadow-lg shadow-emerald-500/10' 
-              : 'bg-brand-card text-gray-400 border border-emerald-950/40 hover:text-white'
+              ? 'bg-brand-accent text-brand-bg shadow-lg shadow-emerald-500/10' 
+              : 'bg-brand-card text-brand-text-muted border border-brand-border/40 hover:text-brand-text'
             }
           `}
         >
@@ -150,8 +150,8 @@ export function OrdersView({ profile, setActiveTab }: { profile: any; setActiveT
           onClick={() => setActiveSubTab('airtime')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer
             ${activeSubTab === 'airtime' 
-              ? 'bg-[#00C853] text-brand-bg shadow-lg shadow-emerald-500/10' 
-              : 'bg-brand-card text-gray-400 border border-emerald-950/40 hover:text-white'
+              ? 'bg-brand-accent text-brand-bg shadow-lg shadow-emerald-500/10' 
+              : 'bg-brand-card text-brand-text-muted border border-brand-border/40 hover:text-brand-text'
             }
           `}
         >
@@ -162,8 +162,8 @@ export function OrdersView({ profile, setActiveTab }: { profile: any; setActiveT
       {activeSubTab === 'licenses' ? (
         <div className="space-y-6">
           <div>
-            <h2 className="text-xl font-display font-bold text-white">License Key Orders</h2>
-            <p className="text-xs text-gray-500">Acquire secured corporate access codes to instantly unlock premium ledger tools.</p>
+            <h2 className="text-xl font-display font-bold text-brand-text">License Key Orders</h2>
+            <p className="text-xs text-brand-text-dim">Acquire secured corporate access codes to instantly unlock premium ledger tools.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
@@ -171,40 +171,40 @@ export function OrdersView({ profile, setActiveTab }: { profile: any; setActiveT
               <div
                 key={lic.name}
                 className={`bg-brand-card p-6 rounded-xl border shadow-xl flex flex-col justify-between space-y-4 relative overflow-hidden
-                  ${lic.recommended ? 'border-[#00C853]/40' : 'border-emerald-950/40'}
+                  ${lic.recommended ? 'border-brand-accent/40' : 'border-brand-border/40'}
                 `}
               >
                 {lic.recommended && (
-                  <span className="absolute top-3 right-3 text-[9px] font-bold font-mono bg-[#00C853]/15 text-[#00C853] border border-[#00C853]/30 px-2 py-0.5 rounded-full">
+                  <span className="absolute top-3 right-3 text-[9px] font-bold font-mono bg-brand-accent/15 text-brand-accent border border-brand-accent/30 px-2 py-0.5 rounded-full">
                     RECOMMENDED
                   </span>
                 )}
 
                 <div className="space-y-2">
-                  <span className="text-[10px] text-gray-500 font-mono font-bold tracking-wider">SimuPay Pro License Option</span>
-                  <h3 className="text-lg font-display font-bold text-white">{lic.name}</h3>
-                  <p className="text-xs text-gray-400 leading-relaxed">{lic.desc}</p>
+                  <span className="text-[10px] text-brand-text-dim font-mono font-bold tracking-wider">SimuPay Pro License Option</span>
+                  <h3 className="text-lg font-display font-bold text-brand-text">{lic.name}</h3>
+                  <p className="text-xs text-brand-text-muted leading-relaxed">{lic.desc}</p>
                   
-                  <div className="py-2.5 border-y border-emerald-950/40 text-xs font-mono space-y-1.5">
+                  <div className="py-2.5 border-y border-brand-border/40 text-xs font-mono space-y-1.5">
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Limits:</span>
-                      <span className="text-white font-bold">{lic.limit}</span>
+                      <span className="text-brand-text-dim">Limits:</span>
+                      <span className="text-brand-text font-bold">{lic.limit}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Validity:</span>
-                      <span className="text-[#00C853] font-bold">Lifetime Keys</span>
+                      <span className="text-brand-text-dim">Validity:</span>
+                      <span className="text-brand-accent font-bold">Lifetime Keys</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
                   <div className="font-display">
-                    <span className="text-2xl font-bold text-white">${lic.price}</span>
-                    <span className="text-xs text-gray-500 font-medium"> / flat</span>
+                    <span className="text-2xl font-bold text-brand-text">${lic.price}</span>
+                    <span className="text-xs text-brand-text-dim font-medium"> / flat</span>
                   </div>
                   <button
                     onClick={() => handleOrder(lic.name)}
-                    className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 cursor-pointer shadow-lg transition-all"
+                    className="bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 cursor-pointer shadow-lg transition-all"
                   >
                     <CreditCard className="w-3.5 h-3.5" /> Buy License Key
                   </button>
@@ -217,39 +217,39 @@ export function OrdersView({ profile, setActiveTab }: { profile: any; setActiveT
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <div>
-              <h2 className="text-xl font-display font-bold text-white">Mobile Topup Purchases</h2>
-              <p className="text-xs text-gray-500">Track real-time Flutterwave-funded airtime and data Topups.</p>
+              <h2 className="text-xl font-display font-bold text-brand-text">Mobile Topup Purchases</h2>
+              <p className="text-xs text-brand-text-dim">Track real-time Flutterwave-funded airtime and data Topups.</p>
             </div>
             <button
               onClick={fetchAirtimeOrders}
               disabled={loadingOrders}
-              className="px-3 py-1.5 bg-[#16362F]/40 border border-[#16362F] text-[#00C853] hover:bg-[#16362F]/60 rounded-lg text-xs font-medium cursor-pointer transition-all flex items-center gap-1.5"
+              className="px-3 py-1.5 bg-brand-surface/40 border border-brand-border text-brand-accent hover:bg-brand-surface/60 rounded-lg text-xs font-medium cursor-pointer transition-all flex items-center gap-1.5"
             >
               Sync Records
             </button>
           </div>
 
           {loadingOrders ? (
-            <div className="bg-brand-card p-12 rounded-2xl border border-emerald-950/40 flex flex-col items-center justify-center space-y-3 shadow-xl">
-              <div className="w-6 h-6 border-2 border-[#00C853] border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-xs text-gray-400 font-mono">Synchronizing airtime orders ledger...</span>
+            <div className="bg-brand-card p-12 rounded-2xl border border-brand-border/40 flex flex-col items-center justify-center space-y-3 shadow-xl">
+              <div className="w-6 h-6 border-2 border-brand-accent border-t-transparent rounded-full animate-spin"></div>
+              <span className="text-xs text-brand-text-muted font-mono">Synchronizing airtime orders ledger...</span>
             </div>
           ) : airtimeOrders.length === 0 ? (
-            <div className="bg-brand-card p-12 rounded-2xl border border-emerald-950/40 flex flex-col items-center justify-center text-center space-y-4 shadow-xl">
-              <span className="p-4 rounded-full bg-emerald-950/10 text-[#00C853] border border-emerald-950/30">
+            <div className="bg-brand-card p-12 rounded-2xl border border-brand-border/40 flex flex-col items-center justify-center text-center space-y-4 shadow-xl">
+              <span className="p-4 rounded-full bg-emerald-950/10 text-brand-accent border border-emerald-950/30">
                 <Smartphone className="w-8 h-8" />
               </span>
               <div className="space-y-1 max-w-sm">
-                <h3 className="text-sm font-bold text-white">No Topup Orders Found</h3>
-                <p className="text-xs text-gray-500">You haven't initiated any Flutterwave airtime or data topup orders yet.</p>
+                <h3 className="text-sm font-bold text-brand-text">No Topup Orders Found</h3>
+                <p className="text-xs text-brand-text-dim">You haven't initiated any Flutterwave airtime or data topup orders yet.</p>
               </div>
             </div>
           ) : (
-            <div className="bg-brand-card rounded-2xl border border-emerald-950/40 shadow-xl overflow-hidden">
+            <div className="bg-brand-card rounded-2xl border border-brand-border/40 shadow-xl overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-[#091714] border-b border-emerald-950/50 text-[10px] font-mono uppercase tracking-wider text-gray-500">
+                    <tr className="bg-brand-card border-b border-brand-border/50 text-[10px] font-mono uppercase tracking-wider text-brand-text-dim">
                       <th className="p-4">Order ID & Date</th>
                       <th className="p-4">Details</th>
                       <th className="p-4">Recipient</th>
@@ -258,7 +258,7 @@ export function OrdersView({ profile, setActiveTab }: { profile: any; setActiveT
                       <th className="p-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-emerald-950/20 text-xs font-sans text-gray-300">
+                  <tbody className="divide-y divide-emerald-950/20 text-xs font-sans text-brand-text-muted">
                     {airtimeOrders.map((order) => {
                       const dateStr = new Date(order.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
                       const timeStr = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -275,10 +275,10 @@ export function OrdersView({ profile, setActiveTab }: { profile: any; setActiveT
                       };
 
                       return (
-                        <tr key={order.id} className="hover:bg-[#16362F]/10 transition-all">
+                        <tr key={order.id} className="hover:bg-brand-surface/10 transition-all">
                           <td className="p-4">
-                            <div className="font-mono font-bold text-white text-[11px]">{order.id}</div>
-                            <div className="text-[10px] text-gray-500 flex items-center gap-1 mt-0.5">
+                            <div className="font-mono font-bold text-brand-text text-[11px]">{order.id}</div>
+                            <div className="text-[10px] text-brand-text-dim flex items-center gap-1 mt-0.5">
                               <Clock className="w-3 h-3" /> {dateStr} at {timeStr}
                             </div>
                           </td>
@@ -287,15 +287,15 @@ export function OrdersView({ profile, setActiveTab }: { profile: any; setActiveT
                               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase font-mono ${getNetworkBadge(networkName)}`}>
                                 {networkName}
                               </span>
-                              <span className="text-[10px] text-gray-400 font-mono">
+                              <span className="text-[10px] text-brand-text-muted font-mono">
                                 {isData ? 'DATA' : 'AIRTIME'}
                               </span>
                             </div>
                           </td>
-                          <td className="p-4 font-mono font-bold text-gray-300">
+                          <td className="p-4 font-mono font-bold text-brand-text-muted">
                             {order.phone_number}
                           </td>
-                          <td className="p-4 font-mono font-bold text-[#00C853] text-[13px]">
+                          <td className="p-4 font-mono font-bold text-brand-accent text-[13px]">
                             ₦{Number(order.amount).toLocaleString()}
                           </td>
                           <td className="p-4">
@@ -329,14 +329,14 @@ export function OrdersView({ profile, setActiveTab }: { profile: any; setActiveT
                                   setActiveTab('receipt-generator');
                                   showToast('Opening generated topup receipt in Receipt Studio!', 'info');
                                 }}
-                                className="px-2.5 py-1 bg-[#00C853]/10 hover:bg-[#00C853]/20 border border-[#00C853]/30 text-[#00C853] rounded-lg text-[10px] font-bold font-mono cursor-pointer transition-all flex items-center gap-1 ml-auto"
+                                className="px-2.5 py-1 bg-brand-accent/10 hover:bg-brand-accent/20 border border-brand-accent/30 text-brand-accent rounded-lg text-[10px] font-bold font-mono cursor-pointer transition-all flex items-center gap-1 ml-auto"
                               >
                                 <FileText className="w-3.5 h-3.5" /> View Receipt
                               </button>
                             ) : order.status === 'failed' ? (
                               <span className="text-[10px] text-red-400 font-mono">Failed</span>
                             ) : (
-                              <span className="text-[10px] text-gray-500 font-mono">Verifying...</span>
+                              <span className="text-[10px] text-brand-text-dim font-mono">Verifying...</span>
                             )}
                           </td>
                         </tr>
@@ -413,20 +413,20 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-display font-bold text-white">Help & Merchant Support</h2>
-        <p className="text-xs text-gray-500">Access instant human assistance or file a technical ticket to our developers.</p>
+        <h2 className="text-xl font-display font-bold text-brand-text">Help & Merchant Support</h2>
+        <p className="text-xs text-brand-text-dim">Access instant human assistance or file a technical ticket to our developers.</p>
       </div>
 
       {/* INSTANT CHANNELS GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* WhatsApp Enterprise Support */}
-        <div className="bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-brand-card p-6 rounded-xl border border-brand-border/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1.5 max-w-full sm:max-w-[65%]">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <h3 className="text-sm font-semibold text-white">WhatsApp Live Support</h3>
+              <h3 className="text-sm font-semibold text-brand-text">WhatsApp Live Support</h3>
             </div>
-            <p className="text-xs text-gray-400 leading-relaxed">
+            <p className="text-xs text-brand-text-muted leading-relaxed">
               Connect directly with our corporate account manager. Standard response time is under 5 minutes.
             </p>
           </div>
@@ -434,7 +434,7 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
             href="https://wa.me/2348104908260"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto text-center flex-shrink-0 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-lg transition-all"
+            className="w-full sm:w-auto text-center flex-shrink-0 bg-emerald-600 hover:bg-emerald-500 text-brand-text font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-lg transition-all"
           >
             <MessageSquare className="w-3.5 h-3.5" />
             WhatsApp Support
@@ -442,14 +442,14 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
         </div>
 
         {/* Telegram Configurable Support */}
-        <div className="bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl space-y-4">
+        <div className="bg-brand-card p-6 rounded-xl border border-brand-border/40 shadow-xl space-y-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1.5 max-w-full sm:max-w-[65%]">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                <h3 className="text-sm font-semibold text-white">Telegram Support Bot</h3>
+                <h3 className="text-sm font-semibold text-brand-text">Telegram Support Bot</h3>
               </div>
-              <p className="text-xs text-gray-400 leading-relaxed">
+              <p className="text-xs text-brand-text-muted leading-relaxed">
                 Interact with our interactive customer bot for rapid automated query solving.
               </p>
             </div>
@@ -457,17 +457,17 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
               href={tgBotLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto text-center flex-shrink-0 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-lg transition-all"
+              className="w-full sm:w-auto text-center flex-shrink-0 bg-blue-600 hover:bg-blue-500 text-brand-text font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-lg transition-all"
             >
               <Send className="w-3.5 h-3.5" />
               Telegram Support
             </a>
           </div>
 
-          <div className="border-t border-emerald-950/50 pt-3">
+          <div className="border-t border-brand-border/50 pt-3">
             {!isEditingTgLink ? (
               <div className="flex items-center justify-between text-[11px]">
-                <span className="text-gray-500 truncate max-w-[70%]">Active Bot: <span className="font-mono text-gray-300">{tgBotLink}</span></span>
+                <span className="text-brand-text-dim truncate max-w-[70%]">Active Bot: <span className="font-mono text-brand-text-muted">{tgBotLink}</span></span>
                 <button
                   onClick={() => { setTempTgLink(tgBotLink); setIsEditingTgLink(true); }}
                   className="text-blue-400 hover:text-blue-300 font-semibold cursor-pointer underline decoration-dotted text-xs"
@@ -482,17 +482,17 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
                   value={tempTgLink}
                   onChange={(e) => setTempTgLink(e.target.value)}
                   placeholder="https://t.me/your_bot_link"
-                  className="flex-1 bg-brand-bg/60 border border-emerald-950/60 rounded-lg px-2.5 py-1.5 text-white text-[11px] font-mono focus:outline-none focus:border-blue-500"
+                  className="flex-1 bg-brand-bg/60 border border-emerald-950/60 rounded-lg px-2.5 py-1.5 text-brand-text text-[11px] font-mono focus:outline-none focus:border-blue-500"
                 />
                 <button
                   onClick={handleSaveTgLink}
-                  className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-3 py-1.5 rounded-lg text-[10px] cursor-pointer"
+                  className="bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold px-3 py-1.5 rounded-lg text-[10px] cursor-pointer"
                 >
                   Save
                 </button>
                 <button
                   onClick={() => setIsEditingTgLink(false)}
-                  className="text-gray-400 hover:text-gray-300 text-[10px] cursor-pointer"
+                  className="text-brand-text-muted hover:text-brand-text-muted text-[10px] cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -503,33 +503,33 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-        <form onSubmit={handleSupportTicket} className="md:col-span-3 bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl space-y-4">
-          <div className="flex items-center gap-2 border-b border-emerald-950/50 pb-2.5">
-            <LifeBuoy className="w-4 h-4 text-[#00C853]" />
-            <h3 className="text-sm font-semibold text-white">Open Support Ticket</h3>
+        <form onSubmit={handleSupportTicket} className="md:col-span-3 bg-brand-card p-6 rounded-xl border border-brand-border/40 shadow-xl space-y-4">
+          <div className="flex items-center gap-2 border-b border-brand-border/50 pb-2.5">
+            <LifeBuoy className="w-4 h-4 text-brand-accent" />
+            <h3 className="text-sm font-semibold text-brand-text">Open Support Ticket</h3>
           </div>
 
           <div className="space-y-3.5">
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Subject</label>
+              <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-wider">Subject</label>
               <input
                 type="text"
                 value={ticketSubject}
                 onChange={(e) => setTicketSubject(e.target.value)}
                 placeholder="Subject of support request..."
-                className="w-full bg-brand-bg/50 border border-emerald-950/50 rounded-xl px-3 py-2.5 text-white text-xs focus:outline-none focus:border-[#00C853]"
+                className="w-full bg-brand-bg/50 border border-brand-border/50 rounded-xl px-3 py-2.5 text-brand-text text-xs focus:outline-none focus:border-brand-accent"
                 required
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Message</label>
+              <label className="text-[10px] font-bold text-brand-text-muted uppercase tracking-wider">Message</label>
               <textarea
                 value={ticketMessage}
                 onChange={(e) => setTicketMessage(e.target.value)}
                 rows={4}
                 placeholder="Provide details about your query..."
-                className="w-full bg-brand-bg/50 border border-emerald-950/50 rounded-xl px-3 py-2.5 text-white text-xs leading-relaxed focus:outline-none focus:border-[#00C853]"
+                className="w-full bg-brand-bg/50 border border-brand-border/50 rounded-xl px-3 py-2.5 text-brand-text text-xs leading-relaxed focus:outline-none focus:border-brand-accent"
                 required
               />
             </div>
@@ -539,7 +539,7 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
             <button
               type="submit"
               disabled={ticketSent}
-              className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 text-xs cursor-pointer shadow-lg disabled:opacity-50"
+              className="bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl transition-all flex items-center gap-2 text-xs cursor-pointer shadow-lg disabled:opacity-50"
             >
               <Send className="w-3.5 h-3.5" />
               {ticketSent ? 'Submitting ticket...' : 'Submit Support Ticket'}
@@ -547,32 +547,32 @@ export function SupportView({ userId, tickets, onRefresh }: SupportViewProps) {
           </div>
         </form>
 
-        <div className="md:col-span-2 bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl space-y-4">
-          <h4 className="text-xs font-bold text-white uppercase tracking-wider border-b border-emerald-950/50 pb-2">FAQ Guide</h4>
+        <div className="md:col-span-2 bg-brand-card p-6 rounded-xl border border-brand-border/40 shadow-xl space-y-4">
+          <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider border-b border-brand-border/50 pb-2">FAQ Guide</h4>
           <div className="space-y-4 border-b border-emerald-950/20 pb-4">
             {faqs.map((faq, idx) => (
               <div key={idx} className="space-y-1">
-                <h5 className="text-xs font-bold text-[#00C853]">{faq.q}</h5>
-                <p className="text-xs text-gray-400 leading-relaxed">{faq.a}</p>
+                <h5 className="text-xs font-bold text-brand-accent">{faq.q}</h5>
+                <p className="text-xs text-brand-text-muted leading-relaxed">{faq.a}</p>
               </div>
             ))}
           </div>
 
           {/* Ticket List Section */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">Your Filed Tickets ({tickets.length})</h4>
+            <h4 className="text-xs font-bold text-brand-text uppercase tracking-wider">Your Filed Tickets ({tickets.length})</h4>
             {tickets.length === 0 ? (
-              <p className="text-[11px] text-gray-500 italic">No tickets filed yet in this node session.</p>
+              <p className="text-[11px] text-brand-text-dim italic">No tickets filed yet in this node session.</p>
             ) : (
               <div className="space-y-2 max-h-[180px] overflow-y-auto pr-1 font-sans">
                 {tickets.map((ticket) => (
-                  <div key={ticket.id} className="p-3 bg-brand-bg/40 rounded-lg border border-emerald-950/40 flex justify-between items-start gap-2">
+                  <div key={ticket.id} className="p-3 bg-brand-bg/40 rounded-lg border border-brand-border/40 flex justify-between items-start gap-2">
                     <div className="space-y-1">
-                      <span className="text-[10px] font-bold text-white block truncate max-w-[130px]">{ticket.subject}</span>
-                      <span className="text-[9px] text-gray-500 block">{new Date(ticket.created_at).toLocaleDateString()}</span>
+                      <span className="text-[10px] font-bold text-brand-text block truncate max-w-[130px]">{ticket.subject}</span>
+                      <span className="text-[9px] text-brand-text-dim block">{new Date(ticket.created_at).toLocaleDateString()}</span>
                     </div>
                     <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase
-                      ${ticket.status === 'resolved' ? 'bg-[#00C853]/15 text-[#00C853]' : ''}
+                      ${ticket.status === 'resolved' ? 'bg-brand-accent/15 text-brand-accent' : ''}
                       ${ticket.status === 'pending' ? 'bg-amber-500/15 text-amber-500' : ''}
                       ${ticket.status === 'open' ? 'bg-blue-500/15 text-blue-400' : ''}
                     `}>
@@ -633,58 +633,58 @@ export function SettingsView({ profile, onUpdateProfile }: SettingsViewProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-display font-bold text-white">System Settings</h2>
-        <p className="text-xs text-gray-500">Configure corporate ledger tunnels, API permissions, and preferences.</p>
+        <h2 className="text-xl font-display font-bold text-brand-text">System Settings</h2>
+        <p className="text-xs text-brand-text-dim">Configure corporate ledger tunnels, API permissions, and preferences.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl">
         {/* Settings Column */}
-        <div className="bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl space-y-6">
-          <div className="flex items-center gap-2 border-b border-emerald-950/50 pb-2.5">
-            <Settings className="w-4 h-4 text-[#00C853]" />
-            <h3 className="text-sm font-semibold text-white">Merchant Preferences</h3>
+        <div className="bg-brand-card p-6 rounded-xl border border-brand-border/40 shadow-xl space-y-6">
+          <div className="flex items-center gap-2 border-b border-brand-border/50 pb-2.5">
+            <Settings className="w-4 h-4 text-brand-accent" />
+            <h3 className="text-sm font-semibold text-brand-text">Merchant Preferences</h3>
           </div>
 
           <div className="space-y-4 text-xs">
             {/* Email notifications */}
             <div className="flex items-center justify-between p-3.5 bg-brand-bg/60 border border-emerald-950 rounded-xl">
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-white block">Email Compliance Alerts</span>
-                <span className="text-[10px] text-gray-500 block">Dispatch transaction alerts directly to your inbox.</span>
+                <span className="text-xs font-bold text-brand-text block">Email Compliance Alerts</span>
+                <span className="text-[10px] text-brand-text-dim block">Dispatch transaction alerts directly to your inbox.</span>
               </div>
               <input
                 type="checkbox"
                 checked={emailAlerts}
                 onChange={(e) => setEmailAlerts(e.target.checked)}
-                className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-[#00C853] focus:ring-[#00C853] cursor-pointer"
+                className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-brand-accent focus:ring-[#00C853] cursor-pointer"
               />
             </div>
 
             {/* Sandbox toggle */}
             <div className="flex items-center justify-between p-3.5 bg-brand-bg/60 border border-emerald-950 rounded-xl">
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-white block">Sandbox Testing Mode</span>
-                <span className="text-[10px] text-gray-500 block">Allow simulation deposits and test credits.</span>
+                <span className="text-xs font-bold text-brand-text block">Sandbox Testing Mode</span>
+                <span className="text-[10px] text-brand-text-dim block">Allow simulation deposits and test credits.</span>
               </div>
               <input
                 type="checkbox"
                 checked={sandboxMode}
                 disabled
-                className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-[#00C853] focus:ring-[#00C853] opacity-40 cursor-not-allowed"
+                className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-brand-accent focus:ring-[#00C853] opacity-40 cursor-not-allowed"
               />
             </div>
 
             {/* Auto Mempool clear */}
             <div className="flex items-center justify-between p-3.5 bg-brand-bg/60 border border-emerald-950 rounded-xl">
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-white block">Auto-Clear Mempool Queue</span>
-                <span className="text-[10px] text-gray-500 block">Clean transaction queue to save bandwidth when necessary.</span>
+                <span className="text-xs font-bold text-brand-text block">Auto-Clear Mempool Queue</span>
+                <span className="text-[10px] text-brand-text-dim block">Clean transaction queue to save bandwidth when necessary.</span>
               </div>
               <input
                 type="checkbox"
                 checked={mempoolClear}
                 onChange={(e) => setMempoolClear(e.target.checked)}
-                className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-[#00C853] focus:ring-[#00C853] cursor-pointer"
+                className="w-5 h-5 rounded bg-brand-bg border-emerald-950 text-brand-accent focus:ring-[#00C853] cursor-pointer"
               />
             </div>
           </div>
@@ -693,7 +693,7 @@ export function SettingsView({ profile, onUpdateProfile }: SettingsViewProps) {
             <button
               onClick={handleSaveSettings}
               disabled={saving}
-              className="bg-[#00C853] hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs cursor-pointer shadow-lg transition-all disabled:opacity-50"
+              className="bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold px-5 py-2.5 rounded-xl text-xs cursor-pointer shadow-lg transition-all disabled:opacity-50"
             >
               {saving ? 'Saving...' : 'Save Preferences'}
             </button>
@@ -701,43 +701,43 @@ export function SettingsView({ profile, onUpdateProfile }: SettingsViewProps) {
         </div>
 
         {/* About Developer Column */}
-        <div className="bg-brand-card p-6 rounded-xl border border-emerald-950/40 shadow-xl h-fit space-y-6">
-          <div className="flex items-center gap-2 border-b border-emerald-950/50 pb-2.5">
-            <span className="w-2 h-2 rounded-full bg-[#00C853] animate-pulse" />
-            <h3 className="text-sm font-semibold text-white">System Information</h3>
+        <div className="bg-brand-card p-6 rounded-xl border border-brand-border/40 shadow-xl h-fit space-y-6">
+          <div className="flex items-center gap-2 border-b border-brand-border/50 pb-2.5">
+            <span className="w-2 h-2 rounded-full bg-brand-accent animate-pulse" />
+            <h3 className="text-sm font-semibold text-brand-text">System Information</h3>
           </div>
 
           <div className="space-y-4">
             <div className="p-4 bg-brand-bg/60 border border-emerald-950 rounded-xl flex flex-col items-center justify-center text-center gap-2">
               <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#00C853] to-emerald-900 flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold font-mono">LDW</span>
+                <span className="text-brand-text font-bold font-mono">LDW</span>
               </div>
               <div>
-                <h4 className="text-sm font-bold text-white">Luckman Dev World</h4>
-                <p className="text-[10px] text-gray-400 font-mono">Lead Developer & Architect</p>
+                <h4 className="text-sm font-bold text-brand-text">Luckman Dev World</h4>
+                <p className="text-[10px] text-brand-text-muted font-mono">Lead Developer & Architect</p>
               </div>
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
-                <span className="text-gray-500">PLATFORM</span>
-                <span className="text-white font-bold">SimuPay Pro v2.0</span>
+              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-brand-border/40">
+                <span className="text-brand-text-dim">PLATFORM</span>
+                <span className="text-brand-text font-bold">SimuPay Pro v2.0</span>
               </div>
-              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
-                <span className="text-gray-500">FRAMEWORK</span>
-                <span className="text-white font-bold">React + Vite + TS</span>
+              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-brand-border/40">
+                <span className="text-brand-text-dim">FRAMEWORK</span>
+                <span className="text-brand-text font-bold">React + Vite + TS</span>
               </div>
-              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
-                <span className="text-gray-500">DATABASE</span>
-                <span className="text-white font-bold">Supabase (PostgreSQL)</span>
+              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-brand-border/40">
+                <span className="text-brand-text-dim">DATABASE</span>
+                <span className="text-brand-text font-bold">Supabase (PostgreSQL)</span>
               </div>
-              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
-                <span className="text-gray-500">HOSTING</span>
-                <span className="text-white font-bold">Vercel Edge</span>
+              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-brand-border/40">
+                <span className="text-brand-text-dim">HOSTING</span>
+                <span className="text-brand-text font-bold">Vercel Edge</span>
               </div>
-              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-emerald-950/40">
-                <span className="text-gray-500">COPYRIGHT</span>
-                <span className="text-white font-bold">© 2026 Luckman Dev World</span>
+              <div className="flex justify-between items-center p-2.5 bg-brand-bg/40 rounded-lg text-[11px] font-mono border border-brand-border/40">
+                <span className="text-brand-text-dim">COPYRIGHT</span>
+                <span className="text-brand-text font-bold">© 2026 Luckman Dev World</span>
               </div>
             </div>
           </div>
