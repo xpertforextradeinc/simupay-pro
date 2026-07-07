@@ -103,7 +103,7 @@ export function DataBundlesView({ userEmail, userId }: { userEmail: string; user
           className="w-full bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold py-3 rounded-xl flex items-center justify-center gap-2"
         >
           {loading ? <RefreshCw className="animate-spin w-5 h-5" /> : <CreditCard className="w-5 h-5" />}
-          Pay with Flutterwave
+          Purchase Data Bundle
         </button>
       </div>
     </div>
