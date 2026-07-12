@@ -1251,7 +1251,7 @@ export function SlipMintMarketView({ profile, onProfileUpdate }: SlipMintMarketV
                       }
                     }}
                     disabled={paymentProcessing}
-                    className="w-full bg-white hover:bg-gray-200 text-black font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg disabled:opacity-50"
+                    className="w-full bg-brand-card hover:bg-brand-surface text-brand-text font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg disabled:opacity-50"
                   >
                     Pay via Flutterwave
                   </button>

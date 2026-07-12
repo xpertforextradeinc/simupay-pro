@@ -13,7 +13,7 @@ export function AdminProviders() {
   // Form state for creating/editing provider
   const [provName, setProvName] = useState('');
   const [provCategory, setProvCategory] = useState<'crypto' | 'wallet' | 'bank'>('crypto');
-  const [provBg, setProvBg] = useState('bg-white');
+  const [provBg, setProvBg] = useState('bg-brand-card');
   const [provAccent, setProvAccent] = useState('#00C853');
   const [provHeaderBg, setProvHeaderBg] = useState('bg-brand-accent');
   const [provHeaderText, setProvHeaderText] = useState('text-brand-text');
@@ -125,7 +125,7 @@ export function AdminProviders() {
   const resetForm = () => {
     setProvName('');
     setProvCategory('crypto');
-    setProvBg('bg-white');
+    setProvBg('bg-brand-card');
     setProvAccent('#00C853');
     setProvHeaderBg('bg-brand-accent');
     setProvHeaderText('text-brand-text');
@@ -150,7 +150,7 @@ export function AdminProviders() {
                   setSelectedProvider(null);
                   resetForm();
                 }}
-                className="text-[10px] bg-brand-accent hover:bg-emerald-400 text-black px-2 py-1 rounded uppercase font-bold"
+                className="text-[10px] bg-brand-accent hover:bg-emerald-400 text-brand-bg px-2 py-1 rounded uppercase font-bold"
               >
                 + ADD
               </button>
@@ -264,7 +264,7 @@ export function AdminProviders() {
                   onChange={(e) => setProvBg(e.target.value)}
                   className="w-full bg-brand-bg border border-brand-border rounded px-2 py-1 text-brand-text"
                 >
-                  <option value="bg-white">Standard White</option>
+                  <option value="bg-brand-card">Standard Dark</option>
                   <option value="bg-[#12161A]">Binance Slate Dark</option>
                   <option value="bg-[#161311]">MetaMask Ochre Dark</option>
                   <option value="bg-[#0f1115]">Classic Terminal Jet</option>
@@ -397,7 +397,7 @@ export function AdminProviders() {
           <div className="flex gap-2 justify-end pt-4 border-t border-brand-border/40">
             <button
               onClick={handleSaveProvider}
-              className="px-4 py-2 bg-brand-accent hover:bg-emerald-400 text-black font-bold text-xs rounded-xl uppercase shadow-lg transition-all cursor-pointer"
+              className="px-4 py-2 bg-brand-accent hover:bg-emerald-400 text-brand-bg font-bold text-xs rounded-xl uppercase shadow-lg transition-all cursor-pointer"
             >
               Commit Provider Layout
             </button>

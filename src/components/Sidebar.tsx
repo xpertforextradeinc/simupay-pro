@@ -66,14 +66,14 @@ export function Sidebar({
   }
 
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    return (localStorage.getItem('spp_theme') as 'dark' | 'light') || 'dark';
+    return 'dark'; // Force dark mode
   });
 
   useEffect(() => {
-    if (theme === 'light') {
-      document.documentElement.classList.add('light');
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('light');
+      document.documentElement.classList.remove('dark');
     }
     localStorage.setItem('spp_theme', theme);
   }, [theme]);

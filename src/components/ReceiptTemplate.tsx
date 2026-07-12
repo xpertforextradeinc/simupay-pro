@@ -19,7 +19,7 @@ export function ReceiptTemplate({ provider, data }: ReceiptTemplateProps) {
   const bgColor = providerColors[provider] || 'bg-gray-800';
 
   return (
-    <div className="bg-white text-gray-900 p-8 rounded-2xl shadow-xl max-w-md mx-auto">
+    <div className="bg-brand-card text-brand-text p-8 rounded-2xl shadow-xl max-w-md mx-auto">
       <div className={`${bgColor} text-brand-text p-4 rounded-t-xl text-center font-bold text-lg`}>
         {provider} Receipt
       </div>

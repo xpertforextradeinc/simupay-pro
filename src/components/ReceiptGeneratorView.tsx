@@ -566,7 +566,7 @@ export function ReceiptGeneratorView({ profile }: ReceiptGeneratorViewProps) {
                 <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
                   <button 
                     onClick={() => window.print()}
-                    className="px-6 py-2.5 bg-white text-[#050E0C] font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors"
+                    className="px-6 py-2.5 bg-brand-accent text-brand-bg font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-brand-accent/80 transition-colors"
                   >
                     <Download className="w-4 h-4" /> Export as PDF
                   </button>

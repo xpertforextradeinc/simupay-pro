@@ -62,7 +62,7 @@ const DEFAULT_PROVIDERS: DynamicProvider[] = [
     category: 'crypto',
     enabled: true,
     theme: {
-      bg: 'bg-white',
+      bg: 'bg-brand-card',
       accent: '#0052FF',
       accentText: 'text-[#0052FF]',
       headerBg: 'bg-[#0052FF]',
@@ -112,7 +112,7 @@ const DEFAULT_PROVIDERS: DynamicProvider[] = [
     category: 'wallet',
     enabled: true,
     theme: {
-      bg: 'bg-white',
+      bg: 'bg-brand-card',
       accent: '#00D632',
       accentText: 'text-[#00D632]',
       headerBg: 'bg-[#00D632]',
@@ -136,7 +136,7 @@ const DEFAULT_PROVIDERS: DynamicProvider[] = [
     category: 'wallet',
     enabled: true,
     theme: {
-      bg: 'bg-white',
+      bg: 'bg-brand-card',
       accent: '#003087',
       accentText: 'text-[#003087]',
       headerBg: 'bg-[#003087]',
@@ -159,9 +159,9 @@ const DEFAULT_PROVIDERS: DynamicProvider[] = [
     category: 'bank',
     enabled: true,
     theme: {
-      bg: 'bg-white',
+      bg: 'bg-brand-card',
       accent: '#111827',
-      accentText: 'text-gray-900',
+      accentText: 'text-brand-text',
       headerBg: 'bg-gray-900',
       headerText: 'text-brand-text',
       tagline: 'CHASE BANK OFFICIAL RECORD',
@@ -223,7 +223,7 @@ digitalWalletProviders.forEach(p => {
       category: 'wallet',
       enabled: true,
       theme: {
-        bg: 'bg-white',
+        bg: 'bg-brand-card',
         accent: '#00C853',
         accentText: 'text-brand-accent',
         headerBg: 'bg-emerald-950',
@@ -252,9 +252,9 @@ bankProviders.forEach(p => {
       category: 'bank',
       enabled: true,
       theme: {
-        bg: 'bg-white',
+        bg: 'bg-brand-card',
         accent: '#1F2937',
-        accentText: 'text-gray-900',
+        accentText: 'text-brand-text',
         headerBg: 'bg-slate-900',
         headerText: 'text-brand-text',
         tagline: `${p.toUpperCase()} CLEARING GATEWAY`,
