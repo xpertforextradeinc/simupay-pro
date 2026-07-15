@@ -17,7 +17,10 @@ import {
   OrderItem,
   ProductDownload,
   Coupon,
-  ProductReview
+  ProductReview,
+  VTUProvider,
+  VTUNetwork,
+  VTUDataPlan
 } from '../types';
 
 // ============================================================================
@@ -1594,6 +1597,43 @@ export const dbService = {
       order: newOrder,
       message: `Purchase completed successfully! ${productName} resources are ready for instant download.`
     };
+  },
+
+  getVTUProviders: async (): Promise<VTUProvider[]> => {
+    try {
+      const response = await fetch('/api/vtu/providers');
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (e) {
+      console.error('[dbService] Failed to fetch VTU providers:', e);
+    }
+    return [];
+  },
+
+  getVTUNetworks: async (): Promise<VTUNetwork[]> => {
+    try {
+      const response = await fetch('/api/vtu/networks');
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (e) {
+      console.error('[dbService] Failed to fetch VTU networks:', e);
+    }
+    return [];
+  },
+
+  getVTUDataPlans: async (networkId?: string): Promise<VTUDataPlan[]> => {
+    try {
+      const url = networkId ? `/api/vtu/data-plans?network_id=${networkId}` : '/api/vtu/data-plans';
+      const response = await fetch(url);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (e) {
+      console.error('[dbService] Failed to fetch VTU data plans:', e);
+    }
+    return [];
   },
 
   getAirtimeOrders: async (userId: string): Promise<any[]> => {

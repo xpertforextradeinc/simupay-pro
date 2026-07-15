@@ -239,3 +239,35 @@ export interface ProductReview {
   comment: string;
   created_at: string;
 }
+
+export interface VTUProvider {
+  id: string;
+  name: string;             // e.g., 'VTpass', 'Flutterwave Bills'
+  type: 'VTpass' | 'Flutterwave' | 'Custom';
+  is_active: boolean;
+  is_default: boolean;
+  profit_margin_percent: number;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface VTUNetwork {
+  id: string;
+  provider_id: string;      // Links to VTUProvider
+  name: string;             // e.g., 'MTN', 'Airtel'
+  network_code: string;     // Provider specific network code
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface VTUDataPlan {
+  id: string;
+  network_id: string;       // Links to VTUNetwork
+  name: string;             // e.g., '1GB Data Plan'
+  plan_code: string;        // Provider specific plan code
+  price: number;            // Cost from provider
+  retail_price: number;     // Cost charged to user
+  validity: string;         // e.g., '30 Days'
+  is_active: boolean;
+  created_at: string;
+}

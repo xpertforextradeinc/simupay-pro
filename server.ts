@@ -219,8 +219,38 @@ async function startServer() {
     created_at: string;
   }
 
-  // In-memory fallback database
-  const inMemoryOrders: AirtimeOrder[] = [];
+  // In-memory fallback database for VTU Architecture
+  const inMemoryVTUProviders: any[] = [
+    {
+      id: 'vtu-prov-1',
+      name: 'Flutterwave Bills',
+      type: 'Flutterwave',
+      is_active: true,
+      is_default: true,
+      profit_margin_percent: 5,
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 'vtu-prov-2',
+      name: 'VTpass',
+      type: 'VTpass',
+      is_active: false,
+      is_default: false,
+      profit_margin_percent: 5,
+      created_at: new Date().toISOString()
+    }
+  ];
+
+  const inMemoryVTUNetworks: any[] = [
+    { id: 'vtu-net-1', provider_id: 'vtu-prov-1', name: 'MTN', network_code: 'mtn', is_active: true, created_at: new Date().toISOString() },
+    { id: 'vtu-net-2', provider_id: 'vtu-prov-1', name: 'Airtel', network_code: 'airtel', is_active: true, created_at: new Date().toISOString() },
+    { id: 'vtu-net-3', provider_id: 'vtu-prov-1', name: 'Glo', network_code: 'glo', is_active: true, created_at: new Date().toISOString() },
+    { id: 'vtu-net-4', provider_id: 'vtu-prov-1', name: '9Mobile', network_code: '9mobile', is_active: true, created_at: new Date().toISOString() }
+  ];
+
+  const inMemoryVTUDataPlans: any[] = [
+    { id: 'vtu-dp-1', network_id: 'vtu-net-1', name: '1GB Data Plan', plan_code: 'mtn-1gb', price: 1000, retail_price: 1050, validity: '30 Days', is_active: true, created_at: new Date().toISOString() }
+  ];
 
   // Database operations for airtime orders
   async function createOrderInDb(order: AirtimeOrder): Promise<AirtimeOrder> {
@@ -771,6 +801,49 @@ async function startServer() {
       res.status(500).json({ error: 'Failed to fetch airtime orders' });
     }
   });
+
+  // --- VTU Architecture Endpoints ---
+  app.get('/api/vtu/providers', async (req, res) => {
+    try {
+      const resp = await fetch(`${getSupabaseUrl()}/rest/v1/vtu_providers`, { headers: getSupabaseHeaders() });
+      if (resp.ok) {
+        const data = await resp.json();
+        return res.json(data);
+      }
+    } catch(e) {}
+    res.json(inMemoryVTUProviders);
+  });
+
+  app.get('/api/vtu/networks', async (req, res) => {
+    try {
+      const resp = await fetch(`${getSupabaseUrl()}/rest/v1/vtu_networks`, { headers: getSupabaseHeaders() });
+      if (resp.ok) {
+        const data = await resp.json();
+        return res.json(data);
+      }
+    } catch(e) {}
+    res.json(inMemoryVTUNetworks);
+  });
+
+  app.get('/api/vtu/data-plans', async (req, res) => {
+    try {
+      const { network_id } = req.query;
+      let url = `${getSupabaseUrl()}/rest/v1/vtu_data_plans`;
+      if (network_id) url += `?network_id=eq.${network_id}`;
+      
+      const resp = await fetch(url, { headers: getSupabaseHeaders() });
+      if (resp.ok) {
+        const data = await resp.json();
+        return res.json(data);
+      }
+    } catch(e) {}
+    
+    if (req.query.network_id) {
+      return res.json(inMemoryVTUDataPlans.filter(p => p.network_id === req.query.network_id));
+    }
+    res.json(inMemoryVTUDataPlans);
+  });
+  // ----------------------------------
 
   app.get('/api/market/prices', async (req, res) => {
     try {
