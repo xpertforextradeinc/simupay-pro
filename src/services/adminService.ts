@@ -296,7 +296,7 @@ const DEFAULT_SYSTEM_SETTINGS: SystemSettings = {
     ipWhitelisting: false,
     failedAttemptsLimit: 5
   },
-  discordInviteLink: 'https://discord.gg/S4RpdYnCR',
+  discordInviteLink: 'https://discord.gg/2JumdrzaX',
   telegramSupportLink: 'https://t.me/slipmintsignals',
   telegramChannelLink: 'https://t.me/slipmintsignals'
 };
