@@ -252,6 +252,8 @@ async function startServer() {
     { id: 'vtu-dp-1', network_id: 'vtu-net-1', name: '1GB Data Plan', plan_code: 'mtn-1gb', price: 1000, retail_price: 1050, validity: '30 Days', is_active: true, created_at: new Date().toISOString() }
   ];
 
+  const inMemoryOrders: AirtimeOrder[] = [];
+
   // Database operations for airtime orders
   async function createOrderInDb(order: AirtimeOrder): Promise<AirtimeOrder> {
     logAudit(`Creating pending order: ${order.id}`, { userId: order.user_id, network: order.network, phone: order.phone_number, amount: order.amount });

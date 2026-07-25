@@ -1,4 +1,4 @@
-import { cryptoProviders, digitalWalletProviders, bankProviders, ProviderCategory, ProviderField } from '../data/paymentProviders';
+import { cryptoProviders, digitalWalletProviders, bankProviders, vtuProviders, ProviderCategory, ProviderField } from '../data/paymentProviders';
 
 export interface DynamicProvider {
   id: string;
