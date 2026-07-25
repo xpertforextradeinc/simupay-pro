@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Smartphone, Check, CreditCard, RefreshCw } from 'lucide-react';
+import { Smartphone, Check, CreditCard, RefreshCw, Zap, Percent } from 'lucide-react';
 import { useToast } from './Toast';
-import { dbService } from '../services/dbService';
 
 export function AirtimeView({ userEmail, userId }: { userEmail: string; userId?: string }) {
   const { showToast } = useToast();
@@ -38,7 +37,6 @@ export function AirtimeView({ userEmail, userId }: { userEmail: string; userId?:
       try {
         data = text ? JSON.parse(text) : {};
       } catch (e) {
-        console.error('Non-JSON response:', text);
         throw new Error(`Server returned invalid response (${response.status})`);
       }
 
@@ -48,7 +46,6 @@ export function AirtimeView({ userEmail, userId }: { userEmail: string; userId?:
         throw new Error(data.error || data.message || 'Payment initiation failed');
       }
     } catch (error: any) {
-      console.error(error);
       showToast(error.message || 'Failed to initiate payment', 'error');
     } finally {
       setLoading(false);
@@ -56,50 +53,54 @@ export function AirtimeView({ userEmail, userId }: { userEmail: string; userId?:
   };
 
   return (
-    <div className="bg-brand-card p-6 rounded-2xl border border-brand-border/40 shadow-xl space-y-6 max-w-lg mx-auto">
-      <div className="flex items-center gap-3">
-        <span className="p-3 rounded-xl bg-brand-accent/10 text-brand-accent border border-brand-accent/25">
-          <Smartphone className="w-6 h-6" />
-        </span>
-        <h2 className="text-xl font-bold text-brand-text">Buy Airtime</h2>
+    <div className="max-w-xl mx-auto space-y-6">
+      <div className="bg-gradient-to-br from-brand-accent/20 to-brand-bg p-8 rounded-3xl border border-brand-accent/20 text-center space-y-2">
+        <Zap className="w-10 h-10 text-brand-accent mx-auto" />
+        <h1 className="text-3xl font-bold text-brand-text">Instant Top-Up</h1>
+        <p className="text-brand-text-muted">Need a quick top-up? Enjoy our lightning-fast airtime services.</p>
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-accent/10 text-brand-accent text-sm font-semibold">
+          <Percent className="w-4 h-4" /> 5% Instant Cashback on All Purchases
+        </div>
       </div>
 
-      <div className="space-y-4">
-        <select 
-          className="w-full bg-brand-bg border border-brand-border/40 rounded-xl p-3 text-brand-text"
-          value={network}
-          onChange={(e) => setNetwork(e.target.value)}
-        >
-          <option value="">Select Network</option>
-          <option value="mtn">MTN</option>
-          <option value="airtel">Airtel</option>
-          <option value="glo">Glo</option>
-          <option value="9mobile">9Mobile</option>
-        </select>
+      <div className="bg-brand-card p-8 rounded-3xl border border-brand-border/40 shadow-xl space-y-6">
+        <div className="grid grid-cols-2 gap-4">
+          <select 
+            className="col-span-2 bg-brand-bg border border-brand-border/40 rounded-xl p-4 text-brand-text focus:ring-2 focus:ring-brand-accent outline-none"
+            value={network}
+            onChange={(e) => setNetwork(e.target.value)}
+          >
+            <option value="">Select Network</option>
+            <option value="mtn">MTN</option>
+            <option value="airtel">Airtel</option>
+            <option value="glo">Glo</option>
+            <option value="9mobile">9Mobile</option>
+          </select>
 
-        <input 
-          type="text" 
-          placeholder="Phone Number" 
-          className="w-full bg-brand-bg border border-brand-border/40 rounded-xl p-3 text-brand-text"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-        <input 
-          type="number" 
-          placeholder="Amount (₦)" 
-          className="w-full bg-brand-bg border border-brand-border/40 rounded-xl p-3 text-brand-text"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
+          <input 
+            type="text" 
+            placeholder="Phone Number" 
+            className="col-span-2 bg-brand-bg border border-brand-border/40 rounded-xl p-4 text-brand-text focus:ring-2 focus:ring-brand-accent outline-none"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+          <input 
+            type="number" 
+            placeholder="Amount (₦)" 
+            className="col-span-2 bg-brand-bg border border-brand-border/40 rounded-xl p-4 text-brand-text focus:ring-2 focus:ring-brand-accent outline-none"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
 
-        <button 
-          onClick={handlePurchase}
-          disabled={loading}
-          className="w-full bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold py-3 rounded-xl flex items-center justify-center gap-2"
-        >
-          {loading ? <RefreshCw className="animate-spin w-5 h-5" /> : <CreditCard className="w-5 h-5" />}
-          Purchase Airtime
-        </button>
+          <button 
+            onClick={handlePurchase}
+            disabled={loading}
+            className="col-span-2 bg-brand-accent hover:bg-emerald-500 text-brand-bg font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all"
+          >
+            {loading ? <RefreshCw className="animate-spin w-5 h-5" /> : <CreditCard className="w-5 h-5" />}
+            {loading ? 'Processing...' : 'Purchase Airtime'}
+          </button>
+        </div>
       </div>
     </div>
   );

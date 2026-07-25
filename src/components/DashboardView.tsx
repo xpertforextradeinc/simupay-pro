@@ -14,11 +14,14 @@ import {
   AlertCircle,
   Receipt,
   Settings,
-  CreditCard
+  CreditCard,
+  Smartphone,
+  Database
 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts';
 import { Profile, Transaction, AppNotification } from '../types';
 import { DISCLOSURE_TEXT } from '../data/partners';
+import { vtuProviders, cryptoProviders, digitalWalletProviders } from '../data/paymentProviders';
 
 // Helper to get last 30 days data
 const getLast30DaysData = (transactions: Transaction[]) => {
@@ -434,6 +437,51 @@ export function DashboardView({
                   </div>
                 ))
               )}
+            </div>
+          </div>
+
+          {/* Airtime & Data Quick Panel */}
+          <div className="bg-brand-card p-5 rounded-xl border border-brand-border/40 shadow-xl space-y-4">
+            <h4 className="text-sm font-semibold text-brand-text border-b border-brand-border/50 pb-2">Airtime & Data</h4>
+            <div className="grid grid-cols-2 gap-2">
+              {vtuProviders.map((provider) => (
+                <button
+                  key={provider}
+                  onClick={() => onNavigate('airtime')}
+                  className="p-3 bg-brand-bg/80 border border-emerald-950 hover:border-brand-accent/30 rounded-xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer text-center group"
+                >
+                  <div className="p-2 bg-emerald-950/40 rounded-lg group-hover:bg-brand-accent/10 text-brand-accent">
+                    <Smartphone className="w-4 h-4" />
+                  </div>
+                  <span className="text-xs text-brand-text-muted font-medium">{provider}</span>
+                </button>
+              ))}
+              <button
+                onClick={() => onNavigate('data-bundles')}
+                className="col-span-2 p-3 bg-brand-bg/80 border border-emerald-950 hover:border-brand-accent/30 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer text-center group"
+              >
+                <Database className="w-4 h-4 text-brand-accent" />
+                <span className="text-xs text-brand-text-muted font-medium">View Data Plans</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Financial Services Quick Panel */}
+          <div className="bg-brand-card p-5 rounded-xl border border-brand-border/40 shadow-xl space-y-4">
+            <h4 className="text-sm font-semibold text-brand-text border-b border-brand-border/50 pb-2">Financial Services</h4>
+            <div className="grid grid-cols-2 gap-2">
+              {[...cryptoProviders.slice(0, 3), ...digitalWalletProviders.slice(0, 3)].map((provider) => (
+                <button
+                  key={provider}
+                  onClick={() => onNavigate('wallet')}
+                  className="p-3 bg-brand-bg/80 border border-emerald-950 hover:border-brand-accent/30 rounded-xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer text-center group"
+                >
+                  <div className="p-2 bg-emerald-950/40 rounded-lg group-hover:bg-brand-accent/10 text-brand-accent">
+                    <CreditCard className="w-4 h-4" />
+                  </div>
+                  <span className="text-xs text-brand-text-muted font-medium truncate max-w-full">{provider}</span>
+                </button>
+              ))}
             </div>
           </div>
 

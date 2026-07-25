@@ -373,149 +373,151 @@ function AppContent() {
       />
 
       {/* Main content body */}
-      <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 pb-20 lg:pb-8 overflow-y-auto max-h-screen flex flex-col">
+      <main className={`flex-1 min-w-0 ${!['airtime', 'data-bundles'].includes(activeTab) ? 'p-4 sm:p-6 lg:p-8' : ''} pb-20 lg:pb-8 overflow-y-auto max-h-screen flex flex-col`}>
         
-        {/* Top Sticky/Premium Navigation Bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-brand-border/60 pb-5 mb-6">
-          {/* Left: Quick search input */}
-          <div className="relative w-full sm:max-w-xs z-50">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-[#9CB1AC]">
-              <Search className="w-4 h-4" />
-            </span>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search services or hash keys..."
-              className="w-full bg-brand-card border border-brand-border rounded-xl py-2 pl-9 pr-4 text-brand-text placeholder-gray-500 focus:outline-none focus:border-brand-accent text-xs font-mono"
-            />
-            {searchQuery && (
-              <div className="absolute left-0 mt-2 w-72 bg-brand-card border border-brand-border rounded-xl shadow-2xl p-2 space-y-2 text-xs font-sans max-h-96 overflow-y-auto">
-                {(() => {
-                  const filteredSearchTx = transactions.filter(t => 
-                    t.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    t.wallet.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    (t.tx_hash && t.tx_hash.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                    t.network.toLowerCase().includes(searchQuery.toLowerCase())
-                  ).slice(0, 3);
-
-                  const filteredSearchNotifs = notifications.filter(n => 
-                    n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    n.message.toLowerCase().includes(searchQuery.toLowerCase())
-                  ).slice(0, 3);
-
-                  if (filteredSearchTx.length === 0 && filteredSearchNotifs.length === 0) {
-                    return <p className="p-3 text-center text-brand-text-dim text-xs italic">No matching records found.</p>;
-                  }
-
-                  return (
-                    <>
-                      {filteredSearchTx.length > 0 && (
-                        <div className="space-y-1">
-                          <div className="text-[10px] text-brand-text-dim font-mono font-bold uppercase tracking-wider px-2 border-b border-brand-border/30 pb-1">Ledger Records</div>
-                          {filteredSearchTx.map(tx => (
-                            <button
-                              key={tx.id}
-                              onClick={() => {
-                                setActiveTab('transactions');
-                                setSearchQuery('');
-                              }}
-                              className="w-full text-left p-2 hover:bg-brand-surface/30 rounded-lg flex justify-between items-center transition-colors cursor-pointer"
-                            >
-                              <span className="font-mono text-brand-accent truncate max-w-[150px]">{tx.id}</span>
-                              <span className="text-brand-text font-bold">${tx.amount.toLocaleString()}</span>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                      {filteredSearchNotifs.length > 0 && (
-                        <div className="space-y-1 pt-1">
-                          <div className="text-[10px] text-brand-text-dim font-mono font-bold uppercase tracking-wider px-2 border-b border-brand-border/30 pb-1">Security Logs</div>
-                          {filteredSearchNotifs.map(n => (
-                            <button
-                              key={n.id}
-                              onClick={() => {
-                                setActiveTab('notifications');
-                                setSearchQuery('');
-                              }}
-                              className="w-full text-left p-2 hover:bg-brand-surface/30 rounded-lg space-y-0.5 transition-colors cursor-pointer block"
-                            >
-                              <span className="text-brand-text font-bold block truncate">{n.title}</span>
-                              <span className="text-brand-text-muted block truncate text-[11px]">{n.message}</span>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </>
-                  );
-                })()}
-              </div>
-            )}
-          </div>
-
-          {/* Right: Notification badge, Node Status, User Dropdown */}
-          <div className="flex items-center gap-4 justify-between sm:justify-end w-full sm:w-auto">
-            {/* Status cluster */}
-            <div className="hidden md:flex items-center gap-3 bg-brand-card/60 border border-brand-border/60 px-3 py-1.5 rounded-xl text-[10px] font-mono text-[#9CB1AC]">
-              <span className="flex items-center gap-1.5 text-brand-accent">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse" /> CLUSTER-LIVE
+        {/* Conditional Header Rendering */}
+        {!['airtime', 'data-bundles'].includes(activeTab) && (
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-brand-border/60 pb-5 mb-6">
+            {/* Left: Quick search input */}
+            <div className="relative w-full sm:max-w-xs z-50">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-[#9CB1AC]">
+                <Search className="w-4 h-4" />
               </span>
-              <span className="border-l border-brand-border pl-2.5">SSL-SECURE</span>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search services or hash keys..."
+                className="w-full bg-brand-card border border-brand-border rounded-xl py-2 pl-9 pr-4 text-brand-text placeholder-gray-500 focus:outline-none focus:border-brand-accent text-xs font-mono"
+              />
+              {searchQuery && (
+                <div className="absolute left-0 mt-2 w-72 bg-brand-card border border-brand-border rounded-xl shadow-2xl p-2 space-y-2 text-xs font-sans max-h-96 overflow-y-auto">
+                  {(() => {
+                    const filteredSearchTx = transactions.filter(t => 
+                      t.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      t.wallet.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      (t.tx_hash && t.tx_hash.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                      t.network.toLowerCase().includes(searchQuery.toLowerCase())
+                    ).slice(0, 3);
+
+                    const filteredSearchNotifs = notifications.filter(n => 
+                      n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      n.message.toLowerCase().includes(searchQuery.toLowerCase())
+                    ).slice(0, 3);
+
+                    if (filteredSearchTx.length === 0 && filteredSearchNotifs.length === 0) {
+                      return <p className="p-3 text-center text-brand-text-dim text-xs italic">No matching records found.</p>;
+                    }
+
+                    return (
+                      <>
+                        {filteredSearchTx.length > 0 && (
+                          <div className="space-y-1">
+                            <div className="text-[10px] text-brand-text-dim font-mono font-bold uppercase tracking-wider px-2 border-b border-brand-border/30 pb-1">Ledger Records</div>
+                            {filteredSearchTx.map(tx => (
+                              <button
+                                key={tx.id}
+                                onClick={() => {
+                                  setActiveTab('transactions');
+                                  setSearchQuery('');
+                                }}
+                                className="w-full text-left p-2 hover:bg-brand-surface/30 rounded-lg flex justify-between items-center transition-colors cursor-pointer"
+                              >
+                                <span className="font-mono text-brand-accent truncate max-w-[150px]">{tx.id}</span>
+                                <span className="text-brand-text font-bold">${tx.amount.toLocaleString()}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                        {filteredSearchNotifs.length > 0 && (
+                          <div className="space-y-1 pt-1">
+                            <div className="text-[10px] text-brand-text-dim font-mono font-bold uppercase tracking-wider px-2 border-b border-brand-border/30 pb-1">Security Logs</div>
+                            {filteredSearchNotifs.map(n => (
+                              <button
+                                key={n.id}
+                                onClick={() => {
+                                  setActiveTab('notifications');
+                                  setSearchQuery('');
+                                }}
+                                className="w-full text-left p-2 hover:bg-brand-surface/30 rounded-lg space-y-0.5 transition-colors cursor-pointer block"
+                              >
+                                <span className="text-brand-text font-bold block truncate">{n.title}</span>
+                                <span className="text-brand-text-muted block truncate text-[11px]">{n.message}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
             </div>
 
-            {/* Notification trigger button */}
-            <TransactionNotificationBell
-              notifications={notifications}
-              onMarkRead={handleMarkRead}
-              onMarkAllRead={handleMarkAllRead}
-              onNavigate={setActiveTab}
-            />
+            {/* Right: Notification badge, Node Status, User Dropdown */}
+            <div className="flex items-center gap-4 justify-between sm:justify-end w-full sm:w-auto">
+              {/* Status cluster */}
+              <div className="hidden md:flex items-center gap-3 bg-brand-card/60 border border-brand-border/60 px-3 py-1.5 rounded-xl text-[10px] font-mono text-[#9CB1AC]">
+                <span className="flex items-center gap-1.5 text-brand-accent">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse" /> CLUSTER-LIVE
+                </span>
+                <span className="border-l border-brand-border pl-2.5">SSL-SECURE</span>
+              </div>
 
-            {/* Profile Selection Dropdown */}
-            <div className="relative group">
-              <button className="flex items-center gap-2 bg-brand-card border border-brand-border hover:border-brand-accent/40 px-3 py-1.5 rounded-xl text-xs font-sans text-[#9CB1AC] hover:text-brand-text transition-all cursor-pointer">
-                <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#00C853] to-emerald-800 flex items-center justify-center text-[10px] font-bold text-brand-text uppercase overflow-hidden">
-                  {profile?.avatar_url ? (
-                    <img src={profile.avatar_url} alt="A" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
-                  ) : (
-                    profile?.full_name?.substring(0, 1) || 'M'
-                  )}
-                </div>
-                <span className="max-w-[90px] truncate font-medium">{profile?.full_name || 'Merchant'}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-brand-text-dim group-hover:text-brand-accent transition-colors" />
-              </button>
+              {/* Notification trigger button */}
+              <TransactionNotificationBell
+                notifications={notifications}
+                onMarkRead={handleMarkRead}
+                onMarkAllRead={handleMarkAllRead}
+                onNavigate={setActiveTab}
+              />
 
-              {/* Hover Dropdown Option Menu */}
-              <div className="absolute right-0 mt-1 w-48 bg-brand-card border border-brand-border rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-1.5 space-y-1">
-                <div className="px-2.5 py-1.5 border-b border-brand-border mb-1">
-                  <p className="text-[10px] font-bold text-[#9CB1AC] uppercase tracking-wider font-mono">Profile Session</p>
-                  <p className="text-xs text-brand-text truncate font-semibold mt-0.5">{profile?.email}</p>
+              {/* Profile Selection Dropdown */}
+              <div className="relative group">
+                <button className="flex items-center gap-2 bg-brand-card border border-brand-border hover:border-brand-accent/40 px-3 py-1.5 rounded-xl text-xs font-sans text-[#9CB1AC] hover:text-brand-text transition-all cursor-pointer">
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#00C853] to-emerald-800 flex items-center justify-center text-[10px] font-bold text-brand-text uppercase overflow-hidden">
+                    {profile?.avatar_url ? (
+                      <img src={profile.avatar_url} alt="A" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                    ) : (
+                      profile?.full_name?.substring(0, 1) || 'M'
+                    )}
+                  </div>
+                  <span className="max-w-[90px] truncate font-medium">{profile?.full_name || 'Merchant'}</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-brand-text-dim group-hover:text-brand-accent transition-colors" />
+                </button>
+
+                {/* Hover Dropdown Option Menu */}
+                <div className="absolute right-0 mt-1 w-48 bg-brand-card border border-brand-border rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 p-1.5 space-y-1">
+                  <div className="px-2.5 py-1.5 border-b border-brand-border mb-1">
+                    <p className="text-[10px] font-bold text-[#9CB1AC] uppercase tracking-wider font-mono">Profile Session</p>
+                    <p className="text-xs text-brand-text truncate font-semibold mt-0.5">{profile?.email}</p>
+                  </div>
+                  
+                  <button
+                    onClick={() => setActiveTab('account')}
+                    className="w-full text-left px-2.5 py-2 hover:bg-brand-surface/40 hover:text-brand-accent rounded-lg transition-colors text-xs font-medium flex items-center gap-2 cursor-pointer"
+                  >
+                    <User className="w-3.5 h-3.5" /> My Profile
+                  </button>
+                  
+                  <button
+                    onClick={() => setActiveTab('settings')}
+                    className="w-full text-left px-2.5 py-2 hover:bg-brand-surface/40 hover:text-brand-text rounded-lg transition-colors text-xs font-medium flex items-center gap-2 cursor-pointer"
+                  >
+                    <Settings className="w-3.5 h-3.5 text-brand-text-dim" /> Settings
+                  </button>
+                  
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-2.5 py-2 hover:bg-red-950/20 text-red-400 hover:text-red-300 rounded-lg transition-colors text-xs font-medium flex items-center gap-2 cursor-pointer"
+                  >
+                    <LogOut className="w-3.5 h-3.5" /> Secure Sign Out
+                  </button>
                 </div>
-                
-                <button
-                  onClick={() => setActiveTab('account')}
-                  className="w-full text-left px-2.5 py-2 hover:bg-brand-surface/40 hover:text-brand-accent rounded-lg transition-colors text-xs font-medium flex items-center gap-2 cursor-pointer"
-                >
-                  <User className="w-3.5 h-3.5" /> My Profile
-                </button>
-                
-                <button
-                  onClick={() => setActiveTab('settings')}
-                  className="w-full text-left px-2.5 py-2 hover:bg-brand-surface/40 hover:text-brand-text rounded-lg transition-colors text-xs font-medium flex items-center gap-2 cursor-pointer"
-                >
-                  <Settings className="w-3.5 h-3.5 text-brand-text-dim" /> Settings
-                </button>
-                
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left px-2.5 py-2 hover:bg-red-950/20 text-red-400 hover:text-red-300 rounded-lg transition-colors text-xs font-medium flex items-center gap-2 cursor-pointer"
-                >
-                  <LogOut className="w-3.5 h-3.5" /> Secure Sign Out
-                </button>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* View Router Section */}
         <Suspense fallback={<div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-brand-accent" /></div>}>
