@@ -184,7 +184,7 @@ const DEFAULT_PROVIDERS: DynamicProvider[] = [
 const ALL_SEED_PROVIDERS: DynamicProvider[] = [...DEFAULT_PROVIDERS];
 
 // Push the remaining cryptoProviders
-cryptoProviders.forEach(p => {
+cryptoProviders.filter(p => !vtuProviders.includes(p)).forEach(p => {
   if (!ALL_SEED_PROVIDERS.some(x => x.name.toLowerCase() === p.toLowerCase())) {
     ALL_SEED_PROVIDERS.push({
       id: p.toLowerCase().replace(/[^a-z0-9]/g, '-'),
@@ -215,7 +215,7 @@ cryptoProviders.forEach(p => {
 });
 
 // Push the remaining digitalWalletProviders
-digitalWalletProviders.forEach(p => {
+digitalWalletProviders.filter(p => !vtuProviders.includes(p)).forEach(p => {
   if (!ALL_SEED_PROVIDERS.some(x => x.name.toLowerCase() === p.toLowerCase())) {
     ALL_SEED_PROVIDERS.push({
       id: p.toLowerCase().replace(/[^a-z0-9]/g, '-'),
